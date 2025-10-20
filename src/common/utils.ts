@@ -21,7 +21,7 @@ export function splitPath(p: string | undefined): string[] {
   return p.split('/').filter((s) => s !== '');
 }
 
-// #region Parameter normalization
+// # parameter normalization
 export function toDynamicModule(mod: Class | DynamicModule): DynamicModule {
   return whether.likeModule(mod)
     ? { moduleClass: mod, isGlobal: false }
@@ -35,5 +35,3 @@ export function toModuleClass(mod: Class | DynamicModule): Class {
 export function createNamedClass(name: string): Class {
   return new Function(`return class ${name} {}`)();
 }
-
-// #endregion

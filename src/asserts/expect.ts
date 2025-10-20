@@ -7,6 +7,9 @@ import { Sym } from '@/common/index.js';
 import { whether } from './whether.js';
 import { InjecoratorError } from './injecorator-error.class.js';
 
+// todo 看这里能否缩减，比如缩减成名称空间
+// todo expect 和 meta 都看看
+
 /**
  * It is impossible to type the expecter as an assert function.
  * So we should do it manually blow the class definition.

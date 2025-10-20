@@ -13,7 +13,7 @@ import { InjecoratorError } from './injecorator-error.class.js';
  */
 class UntypedExpecter extends Function {
   constructor() {
-    const fstr = `if(!o){\ne=Error(m);\ne.name='${Sym.Name}';throw e}`;
+    const fstr = `if(!o){\ne=Error(m);\ne.name='__NAME__';throw e}`;
     super('o', 'm', fstr);
   }
 
@@ -90,19 +90,13 @@ class UntypedExpecter extends Function {
     }
   }
 
-  isInjectToken(
-    o: any,
-    msg: string = `Should be a string, symbol or class`
-  ): asserts o is InjectToken {
+  isInjectToken(o: any, msg: string = `Should be a string, symbol or class`): asserts o is InjectToken {
     if (!whether.isInjectToken(o)) {
       throw new InjecoratorError(msg);
     }
   }
 
-  orInjectToken(
-    o: any,
-    msg: string = `Should be a string, symbol or class`
-  ): asserts o is InjectToken | undefined {
+  orInjectToken(o: any, msg: string = `Should be a string, symbol or class`): asserts o is InjectToken | undefined {
     if (o !== undefined && !whether.isInjectToken(o)) {
       throw new InjecoratorError(msg);
     }
@@ -160,11 +154,7 @@ class UntypedExpecter extends Function {
     }
   }
 
-  record<V>(
-    target: unknown,
-    asserter: (value: V, key?: Key) => void,
-    msg: string
-  ): asserts target is Record<Key, V> {
+  record<V>(target: unknown, asserter: (value: V, key?: Key) => void, msg: string): asserts target is Record<Key, V> {
     this.isObject(target, msg);
     Object.entries(target).forEach((entry) => asserter(entry[1], entry[0]));
   }
@@ -172,10 +162,7 @@ class UntypedExpecter extends Function {
   // #endregion
 
   // #region Decorator context assertions
-  isClassDecoratorContext(
-    o: any,
-    msg = 'Should be a ClassDecoratorContext'
-  ): asserts o is ClassDecoratorContext {
+  isClassDecoratorContext(o: any, msg = 'Should be a ClassDecoratorContext'): asserts o is ClassDecoratorContext {
     this.isObject<ClassDecoratorContext>(o, msg);
     this(o.kind === 'class', msg);
     this.isString(o.name, msg);
@@ -284,10 +271,7 @@ class UntypedExpecter extends Function {
     );
   }
 
-  injectable(
-    target: Class,
-    context: ClassDecoratorContext
-  ): asserts context is ClassDecoratorContext {
+  injectable(target: Class, context: ClassDecoratorContext): asserts context is ClassDecoratorContext {
     this.isClass(target, `@Injectable/@Controller can only be used on classes`);
     this.isClassDecoratorContext(context);
     this.notDecorated(context, Sym.Provider);
@@ -314,9 +298,7 @@ class UntypedExpecter extends Function {
   isInjectArg(target: InjectArg, msg: string = '') {
     if (!whether.isInjectArg(target)) {
       throw new InjecoratorError(
-        `${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(
-          target
-        )}`
+        `${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(target)}`
       );
     }
   }

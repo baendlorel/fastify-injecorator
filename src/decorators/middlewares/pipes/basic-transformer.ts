@@ -1,9 +1,11 @@
+import { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
 import { PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { whether } from '@/asserts/whether.js';
+
 import { ExecutionContext } from '@/common/execution-context.class.js';
 import { Sym } from '@/common/sym.js';
+import { promiseTry } from '@/common/promise-try.js';
 import { BadRequestException } from '@/exceptions/index.js';
-import { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
 
 type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
 
@@ -100,7 +102,7 @@ class BasicTransformer {
       return args;
     }
 
-    const rawResult = await Promise.try(validator, null, data);
+    const rawResult = await promiseTry(validator, null, data);
     const result = this.handleResult(validator, rawResult);
     if (result !== Sym.Void) {
       args[0] = result; // Update the first argument with the validated data

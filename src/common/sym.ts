@@ -9,14 +9,8 @@ export class Sym extends null {
    */
   static readonly metadata =
     typeof Symbol.metadata === 'undefined'
-      ? (Reflect.set(Symbol, 'metadata', Symbol.for('Symbol.metadata')), Symbol.metadata)
+      ? (Object.defineProperty(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
       : Symbol.metadata;
-
-  /**
-   * Use for logging.
-   * This is the name of the library.
-   */
-  static readonly Name = 'Injectorator';
 
   static readonly Root = Symbol('Injectorator');
 

@@ -1,4 +1,6 @@
-import '@/common/promise.js';
+import { ExecutionContext } from '@/common/execution-context.class.js';
+import { InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@/types/middleware.js';
+import { OrPromise } from '@/types/utils.js';
 import { basicTransformer } from './basic-transformer.js';
 
 export class PipeQuery implements InjecoratorPipe {

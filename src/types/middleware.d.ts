@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FastifySchema } from 'fastify';
+import { ExecutionContext } from '@/common/execution-context.class.js';
+import { InjecoratorPipe } from '@/types/middleware.js';
+import { OrPromise } from '@/types/utils.js';
 
 /**
  * Get middlewares for a class method
@@ -71,11 +75,7 @@ export interface InjecoratorPipe {
    * @param schema validation schema, if provided in the pipe options
    * @returns returned value will be passed to the next pipe or as the `input` argument
    */
-  transform: (
-    context: ExecutionContext,
-    input?: any[],
-    schema?: PipeFullSchema
-  ) => OrPromise<any[]>;
+  transform: (context: ExecutionContext, input?: any[], schema?: PipeFullSchema) => OrPromise<any[]>;
 }
 
 export interface InjecoratorFilter {
@@ -86,11 +86,7 @@ export interface InjecoratorFilter {
   catch: (context: ExecutionContext, exception: unknown) => OrPromise;
 }
 
-export type InjecoratorMiddleware =
-  | InjecoratorInterceptor
-  | InjecoratorGuard
-  | InjecoratorFilter
-  | InjecoratorPipe;
+export type InjecoratorMiddleware = InjecoratorInterceptor | InjecoratorGuard | InjecoratorFilter | InjecoratorPipe;
 
 // & Middleware tasks
 export type GuardTask = InjecoratorGuard['canActivate'];

@@ -47,6 +47,9 @@ importers:
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
+      serial-task:
+        specifier: ^1.0.1
+        version: 1.0.1
       to-assigned:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2011,6 +2014,9 @@ packages:
 
   seq-queue@0.0.5:
     resolution: {integrity: sha512-hr3Wtp/GZIc/6DAGPDcV4/9WoZhjrkXsi5B/07QgX8tsdc6ilr7BFM6PM6rbdAX1kFSDYeZGLipIZZKyQP0O5Q==}
+
+  serial-task@1.0.1:
+    resolution: {integrity: sha512-EC5u0rtwAZDYL+zN120cJUHtq2Gxmu/Ot9JudGlxwipLxm2UvvkjxMPr7CXScwTz1wUbWdILVcnO1gyMn/iRCA==}
 
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
@@ -4282,6 +4288,8 @@ snapshots:
   semver@7.7.2: {}
 
   seq-queue@0.0.5: {}
+
+  serial-task@1.0.1: {}
 
   serialize-javascript@6.0.2:
     dependencies:

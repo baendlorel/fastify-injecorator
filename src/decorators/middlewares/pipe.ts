@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { toAssigned } from 'to-assigned';
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { Sym } from '@/common/sym.js';
 import { expect, whether } from '@/asserts/index.js';
@@ -32,10 +31,8 @@ export function Pipe() {
 
 function predicate(opts: PipeOptions) {
   expect.isObject(opts, 'Pipe options must be an object');
-  const { schema = Sym.NotProvided, pipe } = opts;
-  if (schema !== Sym.NotProvided) {
-    expect.orObject(schema, 'Pipe options.schema must be an object or omitted');
-  }
+  const { schema, pipe } = opts;
+  expect.orObject(schema, 'Pipe options.schema must be an object or omitted');
   expect.isInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
   const validPipe = isBasicPipe(pipe) || (whether.isClass(pipe) && meta.isPipe(pipe)) || whether.isKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
@@ -60,89 +57,63 @@ export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   };
 }
 
+function mergeSchema(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
+  const o = {} as { body?: unknown; response?: unknown };
+  if (input !== undefined) {
+    o.body = input;
+  }
+  if (ok !== undefined) {
+    o.response = { 200: ok };
+  }
+  return Object.assign(o, other);
+}
+
 /**
  * Decorated method will be called with `handler(request.body, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
- * @param inputSchema The pipe will validate `body` against this schema, using `validatorCompiler`(if it is provided too)
+ * @param input The pipe will validate `body` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.body` to provide swagger info
- * @param okSchema will be set to `{ response: { 200: okSchema } }`
- * @param otherSchema The rest schemas like we set in `fastify.route({ schema })`
+ * @param ok will be set to `{ response: { 200: okSchema } }`
+ * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
-export function Body(
-  inputSchema: PipeSchema = Sym.NotProvided,
-  okSchema: PipeSchema = Sym.NotProvided,
-  otherSchema: PipeFullSchema = Sym.NotProvided as any
-) {
-  return UsePipes({
-    pipe: PipeBody,
-    schema: toAssigned(
-      Sym.provide(otherSchema, null),
-      Sym.provide(okSchema, null, { response: { 200: okSchema } }),
-      Sym.provide(inputSchema, null, { body: inputSchema })
-    ),
-  });
+export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
+  return UsePipes({ pipe: PipeBody, schema: mergeSchema(input, ok, other) });
 }
 
 /**
  * Decorated method will be called with `handler(request.params, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
- * @param inputSchema The pipe will validate `params` against this schema, using `validatorCompiler`(if it is provided too)
+ * @param input The pipe will validate `params` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.params` to provide swagger info
- * @param okSchema will be set to `{ response: { 200: okSchema } }`
- * @param otherSchema The rest schemas like we set in `fastify.route({ schema })`
+ * @param ok will be set to `{ response: { 200: okSchema } }`
+ * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
-export function Params(
-  inputSchema: PipeSchema = Sym.NotProvided,
-  okSchema: PipeSchema = Sym.NotProvided,
-  otherSchema: PipeFullSchema = Sym.NotProvided as any
-) {
-  return UsePipes({
-    pipe: PipeParams,
-    schema: toAssigned(
-      Sym.provide(otherSchema, null),
-      Sym.provide(okSchema, null, { response: { 200: okSchema } }),
-      Sym.provide(inputSchema, null, { params: inputSchema })
-    ),
-  });
+export function Params(input: PipeSchema, ok: PipeSchema, other: PipeFullSchema) {
+  return UsePipes({ pipe: PipeParams, schema: mergeSchema(input, ok, other) });
 }
 
 /**
  * Decorated method will be called with `handler(request.query, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
- * @param inputSchema The pipe will validate `query` against this schema, using `validatorCompiler`(if it is provided too)
+ * @param input The pipe will validate `query` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.querystring` to provide swagger info
- * @param okSchema will be set to `{ response: { 200: okSchema } }`
- * @param otherSchema The rest schemas like we set in `fastify.route({ schema })`
+ * @param ok will be set to `{ response: { 200: okSchema } }`
+ * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
-export function Query(
-  inputSchema: PipeSchema = Sym.NotProvided,
-  okSchema: PipeSchema = Sym.NotProvided,
-  otherSchema: PipeFullSchema = Sym.NotProvided as any
-) {
-  return UsePipes({
-    pipe: PipeQuery,
-    schema: toAssigned(
-      Sym.provide(otherSchema, null),
-      Sym.provide(okSchema, null, { response: { 200: okSchema } }),
-      Sym.provide(inputSchema, null, { querystring: inputSchema })
-    ),
-  });
+export function Query(input: PipeSchema, ok: PipeSchema, other: PipeFullSchema) {
+  return UsePipes({ pipe: PipeQuery, schema: mergeSchema(input, ok, other) });
 }
 
 /**
  * Decorated method will be called with `handler(request.raw, reply)
  */
 export function Raw() {
-  return UsePipes({
-    pipe: PipeRaw,
-  });
+  return UsePipes({ pipe: PipeRaw });
 }
 
 /**
  * Decorated method will be called with `handler(request.ip, reply)
  */
 export function Ip() {
-  return UsePipes({
-    pipe: PipeIp,
-  });
+  return UsePipes({ pipe: PipeIp });
 }

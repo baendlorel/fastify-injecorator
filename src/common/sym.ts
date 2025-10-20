@@ -15,36 +15,6 @@ export class Sym extends null {
   static readonly Root = Symbol('Injectorator');
 
   /**
-   * Means argument is not provided
-   * - sometimes it might look like `Sym.Void`
-   */
-  static readonly NotProvided = Symbol('NotProvided');
-
-  /**
-   * Provide the given value when `target` is `Sym.NotProvided`
-   * @param target unknown value
-   * @param defaultValue return this when `target` is `Sym.NotProvided`
-   * @param value return this when `target` is not omitted
-   */
-  static provide(target: unknown, defaultValue: unknown, value: unknown = Sym.NotProvided) {
-    if (target === Sym.NotProvided) {
-      return defaultValue;
-    }
-    return value === Sym.NotProvided ? target : value;
-  }
-
-  /**
-   * Means argument is not initialized
-   */
-  static readonly Uninitialized = Symbol('Uninitialized');
-
-  /**
-   * Means the function returns void
-   * - sometimes it might look like `Sym.NotProvided`
-   */
-  static readonly Void = Symbol('Void');
-
-  /**
    * Global configurations stored here
    * - access by global[Sym.GlobalOptions]
    */

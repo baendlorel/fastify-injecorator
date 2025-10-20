@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
-import { Sym } from '@/common/sym.js';
 import { expect, whether } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { inspect } from 'node:util';
+import { InjectMetadata, ProviderOptions } from '@/types/injecorator.js';
 
 import { Sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
@@ -99,11 +100,7 @@ class ExpectModule extends Function {
 
     const controlled = meta.getController(target);
     expect.isObject(controlled, `class '${target.name}': is not a controller`);
-    expect.isArray(
-      controlled.prefix,
-      pred,
-      `class '${target.name}': prefix should be a string array`
-    );
+    expect.isArray(controlled.prefix, pred, `class '${target.name}': prefix should be a string array`);
 
     const routes = meta.getRoute(target);
     expect.isObject(routes, `${target.name}: should have routes`);
@@ -111,10 +108,7 @@ class ExpectModule extends Function {
       routes,
       (v: RouteConfig) => {
         const basic = v[Sym.RouteBasic];
-        expect.isKey(
-          basic.field,
-          `${target.name}: field of this route config should be a string/symbol`
-        );
+        expect.isKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
         expect.isArray(basic.route, pred, 'Route should be a string array');
         expect.orObject(v[Sym.RouteOpt], `${target.name}: opts should be an object`);
       },
@@ -158,9 +152,7 @@ class ExpectModule extends Function {
     }
     if (moduleMetadata.exports) {
       // & exports must be a subarray of providers
-      expect.isArray(moduleMetadata.exports, (exported) =>
-        expect.includes(moduleMetadata.providers, exported)
-      );
+      expect.isArray(moduleMetadata.exports, (exported) => expect.includes(moduleMetadata.providers, exported));
       moduleMetadata.exports.forEach((t) => this.isInjectable(t));
     }
     if (moduleMetadata.imports) {
@@ -179,9 +171,7 @@ class ExpectModule extends Function {
       if (!whether.isObject(injections)) {
         return null;
       }
-      return Object.values(injections).map((injection) =>
-        provider.getInjectToken(injection.dependency)
-      );
+      return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
     }
 
     if ('useClass' in providerOptions) {
@@ -189,9 +179,7 @@ class ExpectModule extends Function {
       if (!whether.isObject(injections)) {
         return null;
       }
-      return Object.values(injections).map((injection) =>
-        provider.getInjectToken(injection.dependency)
-      );
+      return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
     }
 
     if ('inject' in providerOptions) {

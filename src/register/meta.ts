@@ -164,7 +164,7 @@ class Meta {
   }
 
   isInterceptor(cls: Class): boolean {
-    return this.get(cls, [Sym.Interceptor]) ?? false;
+    return Boolean(this.get(cls, [Sym.Interceptor]));
   }
 
   setGuard(context: ClassDecoratorContext) {
@@ -172,7 +172,7 @@ class Meta {
   }
 
   isGuard(cls: Class): boolean {
-    return this.get(cls, [Sym.Guard]) ?? false;
+    return Boolean(this.get(cls, [Sym.Guard]));
   }
 
   setFilters(context: ClassDecoratorContext, exceptionClasses: Class[]): boolean {
@@ -188,7 +188,7 @@ class Meta {
   }
 
   isPipe(cls: Class): boolean {
-    return this.get(cls, [Sym.Pipe]) ?? false;
+    return Boolean(this.get(cls, [Sym.Pipe]));
   }
 
   // #region set/get+UseMiddlewares series
@@ -220,7 +220,7 @@ class Meta {
   }
 
   getUseGuards(cls: Class): GuardGetter {
-    const controller = this.get<InjectToken[]>(cls, [Sym.ControllerGuard]) ?? [];
+    const controller = this.get<InjectToken[]>(cls, [Sym.ControllerGuard]);
     const handler = this.get<Record<Key, InjectToken[]>>(cls, [Sym.HandlerGuard]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalGuards, controller, handler[field]);
@@ -235,7 +235,7 @@ class Meta {
   }
 
   getUseFilters(cls: Class): FilterGetter {
-    const controller = this.get<InjectToken[]>(cls, [Sym.ControllerFilter]) ?? [];
+    const controller = this.get<InjectToken[]>(cls, [Sym.ControllerFilter]);
     const handler = this.get<Record<Key, InjectToken[]>>(cls, [Sym.HandlerFilter]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalFilters, controller, handler[field]);
@@ -250,7 +250,7 @@ class Meta {
   }
 
   getUsePipes(cls: Class): PipeGetter {
-    const controller = this.get<PipeOptions[]>(cls, [Sym.ControllerPipe]) ?? [];
+    const controller = this.get<PipeOptions[]>(cls, [Sym.ControllerPipe]);
     const handler = this.get<Record<Key, PipeOptions[]>>(cls, [Sym.HandlerPipe]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalPipes, controller, handler[field]);
@@ -260,14 +260,13 @@ class Meta {
   /**
    * Fisrt method pipe is used to set schema for swagger
    */
-  getFirstMethodPipeSchema(cls: Class, field: Key): PipeFullSchema | typeof Sym.NotProvided {
+  getFirstMethodPipeSchema(cls: Class, field: Key): PipeFullSchema | undefined {
     const methodPipes = this.get<PipeOptions[]>(cls, [Sym.HandlerPipe, field]);
     if (!methodPipes) {
       // length > 0 is already assured by @UsePipes
-      return Sym.NotProvided;
+      return undefined;
     }
-    const { schema = Sym.NotProvided } = methodPipes[0];
-    return schema;
+    return methodPipes[0].schema;
   }
   // #endregion
 

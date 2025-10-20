@@ -1,4 +1,6 @@
 import { FastifyInstance } from 'fastify';
+import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
+
 import expectModule from '@/register/expect-module.js';
 import moduleRegister from './module.js';
 
@@ -16,10 +18,7 @@ function normalize(opts: Partial<FastifyInjecoratorOptions>): FastifyInjecorator
   return normalized;
 }
 
-export async function apply(
-  app: FastifyInstance,
-  partialOpts: Partial<FastifyInjecoratorOptions>
-): Promise<void> {
+export async function apply(app: FastifyInstance, partialOpts: Partial<FastifyInjecoratorOptions>): Promise<void> {
   const opts = normalize(partialOpts);
 
   moduleRegister.apply(app, opts);

@@ -1,4 +1,6 @@
 import { FastifyInstance } from 'fastify';
+import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@/types/injecorator.js';
+import { InjecoratorMiddleware } from '@/types/middleware.js';
 
 import { toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
@@ -36,10 +38,7 @@ class LazyInjector {
    * @param tokens
    * @param handlerName
    */
-  getMiddlewareHooks<T extends InjecoratorMiddleware>(
-    tokens: InjectToken[],
-    handlerName: keyof T & Key
-  ): Func[] {
+  getMiddlewareHooks<T extends InjecoratorMiddleware>(tokens: InjectToken[], handlerName: keyof T & Key): Func[] {
     return tokens.map((token) => {
       const instance = this.get(whether.isKey(token) ? token : token.name);
       expect.isObject<T>(instance, `Cannot find class for token: ${String(token)}`);
@@ -100,9 +99,7 @@ class LazyInjector {
       },
       // ! This means the injections must be created after instanceMap being filled up
       useFactory: (token, factory, inject) => {
-        const instances = inject.map((arg) =>
-          this.instanceMap.get(whether.isKey(arg) ? arg : arg.name)
-        );
+        const instances = inject.map((arg) => this.instanceMap.get(whether.isKey(arg) ? arg : arg.name));
         const instance = factory(...instances);
         this.instanceMap.set(token, instance);
         return instance;

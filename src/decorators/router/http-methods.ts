@@ -3,7 +3,7 @@ import meta from '@/register/meta.js';
 
 function registerRoute(method: string) {
   return function (route?: string) {
-    return function (target: Func, context: StrictClassMethodDecoratorContext) {
+    return function (target: Func, context: ClassMethodDecoratorContext) {
       expect.methodDecorator(target, context);
       expect.isString(method);
       expect.orString(route, 'Given route must be string or undefined');

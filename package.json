@@ -17,7 +17,7 @@
     "spec": "clear && vitest '.spec.ts'",
     "test": "clear && vitest '.test.ts'",
     "build": "tsx ./.scripts/rollup.ts",
-    "tc": "tsc --noEmit",
+    "check": "tsc --noEmit",
     "lint": "oxlint .",
     "dev": "tsx watch src/main.ts"
   },

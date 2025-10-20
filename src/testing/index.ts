@@ -1,3 +1,4 @@
+import { LazyInjectEntry, ProviderOptions } from '@/types/injecorator.js';
 import { whether } from '@/asserts/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
 import lazyInjector from '@/register/lazy-injector.js';

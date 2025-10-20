@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
+import { InjectArg, InjectToken } from '@/types/injecorator.js';
 
 import { Sym } from '@/common/index.js';
 import { whether } from './whether.js';
@@ -174,7 +175,7 @@ class UntypedExpecter extends Function {
   isClassDecoratorContext(
     o: any,
     msg = 'Should be a ClassDecoratorContext'
-  ): asserts o is StrictClassDecoratorContext {
+  ): asserts o is ClassDecoratorContext {
     this.isObject<ClassDecoratorContext>(o, msg);
     this(o.kind === 'class', msg);
     this.isString(o.name, msg);
@@ -185,7 +186,7 @@ class UntypedExpecter extends Function {
   isClassMethodDecoratorContext(
     o: any,
     msg = 'Should be a ClassMethodDecoratorContext'
-  ): asserts o is StrictClassMethodDecoratorContext {
+  ): asserts o is ClassMethodDecoratorContext {
     this.isObject<ClassMethodDecoratorContext>(o, msg);
     this(o.kind === 'method', msg);
     this.isKey(o.name, msg);
@@ -200,7 +201,7 @@ class UntypedExpecter extends Function {
   isClassGetterDecoratorContext(
     o: any,
     msg = 'Should be a ClassGetterDecoratorContext'
-  ): asserts o is StrictClassGetterDecoratorContext {
+  ): asserts o is ClassGetterDecoratorContext {
     this.isObject<ClassGetterDecoratorContext>(o, msg);
     this(o.kind === 'getter', msg);
     this.isKey(o.name, msg);
@@ -215,7 +216,7 @@ class UntypedExpecter extends Function {
   isClassSetterDecoratorContext(
     o: any,
     msg = 'Should be a ClassSetterDecoratorContext'
-  ): asserts o is StrictClassSetterDecoratorContext {
+  ): asserts o is ClassSetterDecoratorContext {
     this.isObject<ClassSetterDecoratorContext>(o, msg);
     this(o.kind === 'setter', msg);
     this.isKey(o.name, msg);
@@ -230,7 +231,7 @@ class UntypedExpecter extends Function {
   isClassFieldDecoratorContext(
     o: any,
     msg = 'Should be a ClassFieldDecoratorContext'
-  ): asserts o is StrictClassFieldDecoratorContext {
+  ): asserts o is ClassFieldDecoratorContext {
     this.isObject<ClassFieldDecoratorContext>(o, msg);
     this(o.kind === 'field', msg);
     this.isKey(o.name, msg);
@@ -246,7 +247,7 @@ class UntypedExpecter extends Function {
   isClassAccessorDecoratorContext(
     o: any,
     msg = 'Should be a ClassAccessorDecoratorContext'
-  ): asserts o is StrictClassAccessorDecoratorContext {
+  ): asserts o is ClassAccessorDecoratorContext {
     this.isObject<ClassAccessorDecoratorContext>(o, msg);
     this(o.kind === 'accessor', msg);
     this.isKey(o.name, msg);
@@ -259,10 +260,7 @@ class UntypedExpecter extends Function {
     this.isObject(o.metadata, msg);
   }
 
-  isDecoratorContext(
-    o: any,
-    msg = 'Should be a DecoratorContext'
-  ): asserts o is StrictDecoratorContext {
+  isDecoratorContext(o: any, msg = 'Should be a DecoratorContext'): asserts o is DecoratorContext {
     this.isObject<DecoratorContext>(o, msg);
     this(o.kind === 'accessor', msg);
     this.isKey(o.name, msg);
@@ -272,14 +270,14 @@ class UntypedExpecter extends Function {
   // #endregion
 
   // #region Decorator Creation assertions
-  methodDecorator(target: Func, context: StrictClassMethodDecoratorContext) {
+  methodDecorator(target: Func, context: ClassMethodDecoratorContext) {
     this.isFunction(target);
     this.isClassMethodDecoratorContext(context);
   }
   // #endregion
 
   // #region FastifyInjector assertions
-  routed(context: StrictClassMethodDecoratorContext) {
+  routed(context: ClassMethodDecoratorContext) {
     this.isObject(
       ReflectDeep.get(context.metadata, [Sym.Root, Sym.Route, context.name]),
       'Should be decorated with route decorators(like @Post) first'
@@ -289,22 +287,19 @@ class UntypedExpecter extends Function {
   injectable(
     target: Class,
     context: ClassDecoratorContext
-  ): asserts context is StrictClassDecoratorContext {
+  ): asserts context is ClassDecoratorContext {
     this.isClass(target, `@Injectable/@Controller can only be used on classes`);
     this.isClassDecoratorContext(context);
     this.notDecorated(context, Sym.Provider);
   }
 
-  module(
-    target: Class,
-    context: ClassDecoratorContext
-  ): asserts context is StrictClassDecoratorContext {
+  module(target: Class, context: ClassDecoratorContext): asserts context is ClassDecoratorContext {
     this.isClass(target, `@Module can only be used on classes`);
     this.isClassDecoratorContext(context);
     this.notDecorated(context, Sym.Module);
   }
 
-  notDecorated(context: StrictDecoratorContext, flag: symbol) {
+  notDecorated(context: DecoratorContext, flag: symbol) {
     if (ReflectDeep.has(context.metadata, [Sym.Root, flag])) {
       throw new InjecoratorError(`'${String(context.name)}' is already decorated`);
     }

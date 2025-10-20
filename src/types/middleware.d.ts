@@ -6,18 +6,18 @@
  * @param classMethod method from the class
  * @returns middleware array
  */
-type MiddlewareGetter<T = InjectToken> = (field: Key) => T[];
-type GuardGetter = MiddlewareGetter;
-type InterceptorGetter = MiddlewareGetter;
-type PipeGetter = MiddlewareGetter<PipeOptions>;
-type FilterGetter = MiddlewareGetter;
+export type MiddlewareGetter<T = InjectToken> = (field: Key) => T[];
+export type GuardGetter = MiddlewareGetter;
+export type InterceptorGetter = MiddlewareGetter;
+export type PipeGetter = MiddlewareGetter<PipeOptions>;
+export type FilterGetter = MiddlewareGetter;
 
 /**
  * `PipeSchema` is equivalent to FastifySchema.body/params/query...
  */
-type PipeSchema = unknown;
+export type PipeSchema = unknown;
 
-interface PipeFullSchema {
+export interface PipeFullSchema {
   body?: PipeSchema;
   querystring?: PipeSchema;
   params?: PipeSchema;
@@ -25,9 +25,9 @@ interface PipeFullSchema {
   response?: PipeSchema;
 }
 
-type RouteApiSchema = Omit<FastifySchema, keyof PipeFullSchema>;
+export type RouteApiSchema = Omit<FastifySchema, keyof PipeFullSchema>;
 
-interface PipeOptions {
+export interface PipeOptions {
   /**
    * Validation schema
    * - if pipe class is not given, will try to use global pipe
@@ -42,7 +42,7 @@ interface PipeOptions {
   pipe: Key | Class<InjecoratorPipe>;
 }
 
-interface InjecoratorGuard {
+export interface InjecoratorGuard {
   /**
    * Guard
    * - you can use `throw` when guard fails
@@ -53,7 +53,7 @@ interface InjecoratorGuard {
   canActivate: (context: ExecutionContext) => OrPromise | OrPromise<boolean>;
 }
 
-interface InjecoratorInterceptor {
+export interface InjecoratorInterceptor {
   /**
    * Called when entering the controller method
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -62,8 +62,8 @@ interface InjecoratorInterceptor {
   intercept: (context: ExecutionContext) => OrPromise | OrPromise<Func>;
 }
 
-type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];
-interface InjecoratorPipe {
+export type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];
+export interface InjecoratorPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -78,7 +78,7 @@ interface InjecoratorPipe {
   ) => OrPromise<any[]>;
 }
 
-interface InjecoratorFilter {
+export interface InjecoratorFilter {
   /**
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @param exception catched exception
@@ -86,14 +86,14 @@ interface InjecoratorFilter {
   catch: (context: ExecutionContext, exception: unknown) => OrPromise;
 }
 
-type InjecoratorMiddleware =
+export type InjecoratorMiddleware =
   | InjecoratorInterceptor
   | InjecoratorGuard
   | InjecoratorFilter
   | InjecoratorPipe;
 
 // & Middleware tasks
-type GuardTask = InjecoratorGuard['canActivate'];
-type PipeTask = InjecoratorPipe['transform'];
-type InterceptorTask = InjecoratorInterceptor['intercept'];
-type FilterTask = InjecoratorFilter['catch'];
+export type GuardTask = InjecoratorGuard['canActivate'];
+export type PipeTask = InjecoratorPipe['transform'];
+export type InterceptorTask = InjecoratorInterceptor['intercept'];
+export type FilterTask = InjecoratorFilter['catch'];

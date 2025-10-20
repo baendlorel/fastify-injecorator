@@ -1,3 +1,14 @@
+import {
+  ArgsTypeMap,
+  HttpArgumentsHost,
+  ArgsTypeHttp,
+  RpcArgumentsHost,
+  ArgsTypeRpc,
+  WsArgumentsHost,
+  ArgsTypeWebSocket,
+} from '@/types/middleware-context.js';
+import { FastifyRequest, FastifyReply } from 'fastify';
+
 /**
  * ExecutionContext extends ArgumentsHost to provide reflection metadata
  * (who is the class and handler executing), enabling generic guards/interceptors.

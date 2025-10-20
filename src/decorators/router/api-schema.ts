@@ -6,7 +6,7 @@ import meta from '@/register/meta.js';
  * @param schema FastifySchema with 'summary','description'...
  */
 export function ApiSchema<T extends RouteApiSchema>(schema: T) {
-  return function (target: Func, context: StrictClassMethodDecoratorContext) {
+  return function (target: Func, context: ClassMethodDecoratorContext) {
     expect.methodDecorator(target, context);
     expect.isObject(schema, `Given opts must be a RouteShorthandOptions of Fastify`);
 

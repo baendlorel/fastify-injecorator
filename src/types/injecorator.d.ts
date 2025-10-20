@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FastifyRequest } from 'fastify';
 
-interface BaseHttpException {
+export interface BaseHttpException {
   readonly message: string;
   readonly statusCode: HttpStatus;
   readonly error: string;
@@ -11,19 +12,19 @@ interface BaseHttpException {
   };
 }
 
-type DataKeys<T> = {
+export type DataKeys<T> = {
   [K in keyof T]: T[K] extends Func ? never : K;
 }[keyof T];
 
-type FastifyRequestDataKeys = Exclude<DataKeys<FastifyRequest>, undefined>;
+export type FastifyRequestDataKeys = Exclude<DataKeys<FastifyRequest>, undefined>;
 
-type ArgExtractionPath = FastifyRequestDataKeys | `${FastifyRequestDataKeys}.${string}`;
+export type ArgExtractionPath = FastifyRequestDataKeys | `${FastifyRequestDataKeys}.${string}`;
 
-type InjectToken = Key | Class;
+export type InjectToken = Key | Class;
 
-type InjectArg = InjectToken | (() => Class);
+export type InjectArg = InjectToken | (() => Class);
 
-interface ProviderFactoryOptions {
+export interface ProviderFactoryOptions {
   /**
    * The unique token used to identify and inject this provider.
    */
@@ -39,7 +40,7 @@ interface ProviderFactoryOptions {
   inject?: (Class | Key)[];
 }
 
-type ProviderStandardOptions =
+export type ProviderStandardOptions =
   | ProviderFactoryOptions
   | {
       /**
@@ -76,9 +77,9 @@ type ProviderStandardOptions =
       useExisting: Key;
     };
 
-type ProviderOptions = ProviderStandardOptions | Class;
+export type ProviderOptions = ProviderStandardOptions | Class;
 
-interface DynamicModule {
+export interface DynamicModule {
   moduleClass: Class;
 
   /**
@@ -93,7 +94,7 @@ interface DynamicModule {
   isGlobal?: boolean;
 }
 
-interface FastifyInjecoratorOptions {
+export interface FastifyInjecoratorOptions {
   rootModule: Class;
 
   /**
@@ -105,13 +106,13 @@ interface FastifyInjecoratorOptions {
   allowCrossModuleCircularReference: boolean;
 }
 
-interface LazyInjectEntry {
+export interface LazyInjectEntry {
   provide: Key;
   propertyKey: Key;
   dependency: InjectArg;
 }
 
-interface InjectMetadata {
+export interface InjectMetadata {
   /**
    * When using `@Inject(token)` to decorate a class field
    *
@@ -120,11 +121,11 @@ interface InjectMetadata {
   dependency: InjectArg;
 }
 
-interface ControllerMetadata {
+export interface ControllerMetadata {
   prefix: string[];
 }
 
-interface ProviderMetadata {
+export interface ProviderMetadata {
   /**
    * !Not supported yet
    * @todo
@@ -132,7 +133,7 @@ interface ProviderMetadata {
   args: any[];
 }
 
-interface ModuleMetadata {
+export interface ModuleMetadata {
   /**
    * Services provided by this module
    */
@@ -170,6 +171,6 @@ interface ModuleMetadata {
   readonly outer: boolean;
 }
 
-interface InheritedModuleMetadata {
+export interface InheritedModuleMetadata {
   readonly prefix: string[];
 }

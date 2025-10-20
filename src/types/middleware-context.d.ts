@@ -3,7 +3,7 @@
  * Abstraction over the original handler arguments, allowing retrieval
  * of arguments in a protocol-agnostic way (HTTP, WebSocket, RPC, etc.).
  */
-interface ArgumentsHost {
+export interface ArgumentsHost {
   /**
    * Returns an array of original handler arguments.
    */
@@ -35,7 +35,7 @@ interface ArgumentsHost {
   getType(): ContextType;
 }
 
-interface HttpArgumentsHost {
+export interface HttpArgumentsHost {
   /**
    * Returns the HTTP request object.
    */
@@ -50,7 +50,7 @@ interface HttpArgumentsHost {
 /**
  * ! Not implemented
  */
-interface RpcArgumentsHost {
+export interface RpcArgumentsHost {
   /**
    * Returns the RPC data payload.
    */
@@ -65,7 +65,7 @@ interface RpcArgumentsHost {
 /**
  * ! Not implemented
  */
-interface WsArgumentsHost {
+export interface WsArgumentsHost {
   /**
    * Returns the WebSocket client object.
    */
@@ -77,41 +77,16 @@ interface WsArgumentsHost {
   getData<T = any>(): T;
 }
 
-type ArgsTypeHttp = [FastifyRequest, FastifyReply];
-type ArgsTypeWebSocket = [any /* client */, any /* data */];
-type ArgsTypeRpc = [any /* data */, any /* context */];
-type ArgsType = ArgsTypeHttp | ArgsTypeWebSocket | ArgsTypeRpc;
+export type ArgsTypeHttp = [FastifyRequest, FastifyReply];
+export type ArgsTypeWebSocket = [any /* client */, any /* data */];
+export type ArgsTypeRpc = [any /* data */, any /* context */];
+export type ArgsType = ArgsTypeHttp | ArgsTypeWebSocket | ArgsTypeRpc;
 
-interface ArgsTypeMap {
+export interface ArgsTypeMap {
   http: ArgsTypeHttp;
   ws: ArgsTypeWebSocket;
   rpc: ArgsTypeRpc;
 }
 
 // type ContextType = 'http' | 'ws' | 'rpc' | (string & {});
-type ContextType = keyof ArgsTypeMap;
-
-// & Technically it is different from the ExecutionContext in the .ts file.
-// & Since private props will stop TypeScript from assigning the instance to the type declared in .d.ts
-// & So we have to remove the private props in the .d.ts file.
-/**
- * ExecutionContext extends ArgumentsHost to provide reflection metadata
- * (who is the class and handler executing), enabling generic guards/interceptors.
- */
-declare class ExecutionContext<CT extends keyof ArgsTypeMap = 'http'> implements ArgumentsHost {
-  // private readonly args: ArgsTypeMap[CT];
-  // private readonly controller: Class;
-  // private readonly contextHandler: Func;
-  // private readonly contextType: CT;
-
-  constructor(args: ArgsTypeMap[CT], contextType: CT, controller: Class, handler: Func);
-
-  getArgs(): ArgsTypeMap[CT];
-  getArgByIndex<T = unknown>(index: number): T;
-  switchToHttp(): HttpArgumentsHost;
-  switchToRpc(): RpcArgumentsHost;
-  switchToWs(): WsArgumentsHost;
-  getType(): CT;
-  getClass<T = unknown>(): Class<T>;
-  getHandler(): Func;
-}
+export type ContextType = keyof ArgsTypeMap;

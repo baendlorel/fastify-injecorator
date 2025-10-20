@@ -2,9 +2,9 @@ import fastify from 'fastify';
 import { describe, it, expect } from 'vitest';
 
 import { Injectable, Inject } from '@/index.js';
-import lazyInjector from '@/core/injecorator/register/lazy-injector.js';
-import { Module } from '@/core/injecorator/decorators/module.js';
-import { apply } from '@/core/injecorator/register/index.js';
+import lazyInjector from '@/register/lazy-injector.js';
+import { Module } from '@/decorators/module.js';
+import { apply } from '@/register/index.js';
 // import '@/common/promise.js';
 
 describe('Injectorator Full', () => {

@@ -1,5 +1,24 @@
 import { ReflectDeep } from 'reflect-deep';
 import { concatArr } from 'concat-arr';
+import {
+  ProviderMetadata,
+  ControllerMetadata,
+  InjectArg,
+  InjectMetadata,
+  ModuleMetadata,
+  DynamicModule,
+  ProviderOptions,
+  InjectToken,
+} from '@/types/injecorator.js';
+import {
+  RouteApiSchema,
+  InterceptorGetter,
+  GuardGetter,
+  FilterGetter,
+  PipeOptions,
+  PipeGetter,
+  PipeFullSchema,
+} from '@/types/middleware.js';
 
 import { Sym } from '@/common/index.js';
 import { splitPath, toModuleClass } from '@/common/utils.js';
@@ -19,12 +38,10 @@ class Meta {
     return ReflectDeep.get<T>(cls, [Sym.metadata, Sym.Root, ...keys]);
   }
 
-  setController(context: StrictClassDecoratorContext, prefix?: string): boolean {
+  setController(context: ClassDecoratorContext, prefix?: string): boolean {
     const data: ProviderMetadata = { args: [] };
     const controlled: ControllerMetadata = { prefix: splitPath(prefix) };
-    return (
-      this.set(context, [Sym.Provider], data) && this.set(context, [Sym.Controller], controlled)
-    );
+    return this.set(context, [Sym.Provider], data) && this.set(context, [Sym.Controller], controlled);
   }
 
   getController(cls: Class): ControllerMetadata {
@@ -34,11 +51,7 @@ class Meta {
   /**
    * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteBasic]`
    */
-  setRoute(
-    context: StrictClassMethodDecoratorContext,
-    httpMethod: string,
-    route?: string
-  ): boolean {
+  setRoute(context: ClassMethodDecoratorContext, httpMethod: string, route?: string): boolean {
     const basic: RouteBasic = {
       method: httpMethod,
       route: splitPath(route),
@@ -54,21 +67,21 @@ class Meta {
   /**
    * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteOpt]`
    */
-  setOpt(context: StrictClassMethodDecoratorContext, opts: RouteOptType): boolean {
+  setOpt(context: ClassMethodDecoratorContext, opts: RouteOptType): boolean {
     return this.set(context, [Sym.Route, context.name, Sym.RouteOpt], opts);
   }
 
   /**
    * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteSchema]`
    */
-  setSchema(context: StrictClassMethodDecoratorContext, schema: RouteApiSchema): boolean {
+  setSchema(context: ClassMethodDecoratorContext, schema: RouteApiSchema): boolean {
     return this.set(context, [Sym.Route, context.name, Sym.RouteApiSchema], schema);
   }
 
   /**
    * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.HandlerArgs]`
    */
-  setHandlerArgs(context: StrictClassMethodDecoratorContext, propertyPaths: string[][]) {
+  setHandlerArgs(context: ClassMethodDecoratorContext, propertyPaths: string[][]) {
     return this.set(context, [Sym.Route, context.name, Sym.HandlerArgs], propertyPaths);
   }
 
@@ -116,14 +129,7 @@ class Meta {
    * - some errors might be hidden when returning empty normalized metadata in get.
    */
   setModule(context: ClassDecoratorContext, options: Partial<ModuleMetadata>): boolean {
-    const {
-      controllers = [],
-      providers = [],
-      imports = [],
-      exports = [],
-      outer = false,
-      prefix = '',
-    } = options;
+    const { controllers = [], providers = [], imports = [], exports = [], outer = false, prefix = '' } = options;
 
     /* oxlint-disable typescript/no-this-alias */
     const self = this;
@@ -139,9 +145,7 @@ class Meta {
             return self.getModule(moduleClass).exports.map((e) => e.name);
           })
           .flat();
-        const providerTokens: Key[] = this.providers.map((p: ProviderOptions) =>
-          provider.getToken(p)
-        );
+        const providerTokens: Key[] = this.providers.map((p: ProviderOptions) => provider.getToken(p));
         return [...providerTokens, ...imported, ...collection.globalProviders];
       },
       outer,
@@ -192,10 +196,7 @@ class Meta {
    * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Provider]`
    * - Class level and method level will be stored in different symbols
    */
-  setUseInterceptors(
-    context: ClassDecoratorContext | ClassMethodDecoratorContext,
-    tokens: InjectToken[]
-  ): boolean {
+  setUseInterceptors(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
       return this.set(context, [Sym.ControllerInterceptor], tokens);
     }
@@ -211,10 +212,7 @@ class Meta {
     };
   }
 
-  setUseGuards(
-    context: ClassDecoratorContext | ClassMethodDecoratorContext,
-    tokens: InjectToken[]
-  ): boolean {
+  setUseGuards(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
       return this.set(context, [Sym.ControllerGuard], tokens);
     }
@@ -229,10 +227,7 @@ class Meta {
     };
   }
 
-  setUseFilters(
-    context: ClassDecoratorContext | ClassMethodDecoratorContext,
-    tokens: InjectToken[]
-  ): boolean {
+  setUseFilters(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
       return this.set(context, [Sym.ControllerFilter], tokens);
     }
@@ -247,10 +242,7 @@ class Meta {
     };
   }
 
-  setUsePipes(
-    context: ClassDecoratorContext | ClassMethodDecoratorContext,
-    pipes: PipeOptions[]
-  ): boolean {
+  setUsePipes(context: ClassDecoratorContext | ClassMethodDecoratorContext, pipes: PipeOptions[]): boolean {
     if (context.kind === 'class') {
       return this.set(context, [Sym.ControllerPipe], pipes);
     }

@@ -8,7 +8,7 @@ import { RouteOptType } from '@/types/index.js';
  * @returns
  */
 export function Opt<T extends RouteOptType>(opts: T) {
-  return function (target: Func, context: StrictClassMethodDecoratorContext) {
+  return function (target: Func, context: ClassMethodDecoratorContext) {
     expect.methodDecorator(target, context);
     expect.isObject(opts, `Given opts must be a RouteShorthandOptions of Fastify`);
     meta.setOpt(context, opts);

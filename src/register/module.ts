@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMetadata } from '@/types/injecorator.js';
 import { toDynamicModule, toModuleClass } from '@/common/index.js';
 import { expect } from '@/asserts/index.js';
 import { tryToGetGlobalToken } from '@/common/inject-keys.js';

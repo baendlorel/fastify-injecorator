@@ -1,3 +1,4 @@
+import { InjectArg } from '@/types/injecorator.js';
 import { expect, whether } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

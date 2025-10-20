@@ -1,3 +1,5 @@
+import { InjectToken } from '@/types/injecorator.js';
+import { InjecoratorGuard } from '@/types/middleware.js';
 import { expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { Injectable } from '../injectable.js';
@@ -24,10 +26,7 @@ export function Guard() {
  */
 export function UseGuards(...guards: InjectToken[]) {
   expect(guards.length > 0, '@UseGuards requires at least one guard');
-  return function (
-    target: Class | Func,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext
-  ) {
+  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(guards, target, context);
 
     meta.setUseGuards(context, guards);

@@ -1,3 +1,4 @@
+import { BaseHttpException } from '@/types/injecorator.js';
 import { HttpStatus } from '@/common/status.js';
 
 /**

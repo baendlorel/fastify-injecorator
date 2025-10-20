@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toAssigned } from 'to-assigned';
+import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { Sym } from '@/common/sym.js';
 import { expect, whether } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
@@ -36,8 +37,7 @@ function predicate(opts: PipeOptions) {
     expect.orObject(schema, 'Pipe options.schema must be an object or omitted');
   }
   expect.isInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
-  const validPipe =
-    isBasicPipe(pipe) || (whether.isClass(pipe) && meta.isPipe(pipe)) || whether.isKey(pipe);
+  const validPipe = isBasicPipe(pipe) || (whether.isClass(pipe) && meta.isPipe(pipe)) || whether.isKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }
 
@@ -53,10 +53,7 @@ export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   const normalized = pipes.map((pipe) => (whether.isClass(pipe) ? { pipe } : pipe));
   normalized.forEach(predicate);
 
-  return function (
-    target: Class | Func,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext
-  ) {
+  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware([], target, context);
 
     meta.setUsePipes(context, normalized);

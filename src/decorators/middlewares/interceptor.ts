@@ -1,3 +1,5 @@
+import { InjectToken } from '@/types/injecorator.js';
+import { InjecoratorInterceptor } from '@/types/middleware.js';
 import { expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { Injectable } from '../injectable.js';
@@ -27,10 +29,7 @@ export function Interceptor() {
  */
 export function UseInterceptors(...interceptors: InjectToken[]) {
   expect(interceptors.length > 0, '@UseInterceptors requires at least one interceptor');
-  return function (
-    target: Class | Func,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext
-  ) {
+  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(interceptors, target, context);
     meta.setUseInterceptors(context, interceptors);
   };

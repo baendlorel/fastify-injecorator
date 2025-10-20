@@ -1,8 +1,11 @@
+import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
+import { PipeOptions, PipeTask, PipeFullSchema, InjecoratorPipe } from '@/types/middleware.js';
+import { InjectToken } from '@/types/injecorator.js';
+
 import { Sym } from '@/common/sym.js';
-import { createSerialTask, Taskify } from '@/common/serial-task.js';
 import lazyInjector from '@/register/lazy-injector.js';
 
-export function createPipe(pipeOpts: PipeOptions[]): Taskify<PipeTask> {
+export function createPipe(pipeOpts: PipeOptions[]): TaskifyAsync<PipeTask> {
   const tokens: InjectToken[] = [];
   const schemas: (PipeFullSchema | typeof Sym.NotProvided)[] = [];
 
@@ -12,7 +15,7 @@ export function createPipe(pipeOpts: PipeOptions[]): Taskify<PipeTask> {
     schemas.push(schema);
   }
 
-  return createSerialTask<PipeTask>({
+  return createSerialTaskAsync<PipeTask>({
     tasks: lazyInjector.getMiddlewareHooks<InjecoratorPipe>(tokens, 'transform'),
     resultWrapper: (_task, i, _tasks, args) => {
       if (schemas[i] === Sym.NotProvided) {

@@ -1,3 +1,4 @@
+import { RouteApiSchema } from '@/types/middleware.js';
 import { expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

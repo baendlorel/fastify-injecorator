@@ -1,3 +1,4 @@
+import { DynamicModule } from '@/types/injecorator.js';
 import { expect, whether } from '@/asserts/index.js';
 
 /**

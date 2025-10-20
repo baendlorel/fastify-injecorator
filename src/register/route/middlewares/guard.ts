@@ -1,12 +1,16 @@
+import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
+import { GuardTask, InjecoratorGuard } from '@/types/middleware.js';
+import { InjectToken } from '@/types/injecorator.js';
+
 import { ForbiddenException } from '@/exceptions/index.js';
-import { createSerialTask, Taskify } from '@/common/serial-task.js';
 import lazyInjector from '@/register/lazy-injector.js';
+import { ExecutionContext } from '@/common/execution-context.class.js';
 
 /**
  * Create a preValidation hook for the route
  */
-export function createGuard(tokens: InjectToken[]): Taskify<GuardTask> {
-  const task = createSerialTask<GuardTask>({
+export function createGuard(tokens: InjectToken[]): TaskifyAsync<GuardTask> {
+  const task = createSerialTaskAsync<GuardTask>({
     tasks: lazyInjector.getMiddlewareHooks<InjecoratorGuard>(tokens, 'canActivate'),
     resultWrapper: (_task, _i, _tasks, args) => args,
     breakCondition: (_task, _i, _tasks, _args, lastReturn) => lastReturn === false,

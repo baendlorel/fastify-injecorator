@@ -1,3 +1,5 @@
+import { ProviderStandardOptions, ProviderOptions } from '@/types/injecorator.js';
+
 export const APP_LOGGER = Symbol('APP_LOGGER');
 export const APP_INTERCEPTOR = Symbol('APP_INTERCEPTOR');
 export const APP_FILTER = Symbol('APP_FILTER');

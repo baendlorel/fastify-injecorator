@@ -1,7 +1,8 @@
+import { TaskifyAsync } from 'serial-task';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { expect } from '@/asserts/expect.js';
-import { Taskify } from '@/common/serial-task.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
+import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
 async function run(fns: Func[]) {
   for (let i = 0; i < fns.length; i++) {
@@ -9,10 +10,10 @@ async function run(fns: Func[]) {
   }
 }
 interface MiddlewareGroup {
-  guard: Taskify<GuardTask>;
-  interceptor: Taskify<InterceptorTask>;
-  pipe: Taskify<PipeTask>;
-  filter: Taskify<FilterTask>;
+  guard: TaskifyAsync<GuardTask>;
+  interceptor: TaskifyAsync<InterceptorTask>;
+  pipe: TaskifyAsync<PipeTask>;
+  filter: TaskifyAsync<FilterTask>;
 }
 
 export function createHandler(controller: Class, method: Func, middlewares: MiddlewareGroup) {

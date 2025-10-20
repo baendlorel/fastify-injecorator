@@ -1,3 +1,5 @@
+import { InjectToken } from '@/types/injecorator.js';
+import { InjecoratorFilter } from '@/types/middleware.js';
 import { expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { subclassOf } from '@/common/subclass-of.js';
@@ -40,10 +42,7 @@ export function Filter(...exceptionClasses: Class[]) {
  */
 export function UseFilters(...filters: InjectToken[]) {
   expect(filters.length > 0, '@UseFilters requires at least one filter');
-  return function (
-    target: Class | Func,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext
-  ) {
+  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(filters, target, context);
 
     meta.setUseFilters(context, filters);

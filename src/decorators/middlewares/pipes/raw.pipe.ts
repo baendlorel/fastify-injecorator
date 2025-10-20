@@ -1,4 +1,5 @@
-import '@/common/promise.js';
+import { InjecoratorPipe } from '@/types/middleware.js';
+import { ExecutionContext } from '@/common/execution-context.class.js';
 import { basicTransformer } from './basic-transformer.js';
 
 export class PipeRaw implements InjecoratorPipe {

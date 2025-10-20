@@ -1,12 +1,7 @@
 import { ReflectDeep } from 'reflect-deep';
+import { ModuleMetadata } from '@/types/injecorator.js';
 import { Sym } from '@/common/index.js';
-import {
-  APP_LOGGER,
-  APP_INTERCEPTOR,
-  APP_FILTER,
-  APP_GUARD,
-  APP_PIPE,
-} from '@/common/inject-keys.js';
+import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@/common/inject-keys.js';
 import { expect } from '@/asserts/index.js';
 
 /**
@@ -62,11 +57,7 @@ class Collection {
 
   assembleGlobalProviders() {
     this.globalModules.forEach((m) => {
-      const moduleMetadata = ReflectDeep.get(m, [
-        Sym.metadata,
-        Sym.Root,
-        Sym.Module,
-      ]) as ModuleMetadata;
+      const moduleMetadata = ReflectDeep.get(m, [Sym.metadata, Sym.Root, Sym.Module]) as ModuleMetadata;
       moduleMetadata.exports.forEach((exported) => this.globalProviders.add(exported.name));
     });
     [...this.globalFilters, ...this.globalGuards, ...this.globalInterceptors].forEach((token) =>

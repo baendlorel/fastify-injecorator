@@ -51,7 +51,7 @@
     "mysql2": "^3.14.1",
     "reflect-deep": "^1.3.0",
     "rxjs": "^7.8.2",
-    "serial-task": "^1.0.1",
+    "serial-task": "^1.1.0",
     "to-assigned": "^1.1.1",
     "zod": "^3.25.67"
   },

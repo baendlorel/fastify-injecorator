@@ -1,3 +1,4 @@
+import { InjectToken } from '@/types/injecorator.js';
 import { expect } from '@/asserts/index.js';
 
 /**

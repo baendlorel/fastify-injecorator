@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { InjectToken, InjectArg, ProviderOptions, ProviderStandardOptions } from '@/types/injecorator.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -57,10 +58,7 @@ class UntypedWhether extends Function {
    * @param predicate function to validate each element
    * @param msg
    */
-  isArray<T = any>(
-    arr: any,
-    predicate?: (value: T, index?: number, array?: T[]) => boolean
-  ): arr is T[] {
+  isArray<T = any>(arr: any, predicate?: (value: T, index?: number, array?: T[]) => boolean): arr is T[] {
     if (!Array.isArray(arr)) {
       return false;
     }

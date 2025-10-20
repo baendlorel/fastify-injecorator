@@ -1,4 +1,5 @@
 import { ReflectDeep } from 'reflect-deep';
+import { ModuleMetadata, DynamicModule } from '@/types/injecorator.js';
 
 import { Sym } from '@/common/index.js';
 import { createNamedClass } from '@/common/utils.js';

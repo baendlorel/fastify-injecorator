@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "oxlint:recommended",
+    "oxlint-plugin-prettier/recommended",
+    "oxlint-plugin-typescript/recommended"
+  ],
+  "ignorePatterns": [
+    "dist/**/*.ts",
+    "backup/**/*.ts",
+    "tests/**/*.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
+    "node_modules/",
+    "coverage/**/*.ts",
+    "build/"
+  ],
+  "plugins": [
+    "typescript"
+  ],
+  "rules": {
+    "no-inferrable-types": "off",
+    "prefer-for-of": "off",
+    "unified-signatures": "off",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "no-extraneous-class": "off",
+    "class-literal-property-style": [
+      "error",
+      "fields"
+    ]
+  }
+}

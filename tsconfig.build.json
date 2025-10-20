@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    // 继承基础配置，但可以覆盖一些选项
+    "declaration": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["tests/**/*"]
+}

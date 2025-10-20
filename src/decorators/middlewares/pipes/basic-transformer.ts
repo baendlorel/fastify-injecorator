@@ -11,24 +11,22 @@ type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
 
 type Compiler = FastifySchemaCompiler<PipeSchema>;
 
-type MaybeCompiler = Compiler | typeof Sym.NotProvided | typeof Sym.Uninitialized;
-
 type ValidatorReturn = boolean | { value?: unknown; error?: Error };
 
 class BasicTransformer {
-  private validatorCompiler: MaybeCompiler = Sym.Uninitialized;
+  private validatorCompiler: Compiler | null = null;
   private readonly schemaMap = new Map<PipeSchema, Validator>();
 
-  private getValidator(compiler: Compiler | undefined, schema: PipeSchema): Validator | null {
-    if (this.validatorCompiler === Sym.Uninitialized) {
-      this.validatorCompiler = typeof compiler === 'function' ? compiler : Sym.NotProvided;
+  private getValidator(compiler: Compiler | undefined, schema?: PipeSchema): Validator | null {
+    if (this.validatorCompiler === null) {
+      this.validatorCompiler = typeof compiler === 'function' ? compiler : null;
     }
 
-    if (this.validatorCompiler === Sym.NotProvided) {
+    if (this.validatorCompiler === null) {
       return null; // No fastify schema compiler provided
     }
 
-    if (schema === Sym.NotProvided) {
+    if (schema === undefined) {
       return null; // No schema provided
     }
 
@@ -44,7 +42,7 @@ class BasicTransformer {
 
   private handleResult(validator: Validator, result: ValidatorReturn) {
     if (result === true) {
-      return Sym.Void; // Validation passed
+      return Sym.void; // Validation passed
     }
 
     if (validator.errors && validator.errors.length > 0) {
@@ -55,43 +53,38 @@ class BasicTransformer {
       throw new BadRequestException('Validation failed');
     }
 
-    const { value = Sym.NotProvided, error = Sym.NotProvided } = result;
-    if (error instanceof Error) {
-      throw new BadRequestException(error.message);
+    if (result.error instanceof Error) {
+      throw new BadRequestException(result.error.message);
     }
 
-    if (value !== Sym.NotProvided) {
-      return value;
+    if ('value' in result) {
+      return result.value;
     }
 
-    return Sym.Void; // Validation passed
+    return Sym.void; // Validation passed
   }
 
-  private getNeededSchema(httpPart: HttpPart, schema: PipeFullSchema | typeof Sym.NotProvided) {
-    if (schema === Sym.NotProvided) {
-      return Sym.NotProvided;
+  private getNeededSchema(httpPart: HttpPart, schema?: PipeFullSchema) {
+    if (schema === undefined) {
+      return undefined;
     }
     if (whether.isObject<PipeFullSchema>(schema)) {
       switch (httpPart) {
         case 'body':
-          return 'body' in schema ? schema.body : Sym.NotProvided;
+          return 'body' in schema ? schema.body : undefined;
         case 'params':
-          return 'params' in schema ? schema.params : Sym.NotProvided;
+          return 'params' in schema ? schema.params : undefined;
         case 'query':
-          return 'querystring' in schema ? schema.querystring : Sym.NotProvided;
+          return 'querystring' in schema ? schema.querystring : undefined;
         case 'ip':
         case 'raw':
         default:
-          return Sym.NotProvided;
+          return undefined;
       }
     }
   }
 
-  private async main(
-    context: ExecutionContext,
-    httpPart: HttpPart,
-    schema: PipeFullSchema | typeof Sym.NotProvided = Sym.NotProvided
-  ) {
+  private async main(context: ExecutionContext, httpPart: HttpPart, schema?: PipeFullSchema) {
     const request = context.switchToHttp().getRequest();
     const data = request[httpPart];
     const args = [data, context.switchToHttp().getReply()];
@@ -104,14 +97,14 @@ class BasicTransformer {
 
     const rawResult = await promiseTry(validator, null, data);
     const result = this.handleResult(validator, rawResult);
-    if (result !== Sym.Void) {
+    if (result !== Sym.void) {
       args[0] = result; // Update the first argument with the validated data
     }
     return args;
   }
 
-  get transformer() {
-    return this.main.bind(this);
+  get transformer(): typeof this.main {
+    return (...args) => this.main.apply(this, args);
   }
 }
 

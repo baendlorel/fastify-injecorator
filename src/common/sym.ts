@@ -12,6 +12,11 @@ export class Sym extends null {
       ? (Object.defineProperty(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
       : Symbol.metadata;
 
+  // # signs
+  static readonly void = Symbol('void');
+
+  // # metadata keys
+
   static readonly Root = Symbol('Injectorator');
 
   /**

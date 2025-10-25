@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifySchema } from 'fastify';
 import { ExecutionContext } from '@/common/execution-context.class.js';
-import { InjecoratorPipe } from '@/types/middleware.js';
 import { OrPromise } from '@/types/utils.js';
 
 /**

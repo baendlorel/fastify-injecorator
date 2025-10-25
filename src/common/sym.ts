@@ -1,3 +1,4 @@
+// todo 考虑改成小写namespace
 /**
  * Property keys used to store metadata.
  */

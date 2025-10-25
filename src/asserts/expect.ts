@@ -2,97 +2,124 @@
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
 import { InjectArg, InjectToken } from '@/types/injecorator.js';
+import { fnToString } from '@/common/native.js';
 
 import { Sym } from '@/common/index.js';
 import { whether } from './whether.js';
 import { InjecoratorError } from './injecorator-error.class.js';
 
-// todo 看这里能否缩减，比如缩减成名称空间
-// todo expect 和 meta 都看看
+export const throws = (msg: string): never => {
+  throw new InjecoratorError(msg);
+};
+
+// # Basic
+
+export const dexpect = (target: any, msg: string): asserts target => {
+  if (!target) {
+    throws(msg);
+  }
+};
+
+export const eincludes = (arr: any[], o: any, msg?: string) => {
+  if (!arr.includes(o)) {
+    throws(msg ?? `'${o}' should be one of [${arr.join(', ')}]`);
+  }
+};
+
+export const eorString = (o: any, msg: string): asserts o is string | undefined => {
+  if (o !== undefined && typeof o !== 'string') {
+    throws(msg);
+  }
+};
+
+export const eisString = (o: any, msg: string): asserts o is string | undefined => {
+  if (typeof o !== 'string') {
+    throws(msg);
+  }
+};
+
+export const eorObject = (o: any, msg: string): asserts o is object | undefined => {
+  if (o !== undefined && (typeof o !== 'object' || o === null)) {
+    throws(msg);
+  }
+};
+
+export const eisObject: (o: any, msg: string) => asserts o is object = (o, msg) => {
+  if (typeof o !== 'object' || o === null) {
+    throws(msg);
+  }
+};
+
+export const eisKey = (o: any, msg: string): asserts o is InjectToken => {
+  if (typeof o !== 'string' && typeof o !== 'symbol' && !whether.isClass(o)) {
+    throws(msg);
+  }
+};
+
+export const eisClass = (o: any, msg: string): asserts o is Class => {
+  if (typeof o !== 'function') {
+    throws(msg);
+  }
+  const str = fnToString.call(o);
+  // & This is better than using pseudo calling
+  if (!str.startsWith('class ') && !str.startsWith('[class ')) {
+    throws(msg);
+  }
+};
+
+export const eisBoolean = (o: any, msg: string): asserts o is boolean => {
+  if (o !== true && o !== false) {
+    throws(msg);
+  }
+};
+
+export const eisUndefined = (o: any, msg: string): asserts o is undefined => {
+  if (o !== undefined) {
+    throws(msg);
+  }
+};
+
+export const eisFunction = (o: any, msg: string): asserts o is Func => {
+  if (typeof o !== 'function') {
+    throws(msg);
+  }
+};
 
 /**
- * It is impossible to type the expecter as an assert function.
- * So we should do it manually blow the class definition.
+ * Asserts that `arr` is an array.
+ * - If `asserter` is provided, it will be called for each element in the array.
+ *   - If it returns a string, it will throw an error with that message.
+ *   - If it returns `null` or `undefined`, the element is considered valid.
+ *   - If it returns `boolean` and value is `true`, the element is considered valid.
  */
+export const eisArray = <T = any>(
+  arr: any,
+  msg: string,
+  predicate?: (value: T, index: number, array: T[]) => void
+): asserts arr is T[] => {
+  if (!Array.isArray(arr)) {
+    throw new InjecoratorError(msg);
+  }
+
+  if (predicate) {
+    for (let i = 0; i < arr.length; i++) {
+      predicate(arr[i], i, arr);
+    }
+  }
+};
+
+export const eisRecord: <V>(
+  target: unknown,
+  predicate: (value: V, key?: Key) => void,
+  msg: string
+) => asserts target is Record<Key, V> = (target, predicate, msg) => {
+  eisObject(target, msg);
+  for (const [key, value] of Object.entries(target)) {
+    predicate(value, key);
+  }
+};
+
 class UntypedExpecter extends Function {
-  constructor() {
-    const fstr = `if(!o){\ne=Error(m);\ne.name='__NAME__';throw e}`;
-    super('o', 'm', fstr);
-  }
-
-  throws(msg: string) {
-    return new InjecoratorError(msg);
-  }
-
-  // #region Common assertions
-  includes(arr: any[], o: any, msg?: string) {
-    if (!arr.includes(o)) {
-      throw new InjecoratorError(msg ?? `'${o}' should be one of [${arr.join(', ')}]`);
-    }
-  }
-
-  has(o: any, keys: Key[], msg?: string) {
-    const hasnt: Key[] = [];
-    for (let i = 0; i < keys.length; i++) {
-      const k = keys[i];
-      if (!Reflect.has(o, k)) {
-        hasnt.push(k);
-      }
-    }
-    if (hasnt.length > 0) {
-      const hasntKeys = hasnt.map((k) => String(k)).join(', ');
-      throw new InjecoratorError(msg ?? `'${o}' should has property ${hasntKeys}`);
-    }
-  }
-
-  orString(o: any, msg?: string): asserts o is string | undefined {
-    if (o !== undefined && typeof o !== 'string') {
-      throw new InjecoratorError(msg ?? 'Should be a string or left it undefined');
-    }
-  }
-
-  isString(o: any, msg = 'Should be a string'): asserts o is string {
-    if (typeof o !== 'string') {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  orObject<T extends object>(o: any, msg = 'Should be an object'): asserts o is T | undefined {
-    if (o !== undefined && (typeof o !== 'object' || o === null)) {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  isObject<T extends object>(o: any, msg = 'Should be an object'): asserts o is T {
-    if (typeof o !== 'object' || o === null) {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  isKey(o: any, msg = 'Should be string/symbol'): asserts o is Key {
-    if (typeof o !== 'string' && typeof o !== 'symbol') {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  isClass(o: any, msg = 'Should be a class/constructor'): asserts o is Class {
-    if (typeof o !== 'function') {
-      throw new InjecoratorError(msg);
-    }
-    try {
-      // No side effects, just to check if it is a class
-      new new Proxy(o, { construct: () => ({}) })();
-    } catch {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  orClass(o: any, msg = 'Should be an object'): asserts o is Class | undefined {
-    if (o !== undefined) {
-      this.isClass(o, msg);
-    }
-  }
-
   isInjectToken(o: any, msg: string = `Should be a string, symbol or class`): asserts o is InjectToken {
     if (!whether.isInjectToken(o)) {
       throw new InjecoratorError(msg);
@@ -104,65 +131,6 @@ class UntypedExpecter extends Function {
       throw new InjecoratorError(msg);
     }
   }
-
-  isBoolean(o: any, msg = 'Should be a boolean value'): asserts o is boolean {
-    if (o !== true && o !== false) {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  isUndefined(o: any, msg = 'Should be undefined'): asserts o is undefined {
-    if (o !== undefined) {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  isFunction(o: any, msg = 'Should be a function'): asserts o is Func {
-    if (typeof o !== 'function') {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  /**
-   * Asserts that `arr` is an array.
-   * - If `asserter` is provided, it will be called for each element in the array.
-   *   - If it returns a string, it will throw an error with that message.
-   *   - If it returns `null` or `undefined`, the element is considered valid.
-   *   - If it returns `boolean` and value is `true`, the element is considered valid.
-   * @param arr target array
-   * @param asserter function to validate each element
-   * @param msg
-   */
-  isArray<T = any>(
-    arr: any,
-    asserter?: (value: T, index?: number, array?: T[]) => void,
-    msg = 'Should be an array'
-  ): asserts arr is T[] {
-    if (!Array.isArray(arr)) {
-      throw new InjecoratorError(msg);
-    }
-
-    if (!asserter) {
-      return;
-    }
-
-    for (let i = 0; i < arr.length; i++) {
-      asserter(arr[i], i, arr);
-    }
-  }
-
-  isAnyArray(arr: any, msg = 'Should be an array'): asserts arr is any[] {
-    if (!Array.isArray(arr)) {
-      throw new InjecoratorError(msg);
-    }
-  }
-
-  record<V>(target: unknown, asserter: (value: V, key?: Key) => void, msg: string): asserts target is Record<Key, V> {
-    this.isObject(target, msg);
-    Object.entries(target).forEach((entry) => asserter(entry[1], entry[0]));
-  }
-
-  // #endregion
 
   // #region Decorator context assertions
   isClassDecoratorContext(o: any, msg = 'Should be a ClassDecoratorContext'): asserts o is ClassDecoratorContext {

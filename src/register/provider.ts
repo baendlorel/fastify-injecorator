@@ -10,8 +10,8 @@ import {
   ProviderUseExisting,
 } from '@/types/injecorator.js';
 
-class Provider {
-  match(
+namespace ph {
+  export function match(
     opts: ProviderOptions,
     callbacks: {
       useClass?: (token: Key, cls: Class) => unknown;
@@ -54,7 +54,7 @@ class Provider {
     throws(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);
   }
 
-  getToken(providerOptions: ProviderOptions) {
+  export function getToken(providerOptions: ProviderOptions) {
     const token = 'provide' in providerOptions ? providerOptions.provide : providerOptions.name;
     expectKey(token, `ProviderOptions must have a valid token, got '${providerOptions}'`);
     return token;
@@ -65,7 +65,7 @@ class Provider {
    * @param arg InjectArg
    * @returns  a token used by `lazyInjector.instanceMap`
    */
-  getInjectToken(arg: InjectArg) {
+  export function getInjectToken(arg: InjectArg) {
     if (typeof arg === 'string') {
       return arg;
     }
@@ -84,7 +84,7 @@ class Provider {
     throw throws('Cannot get inject token from argument: ' + String(arg));
   }
 
-  getInjectTokenName(arg: InjectArg) {
+  export function getInjectTokenName(arg: InjectArg) {
     if (typeof arg === 'string') {
       return arg;
     }
@@ -102,8 +102,4 @@ class Provider {
   }
 }
 
-/**
- * Provider helpers
- */
-const ph = new Provider();
 export default ph;

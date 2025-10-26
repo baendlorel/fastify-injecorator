@@ -29,8 +29,8 @@ describe('Custom Decorator Factory', () => {
     @Guard()
     class RoleGuard implements InjecoratorGuard {
       canActivate(context: ExecutionContext): boolean {
-        const roles = getCustomMetadata<string[]>('roles', context);
-        const permission = getCustomMetadata<string>('permission', context);
+        const roles = getCustomMetadata<string[]>(context.getClass(), 'roles', context.getClass());
+        const permission = getCustomMetadata<string>(context.getHandler(), 'permission', context.getClass());
 
         // Simple role check
         return roles?.includes('admin') || permission === 'read';
@@ -64,7 +64,7 @@ describe('Custom Decorator Factory', () => {
     await apply(app, { rootModule: TestModule });
 
     // Test that the decorator stores metadata correctly
-    const controllerRoles = getCustomMetadata<string[]>('roles', TestController);
+    const controllerRoles = getCustomMetadata<string[]>(TestController, 'roles', TestController);
     expect(controllerRoles).toEqual(['user', 'admin']);
 
     // Cleanup
@@ -74,7 +74,7 @@ describe('Custom Decorator Factory', () => {
   it('should handle undefined metadata gracefully', () => {
     class TestClass {}
 
-    const nonExistentMetadata = getCustomMetadata<string>('nonexistent', TestClass);
+    const nonExistentMetadata = getCustomMetadata<string>(TestClass, 'nonexistent', TestClass);
     expect(nonExistentMetadata).toBeUndefined();
   });
 

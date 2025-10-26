@@ -1,5 +1,4 @@
 import { Class, Func, Key } from '@/types/primitive.js';
-import { ExecutionContext } from '@/common/execution-context.class.js';
 
 import { expectDecoratorContext, expectFunction, isClass, isFunction, throws } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
@@ -44,11 +43,11 @@ export function createCustomDecorator<T = unknown>(key: Key) {
     return function (target: Class | Func | undefined, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
       if (isClass(target)) {
-        return meta.set<T>(context, [key], metadata);
+        meta.set<T>(context, [key], metadata);
       } else if (isFunction(target)) {
-        return meta.set<T>(context, [sym.custom.method, target.name, key], metadata);
+        meta.set<T>(context, [sym.custom.method, target.name, key], metadata);
       } else if (target === undefined) {
-        return meta.set<T>(context, [sym.custom.field, context.name as Key, key], metadata);
+        meta.set<T>(context, [sym.custom.field, context.name as Key, key], metadata);
       }
     };
   };
@@ -79,21 +78,19 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * }
  * ```
  */
+// todo get的入参顺序有点奇怪，是否还是直接class，target，key比较好?
 export function getCustomMetadata<T = unknown>(
   target: Class | Func | Key,
   key: Key,
-  context: ExecutionContext
+  sourceClass: Class
 ): T | undefined {
   // If target is ExecutionContext, get metadata from the handler method first, then controller class
-  expectFunction(context?.getClass, '__func__ Invalid target for getCustomMetadata');
-  const controllerClass = context.getClass();
-
   if (isClass(target)) {
-    return meta.get<T>(controllerClass, [key]);
+    return meta.get<T>(sourceClass, [key]);
   } else if (isFunction(target)) {
-    return meta.get<T>(controllerClass, [sym.custom.method, target.name, key]);
+    return meta.get<T>(sourceClass, [sym.custom.method, target.name, key]);
   } else if (target === undefined) {
-    return meta.get<T>(controllerClass, [sym.custom.field, target, key]);
+    return meta.get<T>(sourceClass, [sym.custom.field, target, key]);
   }
 
   throws(`__func__ Invalid target for getCustomMetadata, got ${typeof target}`);

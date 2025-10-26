@@ -1,5 +1,5 @@
 import { LazyInjectEntry, ProviderOptions } from '@/types/injecorator.js';
-import { whether } from '@/asserts/index.js';
+import { wisClass, wisKey } from '@/asserts/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
 import lazyInjector from '@/register/lazy-injector.js';
 
@@ -23,7 +23,7 @@ class TestingModule {
    * @returns
    */
   private getProvide(opts: ProviderOptions) {
-    return whether.isClass(opts) ? opts.name : opts.provide;
+    return wisClass(opts) ? opts.name : opts.provide;
   }
 
   createInstanceByClass(token: Key, cls: Class) {
@@ -37,7 +37,7 @@ class TestingModule {
   }
 
   get<T>(type: Class | Key): T {
-    const token = whether.isKey(type) ? type : type.name;
+    const token = wisKey(type) ? type : type.name;
     return this.instanceMap.get(token);
   }
 }

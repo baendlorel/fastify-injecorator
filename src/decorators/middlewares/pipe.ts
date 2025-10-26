@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
-import { expect, whether } from '@/asserts/index.js';
+import { ehasOneHook, eisInjectToken, eisObject, eorObject, expect, wisClass, wisKey } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 import { Injectable } from '../injectable.js';
@@ -17,11 +17,7 @@ import { isBasicPipe } from './pipes/is-basic-pipe.js';
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.hasOneHook<InjecoratorPipe>(
-      target,
-      hooks,
-      `Pipe class must implement at least one hook: [${hooks.join(', ')}]`
-    );
+    ehasOneHook<InjecoratorPipe>(target, hooks, `Pipe class must implement at least one hook: [${hooks.join(', ')}]`);
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
     meta.setPipe(context);
@@ -29,11 +25,11 @@ export function Pipe() {
 }
 
 function predicate(opts: PipeOptions) {
-  expect.isObject(opts, 'Pipe options must be an object');
+  eisObject(opts, 'Pipe options must be an object');
   const { schema, pipe } = opts;
-  expect.orObject(schema, 'Pipe options.schema must be an object or omitted');
-  expect.isInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
-  const validPipe = isBasicPipe(pipe) || (whether.isClass(pipe) && meta.isPipe(pipe)) || whether.isKey(pipe);
+  eorObject(schema, 'Pipe options.schema must be an object or omitted');
+  eisInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
+  const validPipe = isBasicPipe(pipe) || (wisClass(pipe) && meta.isPipe(pipe)) || wisKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }
 
@@ -46,7 +42,7 @@ function predicate(opts: PipeOptions) {
  */
 export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   expect(pipes.length > 0, '@UsePipes requires at least one pipe option or pipe class');
-  const normalized = pipes.map((pipe) => (whether.isClass(pipe) ? { pipe } : pipe));
+  const normalized = pipes.map((pipe) => (wisClass(pipe) ? { pipe } : pipe));
   normalized.forEach(predicate);
 
   return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {

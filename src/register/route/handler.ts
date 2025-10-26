@@ -1,6 +1,6 @@
 import { TaskifyAsync } from 'serial-task';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { expect } from '@/asserts/expect.js';
+import { eisArray } from '@/asserts/expect.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
 import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
@@ -32,7 +32,7 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
       if (piped.trivial) {
         piped.value = [request, reply];
       } else {
-        expect.isAnyArray(piped.value, `Pipe must return an array, but got: ${String(piped)}`);
+        eisArray(piped.value, `Pipe must return an array, but got: ${String(piped)}`);
       }
 
       // Handler

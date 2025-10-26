@@ -1,6 +1,6 @@
 import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorInterceptor } from '@/types/middleware.js';
-import { expect } from '@/asserts/index.js';
+import { ehasOneHook, expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -11,7 +11,7 @@ const hooks: (keyof InjecoratorInterceptor)[] = ['intercept'];
  */
 export function Interceptor() {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.hasOneHook<InjecoratorInterceptor>(
+    ehasOneHook<InjecoratorInterceptor>(
       target,
       hooks,
       `Interceptor class must implement at least one hook: [${hooks.join(', ')}]`

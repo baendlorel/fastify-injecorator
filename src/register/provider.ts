@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { expect, whether } from '@/asserts/index.js';
+import { eisClass, eisFunction, eisKey, expect, throws, wisClass, wisFunction } from '@/asserts/index.js';
 import { ProviderOptions, InjectArg } from '@/types/injecorator.js';
 
 class Provider {
@@ -14,15 +14,16 @@ class Provider {
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 
-    if (whether.isClass(opts) && useClass) {
+    if (wisClass(opts) && useClass) {
       const r = useClass(opts.name, opts);
       return r;
     }
 
     const optsStr = inspect(opts);
 
+    // todo 这里不需要in
     if ('useClass' in opts && useClass) {
-      expect.isClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
+      eisClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
       const r = useClass(opts.provide, opts.useClass);
       return r;
     }
@@ -33,23 +34,23 @@ class Provider {
     }
 
     if ('useFactory' in opts && useFactory) {
-      expect.isFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
+      eisFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
       const r = useFactory(opts.provide, opts.useFactory, opts.inject ?? []);
       return r;
     }
 
     if ('useExisting' in opts && useExisting) {
-      expect.isKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
+      eisKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
       const r = useExisting(opts.provide, opts.useExisting);
       return r;
     }
 
-    expect.throws(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);
+    throws(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);
   }
 
   getToken(providerOptions: ProviderOptions) {
     const token = 'provide' in providerOptions ? providerOptions.provide : providerOptions.name;
-    expect.isKey(token, `ProviderOptions must have a valid token, got '${providerOptions}'`);
+    eisKey(token, `ProviderOptions must have a valid token, got '${providerOptions}'`);
     return token;
   }
 
@@ -66,15 +67,15 @@ class Provider {
       return arg;
     }
 
-    if (whether.isClass(arg)) {
+    if (wisClass(arg)) {
       return arg.name;
     }
 
-    if (whether.isFunction(arg)) {
+    if (wisFunction(arg)) {
       return arg().name;
     }
 
-    throw expect.throws('Cannot get inject token from argument: ' + String(arg));
+    throw throws('Cannot get inject token from argument: ' + String(arg));
   }
 
   getInjectTokenName(arg: InjectArg) {
@@ -85,11 +86,11 @@ class Provider {
       return String(arg);
     }
 
-    if (whether.isClass(arg)) {
+    if (wisClass(arg)) {
       return arg.name;
     }
 
-    if (whether.isFunction(arg)) {
+    if (wisFunction(arg)) {
       return arg().name;
     }
   }

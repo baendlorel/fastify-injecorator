@@ -56,7 +56,7 @@ export const eisNotDecorated: (context: DecoratorContext, flag: symbol) => void 
   }
 };
 
-export const eisClassNotDecorated: (cls: Class, flag: symbol) => void = (cls, flag) => {
+export const eclassNotDecorated: (cls: Class, flag: symbol) => void = (cls, flag) => {
   if (ReflectDeep.has(cls, [Sym.metadata, Sym.Root, flag])) {
     throws(`'${String(cls.name)}' is already decorated`);
   }
@@ -78,7 +78,7 @@ export const eisProviderOptions: (target: unknown) => void = (target) => {
  * Middleware class must at least have 1 hook implemented
  * @param target it is a Middleware class
  */
-export const eisHasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: string): void => {
+export const ehasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: string): void => {
   const proto = target.prototype as T;
   eisObject(proto, 'Prototype should be an object');
   for (let i = 0; i < hooks.length; i++) {

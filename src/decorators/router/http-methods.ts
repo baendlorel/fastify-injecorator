@@ -1,12 +1,12 @@
-import { expect } from '@/asserts/index.js';
+import { eisMethodDecorator, eisString, eorString } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 function registerRoute(method: string) {
   return function (route?: string) {
     return function (target: Func, context: ClassMethodDecoratorContext) {
-      expect.methodDecorator(target, context);
-      expect.isString(method);
-      expect.orString(route, 'Given route must be string or undefined');
+      eisMethodDecorator(target, context);
+      eisString(method, 'Method must be a string');
+      eorString(route, 'Given route must be string or undefined');
       meta.setRoute(context, method, route);
     };
   };

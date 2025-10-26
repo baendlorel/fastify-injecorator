@@ -1,6 +1,6 @@
 import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorGuard } from '@/types/middleware.js';
-import { expect } from '@/asserts/index.js';
+import { ehasOneHook, expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -8,11 +8,7 @@ import { expectMiddleware } from './expect-middleware.js';
 const hooks: (keyof InjecoratorGuard)[] = ['canActivate'];
 export function Guard() {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.hasOneHook<InjecoratorGuard>(
-      target,
-      hooks,
-      `Guard class must implement at least one hook: [${hooks.join(', ')}]`
-    );
+    ehasOneHook<InjecoratorGuard>(target, hooks, `Guard class must implement at least one hook: [${hooks.join(', ')}]`);
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
     meta.setGuard(context);

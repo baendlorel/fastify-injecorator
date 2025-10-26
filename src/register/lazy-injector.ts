@@ -4,7 +4,7 @@ import { InjecoratorMiddleware } from '@/types/middleware.js';
 
 import { toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
-import { expect, whether } from '@/asserts/index.js';
+import { eisFunction, eisObject, expect, throws, wisClass, wisKey, wisObject } from '@/asserts/index.js';
 
 import meta from './meta.js';
 import provider from './provider.js';
@@ -22,11 +22,11 @@ class LazyInjector {
   private readonly instanceMap = new Map<Key, Instance | null>();
 
   private getProvide(opts: ProviderOptions) {
-    return whether.isClass(opts) ? opts.name : opts.provide;
+    return wisClass(opts) ? opts.name : opts.provide;
   }
 
   get<T extends object>(token: InjectToken) {
-    return this.instanceMap.get(whether.isKey(token) ? token : token.name) as T | undefined;
+    return this.instanceMap.get(wisKey(token) ? token : token.name) as T | undefined;
   }
 
   internalCreateInstanceByClass(cls: Class) {
@@ -40,16 +40,16 @@ class LazyInjector {
    */
   getMiddlewareHooks<T extends InjecoratorMiddleware>(tokens: InjectToken[], handlerName: keyof T & Key): Func[] {
     return tokens.map((token) => {
-      const instance = this.get(whether.isKey(token) ? token : token.name);
-      expect.isObject<T>(instance, `Cannot find class for token: ${String(token)}`);
+      const instance = this.get(wisKey(token) ? token : token.name);
+      eisObject<T>(instance, `Cannot find class for token: ${String(token)}`);
       const handler = instance[handlerName];
-      expect.isFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
+      eisFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
       return (...args) => handler.apply(instance, args);
     });
   }
 
   getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
-    const instance = this.instanceMap.get(whether.isKey(token) ? token : token.name) as T;
+    const instance = this.instanceMap.get(wisKey(token) ? token : token.name) as T;
     const cls = (Reflect.getPrototypeOf(instance)?.constructor ?? null) as Class | null;
     return { instance, cls };
   }
@@ -86,7 +86,7 @@ class LazyInjector {
   createInstance(opts: ProviderOptions): Instance {
     const token = this.getProvide(opts);
     const exist = this.instanceMap.get(token);
-    if (whether.isObject<Instance>(exist)) {
+    if (wisObject<Instance>(exist)) {
       return exist;
     }
     return provider.match(opts, {
@@ -99,15 +99,15 @@ class LazyInjector {
       },
       // ! This means the injections must be created after instanceMap being filled up
       useFactory: (token, factory, inject) => {
-        const instances = inject.map((arg) => this.instanceMap.get(whether.isKey(arg) ? arg : arg.name));
+        const instances = inject.map((arg) => this.instanceMap.get(wisKey(arg) ? arg : arg.name));
         const instance = factory(...instances);
         this.instanceMap.set(token, instance);
         return instance;
       },
       useExisting: (token, existingToken) => {
         const instance = this.instanceMap.get(existingToken);
-        if (!whether.isObject(instance)) {
-          expect.throws(`Cannot find existing provider: ${String(existingToken)}`);
+        if (!wisObject(instance)) {
+          throws(`Cannot find existing provider: ${String(existingToken)}`);
         }
         this.instanceMap.set(token, instance);
         return instance;
@@ -163,7 +163,7 @@ class LazyInjector {
       const moduleClass = toModuleClass(m);
       if (stack.includes(moduleClass)) {
         const chain = stack.map((s) => s.name).join(' -> ');
-        expect.throws(`Circular dependency detected: ${chain} -> ${String(moduleClass.name)}`);
+        throws(`Circular dependency detected: ${chain} -> ${String(moduleClass.name)}`);
       }
       stack.push(moduleClass);
       const moduleMetadata = meta.getModule(moduleClass);

@@ -1,4 +1,4 @@
-import { expect } from '@/asserts/index.js';
+import { eisInjectable, eorString } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -7,8 +7,8 @@ import meta from '@/register/meta.js';
  */
 export function Controller(prefix?: string) {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.injectable(target, context);
-    expect.orString(prefix, 'Controller prefix must be a string or undefined');
+    eisInjectable(target, context);
+    eorString(prefix, 'Controller prefix must be a string or undefined');
     meta.setController(context, prefix);
   };
 }

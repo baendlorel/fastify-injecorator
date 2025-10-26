@@ -1,6 +1,6 @@
 import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorFilter } from '@/types/middleware.js';
-import { expect } from '@/asserts/index.js';
+import { ehasOneHook, expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { subclassOf } from '@/common/subclass-of.js';
 
@@ -16,7 +16,7 @@ const hooks: (keyof InjecoratorFilter)[] = ['catch'];
  */
 export function Filter(...exceptionClasses: Class[]) {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.hasOneHook<InjecoratorFilter>(
+    ehasOneHook<InjecoratorFilter>(
       target,
       hooks,
       `Filter class must implement at least one hook: [${hooks.join(', ')}]`

@@ -1,5 +1,5 @@
 import { RouteApiSchema } from '@/types/middleware.js';
-import { expect } from '@/asserts/index.js';
+import { eisMethodDecorator, eisObject } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -8,8 +8,8 @@ import meta from '@/register/meta.js';
  */
 export function ApiSchema<T extends RouteApiSchema>(schema: T) {
   return function (target: Func, context: ClassMethodDecoratorContext) {
-    expect.methodDecorator(target, context);
-    expect.isObject(schema, `Given opts must be a RouteShorthandOptions of Fastify`);
+    eisMethodDecorator(target, context);
+    eisObject(schema, `Given opts must be a RouteShorthandOptions of Fastify`);
 
     meta.setSchema(context, schema);
   };

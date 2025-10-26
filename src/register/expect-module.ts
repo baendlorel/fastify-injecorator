@@ -5,7 +5,24 @@ import { InjectMetadata, ProviderOptions } from '@/types/injecorator.js';
 import { Sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
 import { toModuleClass } from '@/common/utils.js';
-import { expect, whether } from '@/asserts/index.js';
+import {
+  eincludes,
+  eisArray,
+  eisBoolean,
+  eisClass,
+  eisInjectArg,
+  eisKey,
+  eisObject,
+  eisProviderOptions,
+  eisRecord,
+  eisString,
+  eisUndefined,
+  eorObject,
+  wisClass,
+  wisKey,
+  wisObject,
+  wisPathNode,
+} from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import provider from './provider.js';
 
@@ -30,26 +47,19 @@ class ExpectModule extends Function {
    * - injections?: a record of class dependencies
    */
   isProvider(target: unknown): asserts target is Class {
-    expect.isClass(target, `Target is not a class: ${String(target)}`);
+    eisClass(target, `Target is not a class: ${String(target)}`);
 
     // Should have args[]
     const providerMetadata = meta.getProvider(target);
-    expect.isObject(providerMetadata, `class '${target.name}' is not a provider`);
-    expect.isArray(providerMetadata.args);
+    eisObject(providerMetadata, `class '${target.name}' is not a provider`);
+    eisArray(providerMetadata.args, 'provider metadata.args should be an array');
 
     // If have injections
     const inject = meta.getInject(target);
     if (inject) {
-      const notRecordMsg = `class '${target.name}': Inject metadata should be a record of class dependencies`;
-      expect.isObject(inject, notRecordMsg);
-      expect.record<InjectMetadata>(
-        inject,
-        (value) => {
-          expect.isObject(value, notRecordMsg);
-          expect.isInjectArg(value.dependency);
-        },
-        notRecordMsg
-      );
+      const msg = `class '${target.name}': Inject metadata should be a record of class dependencies`;
+      eisObject(inject, msg);
+      eisRecord<InjectMetadata>(inject, (value) => (eisObject(value, msg), eisInjectArg(value.dependency)), msg);
     }
   }
 
@@ -66,7 +76,7 @@ class ExpectModule extends Function {
 
     // Should not be a controller
     const controlled = meta.getController(target);
-    expect.isUndefined(controlled, `@Injectable should not be a controller`);
+    eisUndefined(controlled, `@Injectable should not be a controller`);
 
     this.injectableCache.add(target);
   }
@@ -92,30 +102,30 @@ class ExpectModule extends Function {
 
     // controller metadata check
     const pred = (pathNode: string) => {
-      if (!whether.isPathNode(pathNode)) {
+      if (!wisPathNode(pathNode)) {
         return `Path node must match /^[a-zA-Z0-9_-]+$/. But got: [${pathNode}]`;
       }
       return true;
     };
 
     const controlled = meta.getController(target);
-    expect.isObject(controlled, `class '${target.name}': is not a controller`);
-    expect.isArray(controlled.prefix, pred, `class '${target.name}': prefix should be a string array`);
+    eisObject(controlled, `class '${target.name}': is not a controller`);
+    eisArray(controlled.prefix, `class '${target.name}': prefix should be a string array`, pred);
 
     const routes = meta.getRoute(target);
-    expect.isObject(routes, `${target.name}: should have routes`);
-    expect.record<RouteConfig>(
+    eisObject(routes, `${target.name}: should have routes`);
+    eisRecord<RouteConfig>(
       routes,
       (v: RouteConfig) => {
         const basic = v[Sym.RouteBasic];
-        expect.isKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
-        expect.isArray(basic.route, pred, 'Route should be a string array');
-        expect.orObject(v[Sym.RouteOpt], `${target.name}: opts should be an object`);
+        eisKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
+        eisArray(basic.route, 'Route should be a string array', pred);
+        eorObject(v[Sym.RouteOpt], `${target.name}: opts should be an object`);
       },
       `${target.name}: should have a record of route metadata`
     );
 
-    expect.isArray(controlled.prefix, (p, i) => {
+    eisArray(controlled.prefix, 'controller prefix must be a string', (p, i) => {
       if (typeof p !== 'string') {
         return `Prefix should be string[], but the ${i}th element got ${typeof p}`;
       }
@@ -135,29 +145,29 @@ class ExpectModule extends Function {
       return;
     }
 
-    expect.isClass(target, `Should be a module class, got: ${inspect(target)}`);
-    const moduleMetadata = meta.getModule(target);
+    eisClass(target, `Should be a module class, got: ${inspect(target)}`);
+    const mm = meta.getModule(target);
 
-    expect.isString(moduleMetadata.prefix, 'Module metadata.prefix should be a string');
-    expect.isBoolean(moduleMetadata.outer, 'Module metadata.outer should be a boolean');
+    eisString(mm.prefix, 'Module metadata.prefix should be a string');
+    eisBoolean(mm.outer, 'Module metadata.outer should be a boolean');
 
-    expect.isObject(moduleMetadata, 'Module metadata should be an object');
-    if (moduleMetadata.controllers) {
-      expect.isArray(moduleMetadata.controllers);
-      moduleMetadata.controllers.forEach((t) => this.isController(t));
+    eisObject(mm, 'Module metadata should be an object');
+    if (mm.controllers) {
+      eisArray(mm.controllers, 'controllers must be an array');
+      mm.controllers.forEach((t) => this.isController(t));
     }
-    if (moduleMetadata.providers) {
-      expect.isArray(moduleMetadata.providers);
-      moduleMetadata.providers.forEach((t) => expect.isProviderOptions(t));
+    if (mm.providers) {
+      eisArray(mm.providers, 'providers must be an array');
+      mm.providers.forEach((t) => eisProviderOptions(t));
     }
-    if (moduleMetadata.exports) {
+    if (mm.exports) {
       // & exports must be a subarray of providers
-      expect.isArray(moduleMetadata.exports, (exported) => expect.includes(moduleMetadata.providers, exported));
-      moduleMetadata.exports.forEach((t) => this.isInjectable(t));
+      eisArray(mm.exports, 'exports must be an array', (exported) => eincludes(mm.providers, exported));
+      mm.exports.forEach((t) => this.isInjectable(t));
     }
-    if (moduleMetadata.imports) {
-      expect.isArray(moduleMetadata.imports);
-      moduleMetadata.imports.forEach((m) => {
+    if (mm.imports) {
+      eisArray(mm.imports, 'imports must be an array');
+      mm.imports.forEach((m) => {
         const moduleClass = toModuleClass(m);
         this.isModule(moduleClass);
       });
@@ -166,9 +176,9 @@ class ExpectModule extends Function {
   }
 
   private getDependencyTokens(providerOptions: ProviderOptions): Key[] | null {
-    if (whether.isClass(providerOptions)) {
+    if (wisClass(providerOptions)) {
       const injections = meta.getInject(providerOptions);
-      if (!whether.isObject(injections)) {
+      if (!wisObject(injections)) {
         return null;
       }
       return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
@@ -176,7 +186,7 @@ class ExpectModule extends Function {
 
     if ('useClass' in providerOptions) {
       const injections = meta.getInject(providerOptions.useClass);
-      if (!whether.isObject(injections)) {
+      if (!wisObject(injections)) {
         return null;
       }
       return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
@@ -184,7 +194,7 @@ class ExpectModule extends Function {
 
     if ('inject' in providerOptions) {
       if (Array.isArray(providerOptions.inject)) {
-        providerOptions.inject.map((arg) => (whether.isKey(arg) ? arg : arg.name));
+        providerOptions.inject.map((arg) => (wisKey(arg) ? arg : arg.name));
       } else {
         return null;
       }
@@ -206,7 +216,7 @@ class ExpectModule extends Function {
     const providerName = String(provider.getToken(opts));
     for (let i = 0; i < tokens.length; i++) {
       const tokenStr = String(tokens[i]);
-      expect.includes(
+      eincludes(
         accessibleProviderTokens,
         tokens[i],
         `Class '${providerName}' can only inject providers from its module, imported modules or global modules, but '${tokenStr}' is not found in the accessible providers.`

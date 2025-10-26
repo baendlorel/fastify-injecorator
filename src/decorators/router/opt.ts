@@ -1,4 +1,4 @@
-import { expect } from '@/asserts/index.js';
+import { eisObject, eisMethodDecorator } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { RouteOptType } from '@/types/index.js';
 
@@ -9,8 +9,8 @@ import { RouteOptType } from '@/types/index.js';
  */
 export function Opt<T extends RouteOptType>(opts: T) {
   return function (target: Func, context: ClassMethodDecoratorContext) {
-    expect.methodDecorator(target, context);
-    expect.isObject(opts, `Given opts must be a RouteShorthandOptions of Fastify`);
+    eisMethodDecorator(target, context);
+    eisObject(opts, `Given opts must be a RouteShorthandOptions of Fastify`);
     meta.setOpt(context, opts);
   };
 }

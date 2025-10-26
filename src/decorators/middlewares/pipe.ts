@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Class, Func } from '@/types/primitive.js';
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { ehasOneHook, eisInjectToken, eisObject, eorObject, expect, wisClass, wisKey } from '@/asserts/index.js';
 import meta from '@/register/meta.js';

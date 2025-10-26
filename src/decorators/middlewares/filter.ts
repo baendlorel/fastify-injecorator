@@ -1,5 +1,7 @@
+import { Class, Func } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorFilter } from '@/types/middleware.js';
+
 import { ehasOneHook, expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { subclassOf } from '@/common/subclass-of.js';

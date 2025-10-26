@@ -1,5 +1,7 @@
-import { fnToString } from '@/common/native.js';
+import { Class, Func, Key } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
+
+import { fnToString } from '@/common/native.js';
 import { InjecoratorError } from './error.js';
 import { wisClass } from './whether.js';
 

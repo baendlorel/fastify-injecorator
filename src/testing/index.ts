@@ -1,4 +1,6 @@
+import { Class, Instance, Key } from '@/types/primitive.js';
 import { LazyInjectEntry, ProviderOptions } from '@/types/injecorator.js';
+
 import { wisClass, wisKey } from '@/asserts/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
 import lazyInjector from '@/register/lazy-injector.js';

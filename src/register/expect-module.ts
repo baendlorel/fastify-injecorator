@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { inspect } from 'node:util';
 import { InjectMetadata, ProviderOptions } from '@/types/injecorator.js';
+import { Class, Key } from '@/types/primitive.js';
 
 import { Sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
@@ -168,20 +169,17 @@ export function eisModule(target: unknown): asserts target is Class {
 
 /**
  * @param opts Will only check when it is a class
- * @param accessibleProviderTokens injections must be accessible
+ * @param apTokens accessible provider tokens
  */
-export function eaccessibleProviders(opts: ProviderOptions, accessibleProviderTokens: Key[]) {
-  const tokens = getDependencyTokens(opts);
-  if (!tokens) {
+export function eaccessibleProviders(opts: ProviderOptions, apTokens: Key[]) {
+  const tks = getDependencyTokens(opts);
+  if (!tks) {
     return;
   }
 
-  for (let i = 0; i < tokens.length; i++) {
-    const includes = accessibleProviderTokens.includes(tokens[i]);
-    expect(
-      includes,
-      `${String(tokens[i])}(to ${String(ph.getToken(opts))}) is not from current/imported/global module`
-    );
+  for (let i = 0; i < tks.length; i++) {
+    const includes = apTokens.includes(tks[i]);
+    expect(includes, `${String(tks[i])}(to ${String(ph.getToken(opts))}) is not from current/imported/global module`);
   }
 }
 
@@ -209,8 +207,10 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
   }
 
   if ('inject' in options) {
+    // todo 缓存native方法
     if (Array.isArray(options.inject)) {
-      options.inject.map((arg) => (wisKey(arg) ? arg : arg.name));
+      // ?? 这里原本arg的类型是什么来着
+      options.inject.map((arg: Key | Class) => (wisKey(arg) ? arg : arg.name));
     } else {
       return null;
     }

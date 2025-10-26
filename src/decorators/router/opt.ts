@@ -1,6 +1,8 @@
+import { Func } from '@/types/primitive.js';
+import { RouteOptType } from '@/types/index.js';
+
 import { eisObject, eisMethodDecorator } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
-import { RouteOptType } from '@/types/index.js';
 
 /**
  * Set route options

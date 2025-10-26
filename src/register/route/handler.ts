@@ -1,8 +1,10 @@
 import { TaskifyAsync } from 'serial-task';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { Func, Class } from '@/types/primitive.js';
+import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
+
 import { eisArray } from '@/asserts/expect.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
-import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
 async function run(fns: Func[]) {
   for (let i = 0; i < fns.length; i++) {

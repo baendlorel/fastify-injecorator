@@ -1,3 +1,4 @@
+import { Class } from '@/types/primitive.js';
 import { eisArray, eisClass, eisInjectable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

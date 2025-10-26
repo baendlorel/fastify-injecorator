@@ -1,5 +1,7 @@
 import { ReflectDeep } from 'reflect-deep';
 import { concatArr } from 'concat-arr';
+import { Class, Key } from '@/types/primitive.js';
+import { RouteBasic, RouteConfig, RouteOptType } from '@/types/index.js';
 import {
   ProviderMetadata,
   ControllerMetadata,
@@ -22,7 +24,6 @@ import {
 
 import { Sym } from '@/common/index.js';
 import { splitPath, toModuleClass } from '@/common/utils.js';
-import { RouteBasic, RouteConfig, RouteOptType } from '@/types/index.js';
 import collection from './collection.js';
 import ph from './provider.js';
 

@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@/types/injecorator.js';
 import { InjecoratorMiddleware } from '@/types/middleware.js';
+import { Class, Func, Instance, Key } from '@/types/primitive.js';
 
 import { toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';

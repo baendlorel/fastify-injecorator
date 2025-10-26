@@ -1,3 +1,5 @@
+import { Class } from '@/types/primitive.js';
+
 /**
  * Like `instanceof`, but works with classes that are not instantiated.
  * - Returns `true` if they are the same class.

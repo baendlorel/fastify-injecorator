@@ -1,5 +1,6 @@
-import { throws, wisLikeModule } from '@/asserts/index.js';
+import { Class } from '@/types/primitive.js';
 import { DynamicModule } from '@/types/injecorator.js';
+import { throws, wisLikeModule } from '@/asserts/index.js';
 
 /**
  * Check if the given path is valid and split it into segments.

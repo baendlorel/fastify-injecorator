@@ -1,3 +1,4 @@
+import { Func } from '@/types/primitive.js';
 import { eisMethodDecorator, eisString, eorString } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

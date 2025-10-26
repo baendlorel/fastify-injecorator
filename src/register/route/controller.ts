@@ -1,5 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { toAssigned } from 'to-assigned';
+import { Class } from '@/types/primitive.js';
+
 import { Sym } from '@/common/index.js';
 import lazyInjector from '../lazy-injector.js';
 import meta from '../meta.js';
@@ -23,11 +25,7 @@ function concatRoute(...routes: string[][]): string {
   return '/' + flatRoutes.map((r) => `${r}/`).join('');
 }
 
-export function registerController(
-  app: FastifyInstance,
-  controller: Class,
-  modulePrefix: string[]
-) {
+export function registerController(app: FastifyInstance, controller: Class, modulePrefix: string[]) {
   const controllerPrefix = meta.getController(controller).prefix;
   const routes = meta.getRoute(controller);
   const instance = lazyInjector.createInstance(controller);

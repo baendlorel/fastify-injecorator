@@ -13,6 +13,7 @@ import {
 } from 'fastify';
 import { Sym } from '@/common/index.js';
 import { RouteApiSchema } from './middleware.js';
+import { Key } from './primitive.js';
 
 export type RouteOptType<
   RawServer extends RawServerBase = RawServerDefault,

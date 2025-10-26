@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Class, Func, Key } from '@/types/primitive.js';
 import { InjectToken, InjectArg, ProviderOptions, ProviderStandardOptions } from '@/types/injecorator.js';
 import meta from '@/register/meta.js';
 import { fnToString } from '@/common/native.js';

@@ -1,3 +1,4 @@
+import { Func } from '@/types/primitive.js';
 import { eisBoolean, eisFunction, eisKey, eisObject, eisString, expect } from './expect.js';
 
 export const eisClassDecoratorContext: (o: any, msg?: string) => asserts o is ClassDecoratorContext = (

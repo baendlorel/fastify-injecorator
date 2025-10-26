@@ -1,4 +1,5 @@
 import { inspect } from 'node:util';
+import { Class, Instance, Key } from '@/types/primitive.js';
 import { eisClass, eisFunction, eisKey, throws, wisClass, wisFunction } from '@/asserts/index.js';
 import {
   InjectArg,

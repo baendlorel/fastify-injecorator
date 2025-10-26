@@ -1,5 +1,7 @@
 import { ReflectDeep } from 'reflect-deep';
+import { Class, Key } from '@/types/primitive.js';
 import { ModuleMetadata } from '@/types/injecorator.js';
+
 import { Sym } from '@/common/index.js';
 import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@/common/inject-keys.js';
 import { expect } from '@/asserts/index.js';

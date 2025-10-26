@@ -1,3 +1,4 @@
+import { Key } from '@/types/primitive.js';
 import { eisDecoratorContext } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

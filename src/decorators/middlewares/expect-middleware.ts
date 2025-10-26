@@ -1,4 +1,6 @@
+import { Class, Func } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
+
 import { eisInjectArg } from '@/asserts/application.js';
 import { eisClassDecoratorContext, eisClassMethodDecoratorContext } from '@/asserts/decorator-context.js';
 import { eisClass, eisFunction } from '@/asserts/expect.js';

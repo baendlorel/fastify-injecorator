@@ -1,3 +1,4 @@
+import { Class, Func } from '@/types/primitive.js';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,

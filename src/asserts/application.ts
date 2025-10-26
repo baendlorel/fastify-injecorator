@@ -1,6 +1,7 @@
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
-import { InjectArg, InjectToken } from '@/types/injecorator.js';
+import { Class } from '@/types/primitive.js';
+import { InjectArg } from '@/types/injecorator.js';
 import { Sym } from '@/common/index.js';
 
 import { eisClass, eisObject, throws } from './expect.js';

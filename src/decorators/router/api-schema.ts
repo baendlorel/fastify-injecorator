@@ -1,4 +1,6 @@
+import { Func } from '@/types/primitive.js';
 import { RouteApiSchema } from '@/types/middleware.js';
+
 import { eisMethodDecorator, eisObject } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 

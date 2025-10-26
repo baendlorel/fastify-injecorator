@@ -5,7 +5,7 @@ import { Injectable, Inject } from '@/index.js';
 import lazyInjector from '@/register/lazy-injector.js';
 import { Module } from '@/decorators/module.js';
 import { apply } from '@/register/index.js';
-// import '@/common/promise.js';
+import { promiseTry } from '@/common/promise-try.js';
 
 describe('Injectorator Full', () => {
   it('Inject should inject dependency into class field', () => {
@@ -49,7 +49,7 @@ describe('Injectorator Full', () => {
     })
     class AppModule {}
 
-    await expect(Promise.try(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
+    await expect(promiseTry(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
   });
 
   it('should throw if @Injectable is missing', async () => {
@@ -65,7 +65,7 @@ describe('Injectorator Full', () => {
       providers: [Consumer, NotInjectable],
     })
     class AppModule {}
-    await expect(Promise.try(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
+    await expect(promiseTry(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
   });
 
   it('should throw on complex multi-level circular dependency', async () => {
@@ -95,6 +95,6 @@ describe('Injectorator Full', () => {
     })
     class AppModule {}
 
-    await expect(Promise.try(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
+    await expect(promiseTry(apply, fastify(), { rootModule: AppModule })).rejects.toThrow();
   });
 });

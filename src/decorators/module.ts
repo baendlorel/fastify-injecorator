@@ -4,7 +4,7 @@ import { Class } from '@/types/primitive.js';
 
 import { Sym } from '@/common/index.js';
 import { createNamedClass } from '@/common/utils.js';
-import { eclassNotDecorated, eisModulable } from '@/asserts/index.js';
+import { expectClassNotDecorated, expectModulable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { toInjectable } from './injectable.js';
 
@@ -19,7 +19,7 @@ import { toInjectable } from './injectable.js';
  */
 export function Module(options: Partial<ModuleMetadata>) {
   return function (target: Class, context: ClassDecoratorContext) {
-    eisModulable(target, context);
+    expectModulable(target, context);
     meta.setModule(context, options);
   };
 }
@@ -36,7 +36,7 @@ interface ToModuleOptions {
  */
 export function toModule(outerProvider: Class, opt?: Partial<ToModuleOptions>): DynamicModule {
   const { isGlobal = false, args = [] } = Object(opt) as ToModuleOptions;
-  eclassNotDecorated(outerProvider, Sym.Provider);
+  expectClassNotDecorated(outerProvider, Sym.Provider);
 
   const injectable = toInjectable(outerProvider, args);
   // & Directly set everything in a temp class, not via `meta.setXXX`

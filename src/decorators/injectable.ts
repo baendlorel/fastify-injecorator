@@ -1,5 +1,5 @@
 import { Class } from '@/types/primitive.js';
-import { expectArray, expectClass, eisInjectable } from '@/asserts/index.js';
+import { expectArray, expectClass, expectInjectable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -7,7 +7,7 @@ import meta from '@/register/meta.js';
  */
 export function Injectable() {
   return function (target: Class, context: ClassDecoratorContext) {
-    eisInjectable(target, context);
+    expectInjectable(target, context);
     meta.setProvider(context);
   };
 }

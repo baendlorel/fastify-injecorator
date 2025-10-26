@@ -8,48 +8,48 @@ import { expectClass, expectObject, throws } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';
 import { wisInjectToken, wisInjectArg, wisProviderOptions, wisFunction } from './whether.js';
 
-export const eisInjectToken = (o: any, msg: string) => {
+export const expectInjectToken = (o: any, msg: string) => {
   if (!wisInjectToken(o)) {
     throws(msg);
   }
 };
 
-export const eisRouted = (context: ClassMethodDecoratorContext) => {
+export const expectRouted = (context: ClassMethodDecoratorContext) => {
   const o = ReflectDeep.get(context.metadata, [Sym.Root, Sym.Route, context.name]);
   expectObject(o, 'Should be decorated with route decorators(like @Post) first');
 };
 
-export const eisInjectable = (target: Class, context: ClassDecoratorContext) => {
+export const expectInjectable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Injectable/@Controller can only be used on classes');
-  expectClassDecoratorContext(context);
-  eisNotDecorated(context, Sym.Provider);
+  expectClassDecoratorContext(context, '@Injectable/@Controller can only be used on classes');
+  expectNotDecorated(context, Sym.Provider);
 };
 
-export const eisModulable = (target: Class, context: ClassDecoratorContext) => {
+export const expectModulable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Module can only be used on classes');
-  expectClassDecoratorContext(context);
-  eisNotDecorated(context, Sym.Module);
+  expectClassDecoratorContext(context, '@Module can only be used on classes');
+  expectNotDecorated(context, Sym.Module);
 };
 
-export const eisNotDecorated = (context: DecoratorContext, flag: symbol) => {
+export const expectNotDecorated = (context: DecoratorContext, flag: symbol) => {
   if (ReflectDeep.has(context.metadata, [Sym.Root, flag])) {
     throws(`'${String(context.name)}' is already decorated`);
   }
 };
 
-export const eclassNotDecorated = (cls: Class, flag: symbol) => {
+export const expectClassNotDecorated = (cls: Class, flag: symbol) => {
   if (ReflectDeep.has(cls, [Sym.metadata, Sym.Root, flag])) {
     throws(`'${String(cls.name)}' is already decorated`);
   }
 };
 
-export const eisInjectArg = (target: InjectArg, msg?: string) => {
+export const expectInjectArg = (target: InjectArg, msg?: string) => {
   if (!wisInjectArg(target)) {
     throws(`${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(target)}`);
   }
 };
 
-export const eisProviderOptions = (target: unknown) => {
+export const expectProviderOptions = (target: unknown) => {
   if (!wisProviderOptions(target)) {
     throws(`Should be a provider options object, got: ${inspect(target)}`);
   }
@@ -59,7 +59,7 @@ export const eisProviderOptions = (target: unknown) => {
  * Middleware class must at least have 1 hook implemented
  * @param target it is a Middleware class
  */
-export const ehasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: string): void => {
+export const expectHasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: string): void => {
   const proto = target.prototype as T;
   expectObject(proto, 'Prototype should be an object');
   for (let i = 0; i < hooks.length; i++) {

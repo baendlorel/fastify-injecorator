@@ -1,7 +1,7 @@
 import { Class, Func } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
 
-import { eisInjectArg } from '@/asserts/application.js';
+import { expectInjectArg } from '@/asserts/application.js';
 import { expectClassDecoratorContext, expectClassMethodDecoratorContext } from '@/asserts/decorator-context.js';
 import { expectClass, expectFunction } from '@/asserts/expect.js';
 
@@ -22,5 +22,5 @@ export function expectMiddleware(
     expectFunction(target, 'target of method decorator must be a function');
     expectClassMethodDecoratorContext(context);
   }
-  tokens.forEach((t) => eisInjectArg(t));
+  tokens.forEach((t) => expectInjectArg(t));
 }

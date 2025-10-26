@@ -10,10 +10,10 @@ import {
   expectArray,
   expectBoolean,
   expectClass,
-  eisInjectArg,
+  expectInjectArg,
   expectKey,
   expectObject,
-  eisProviderOptions,
+  expectProviderOptions,
   expectRecord,
   expectString,
   expectOrObject,
@@ -50,7 +50,7 @@ export function eisProvider(target: unknown): asserts target is Class {
   if (inject) {
     const msg = `class '${target.name}': Inject metadata should be a record of class dependencies`;
     expectObject(inject, msg);
-    expectRecord<InjectMetadata>(inject, (value) => (expectObject(value, msg), eisInjectArg(value.dependency)), msg);
+    expectRecord<InjectMetadata>(inject, (value) => (expectObject(value, msg), expectInjectArg(value.dependency)), msg);
   }
 }
 
@@ -148,7 +148,7 @@ export function eisModule(target: unknown): asserts target is Class {
   }
   if (mm.providers) {
     expectArray(mm.providers, 'providers must be an array');
-    mm.providers.forEach((t) => eisProviderOptions(t));
+    mm.providers.forEach((t) => expectProviderOptions(t));
   }
   if (mm.exports) {
     // & exports must be a subarray of providers

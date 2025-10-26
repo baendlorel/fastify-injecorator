@@ -1,8 +1,8 @@
 import { Class, Func } from '@/types/primitive.js';
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import {
-  ehasOneHook,
-  eisInjectToken,
+  expectHasOneHook,
+  expectInjectToken,
   expectObject,
   expectOrObject,
   expect,
@@ -25,7 +25,11 @@ import { isBasicPipe } from './pipes/is-basic-pipe.js';
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
   return function (target: Class, context: ClassDecoratorContext) {
-    ehasOneHook<InjecoratorPipe>(target, hooks, `Pipe class must implement at least one hook: [${hooks.join(', ')}]`);
+    expectHasOneHook<InjecoratorPipe>(
+      target,
+      hooks,
+      `Pipe class must implement at least one hook: [${hooks.join(', ')}]`
+    );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
     meta.setPipe(context);
@@ -36,7 +40,7 @@ function predicate(opts: PipeOptions) {
   expectObject(opts, 'Pipe options must be an object');
   const { schema, pipe } = opts;
   expectOrObject(schema, 'Pipe options.schema must be an object or omitted');
-  eisInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
+  expectInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
   const validPipe = isBasicPipe(pipe) || (wisClass(pipe) && meta.isPipe(pipe)) || wisKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }

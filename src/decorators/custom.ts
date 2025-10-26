@@ -1,8 +1,9 @@
 import { Class, Func, Key } from '@/types/primitive.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
 
-import { expectDecoratorContext, expectFunction, isClass, isFunction } from '@/asserts/index.js';
+import { expectDecoratorContext, expectFunction, isClass, isFunction, throws } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
+import { sym } from '@/common/sym.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path
@@ -40,12 +41,14 @@ import meta from '@/register/meta.js';
  */
 export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
-    return function (target: Class | Func, context: DecoratorContext) {
-      expectDecoratorContext(context, `Invalid decorator context for custom decorator with key: ${String(key)}`);
+    return function (target: Class | Func | undefined, context: DecoratorContext) {
+      expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
       if (isClass(target)) {
         return meta.set<T>(context, [key], metadata);
       } else if (isFunction(target)) {
-        return meta.set<T>(context, [target.name, key], metadata);
+        return meta.set<T>(context, [sym.custom.method, target.name, key], metadata);
+      } else if (target === undefined) {
+        return meta.set<T>(context, [sym.custom.field, context.name as Key, key], metadata);
       }
     };
   };
@@ -54,6 +57,7 @@ export function createCustomDecorator<T = unknown>(key: Key) {
 /**
  * Retrieves custom metadata from a class or execution context
  *
+ * @param target Class\Method\FieldName
  * @param key - The key used when creating the custom decorator
  * @param target - Either a class constructor or ExecutionContext
  * @returns The stored metadata or undefined if not found
@@ -76,18 +80,21 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * ```
  */
 export function getCustomMetadata<T = unknown>(
-  target: Class | Func,
+  target: Class | Func | Key,
   key: Key,
   context: ExecutionContext
 ): T | undefined {
   // If target is ExecutionContext, get metadata from the handler method first, then controller class
   expectFunction(context?.getClass, '__func__ Invalid target for getCustomMetadata');
   const controllerClass = context.getClass();
+
   if (isClass(target)) {
-    return meta.get<T>(target, [key]);
+    return meta.get<T>(controllerClass, [key]);
   } else if (isFunction(target)) {
-    return meta.get<T>(controllerClass, [target.name, key]);
+    return meta.get<T>(controllerClass, [sym.custom.method, target.name, key]);
+  } else if (target === undefined) {
+    return meta.get<T>(controllerClass, [sym.custom.field, target, key]);
   }
 
-  return undefined;
+  throws(`__func__ Invalid target for getCustomMetadata, got ${typeof target}`);
 }

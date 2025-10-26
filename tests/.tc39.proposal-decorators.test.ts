@@ -19,6 +19,9 @@ describe('tc39 proposal-decorators behavior', () => {
     class A {
       @meta
       method1() {}
+
+      @meta
+      field1 = 1;
     }
 
     const sym = (Symbol as any).metadata ?? Symbol.for('Symbol.metadata');

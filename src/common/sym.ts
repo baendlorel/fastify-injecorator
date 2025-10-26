@@ -132,8 +132,20 @@ export namespace sym {
     export const handler = Symbol('handler');
   }
 
-  /**
-   * Custom metadata stored in this field
-   */
-  export const custom = Symbol('custom');
+  export namespace custom {
+    /**
+     * Custom metadata stored in this field
+     */
+    export const root = Symbol('custom');
+
+    /**
+     * Custom metadata stored in this field
+     */
+    export const method = Symbol('method');
+
+    /**
+     * Custom metadata stored in this field
+     */
+    export const field = Symbol('field');
+  }
 }

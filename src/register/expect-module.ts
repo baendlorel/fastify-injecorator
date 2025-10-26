@@ -25,6 +25,7 @@ import {
 } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import ph from './provider.js';
+import { $isArray, $values } from '@/common/native.js';
 
 const moduleCache = new Set<any>();
 const controllerCache = new Set<any>();
@@ -195,7 +196,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
     if (!isObject(injections)) {
       return null;
     }
-    return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
+    return $values(injections).map((injection) => ph.getInjectToken(injection.dependency));
   }
 
   if ('useClass' in options) {
@@ -203,14 +204,12 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
     if (!isObject(injections)) {
       return null;
     }
-    return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
+    return $values(injections).map((injection) => ph.getInjectToken(injection.dependency));
   }
 
   if ('inject' in options) {
-    // todo 缓存native方法
-    if (Array.isArray(options.inject)) {
-      // ?? 这里原本arg的类型是什么来着
-      options.inject.map((arg: Key | Class) => (isKey(arg) ? arg : arg.name));
+    if ($isArray(options.inject)) {
+      options.inject.map((arg) => (isKey(arg) ? arg : arg.name));
     } else {
       return null;
     }

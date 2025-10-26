@@ -1,4 +1,7 @@
 // todo 考虑改成小写namespace
+
+import { $define } from './native.js';
+
 /**
  * Property keys used to store metadata.
  */
@@ -10,7 +13,7 @@ export class Sym extends null {
    */
   static readonly metadata =
     typeof Symbol.metadata === 'undefined'
-      ? (Object.defineProperty(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
+      ? ($define(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
       : Symbol.metadata;
 
   // # signs

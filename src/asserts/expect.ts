@@ -1,7 +1,7 @@
 import { Class, Func, Key } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
 
-import { fnToString } from '@/common/native.js';
+import { $entries, $fnToString, $isArray } from '@/common/native.js';
 import { InjecoratorError } from './error.js';
 import { isClass } from './whether.js';
 
@@ -51,7 +51,7 @@ export const expectClass: (o: any, msg: string) => asserts o is Class = (o, msg)
   if (typeof o !== 'function') {
     throws(msg);
   }
-  const str = fnToString.call(o);
+  const str = $fnToString.call(o);
   // & This is better than using pseudo calling
   if (!str.startsWith('class ') && !str.startsWith('[class ')) {
     throws(msg);
@@ -82,7 +82,7 @@ export const expectArray: <T = any>(
   msg: string,
   predicate?: (value: T, index: number, array: T[]) => void
 ) => asserts arr is T[] = (arr, msg, predicate) => {
-  if (!Array.isArray(arr)) {
+  if (!$isArray(arr)) {
     throw new InjecoratorError(msg);
   }
 
@@ -99,7 +99,7 @@ export const expectRecord: <V>(
   msg: string
 ) => asserts target is Record<Key, V> = (target, predicate, msg) => {
   expectObject(target, msg);
-  for (const [key, value] of Object.entries(target)) {
+  for (const [key, value] of $entries(target)) {
     predicate(value, key);
   }
 };

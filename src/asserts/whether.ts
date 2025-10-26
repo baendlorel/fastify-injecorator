@@ -9,7 +9,7 @@ import {
   ProviderUseExisting,
 } from '@/types/injecorator.js';
 import meta from '@/register/meta.js';
-import { fnToString } from '@/common/native.js';
+import { $fnToString, $isArray } from '@/common/native.js';
 
 export function isObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;
@@ -24,7 +24,7 @@ export function isClass(o: any): o is Class {
     return false;
   }
 
-  const str = fnToString.call(o);
+  const str = $fnToString.call(o);
   return str.startsWith('class ') || str.startsWith('[class ');
 }
 
@@ -46,7 +46,7 @@ export function isPathNode(p: string): boolean {
  * @param predicate function to validate each element
  */
 export function isArray<T = any>(arr: any, predicate?: (value: T, index: number, array: T[]) => boolean): arr is T[] {
-  if (!Array.isArray(arr)) {
+  if (!$isArray(arr)) {
     return false;
   }
 
@@ -78,7 +78,7 @@ export function isInjectedClassGetter(o: unknown): o is Func {
   if (typeof o !== 'function') {
     return false;
   }
-  const str = fnToString.call(o).replace(/\s/g, '');
+  const str = $fnToString.call(o).replace(/\s/g, '');
   // Match '=>' not preceded by any quote character
   return str.startsWith('()=>');
 }

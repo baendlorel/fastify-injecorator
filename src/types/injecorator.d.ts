@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifyRequest } from 'fastify';
+import { Class } from './primitive.d.ts';
 
 export interface BaseHttpException {
   readonly message: string;

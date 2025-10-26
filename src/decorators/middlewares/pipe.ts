@@ -21,6 +21,7 @@ import { PipeQuery } from './pipes/query.pipe.js';
 import { PipeIp } from './pipes/ip.pipe.js';
 import { PipeRaw } from './pipes/raw.pipe.js';
 import { isBasicPipe } from './pipes/is-basic-pipe.js';
+import { $assign } from '@/common/native.js';
 
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
@@ -72,7 +73,7 @@ function mergeSchema(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema
   if (ok !== undefined) {
     o.response = { 200: ok };
   }
-  return Object.assign(o, other);
+  return $assign(o, other);
 }
 
 /**

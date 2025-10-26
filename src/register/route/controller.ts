@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { toAssigned } from 'to-assigned';
 import { Class } from '@/types/primitive.js';
 
-import { Sym } from '@/common/index.js';
+import { Sym, $values } from '@/common/index.js';
 import lazyInjector from '../lazy-injector.js';
 import meta from '../meta.js';
 
@@ -36,7 +36,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
   const getFilters = meta.getUseFilters(controller);
   const getPipes = meta.getUsePipes(controller);
 
-  Object.values(routes).forEach((routeConfig) => {
+  $values(routes).forEach((routeConfig) => {
     const { field, method, route } = routeConfig[Sym.RouteBasic];
     const url = concatRoute(modulePrefix, controllerPrefix, route);
     const opts = routeConfig[Sym.RouteOpt] ?? {};

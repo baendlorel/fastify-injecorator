@@ -24,7 +24,7 @@ export type InjectToken = Key | Class;
 
 export type InjectArg = InjectToken | (() => Class);
 
-export interface ProviderFactoryOptions {
+export interface ProviderUseFactory {
   /**
    * The unique token used to identify and inject this provider.
    */
@@ -40,42 +40,44 @@ export interface ProviderFactoryOptions {
   inject?: (Class | Key)[];
 }
 
-export type ProviderStandardOptions =
-  | ProviderFactoryOptions
-  | {
-      /**
-       * The unique token used to identify and inject this provider.
-       */
-      provide: Key;
+export interface ProviderUseValue {
+  /**
+   * The unique token used to identify and inject this provider.
+   */
+  provide: Key;
 
-      /**
-       * Directly provide a value. No dependency injection is performed.
-       * If dependencies are needed, the factory must inject them manually.
-       */
-      useValue: Instance;
-    }
-  | {
-      /**
-       * The unique token used to identify and inject this provider.
-       */
-      provide: Key;
+  /**
+   * Directly provide a value. No dependency injection is performed.
+   * If dependencies are needed, the factory must inject them manually.
+   */
+  useValue: Instance;
+}
 
-      /**
-       * Provide via class. Managed by Injecorator, dependencies are automatically injected.
-       */
-      useClass: Class;
-    }
-  | {
-      /**
-       * The unique token used to identify and inject this provider.
-       */
-      provide: Key;
+export interface ProviderUseClass {
+  /**
+   * The unique token used to identify and inject this provider.
+   */
+  provide: Key;
 
-      /**
-       * Provide by referencing an existing provider. No chain lookup; only the referenced provider is used.
-       */
-      useExisting: Key;
-    };
+  /**
+   * Provide via class. Managed by Injecorator, dependencies are automatically injected.
+   */
+  useClass: Class;
+}
+
+export interface ProviderUseExisting {
+  /**
+   * The unique token used to identify and inject this provider.
+   */
+  provide: Key;
+
+  /**
+   * Provide by referencing an existing provider. No chain lookup; only the referenced provider is used.
+   */
+  useExisting: Key;
+}
+
+export type ProviderStandardOptions = ProviderUseFactory | ProviderUseValue | ProviderUseClass | ProviderUseExisting;
 
 export type ProviderOptions = ProviderStandardOptions | Class;
 

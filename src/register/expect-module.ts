@@ -176,26 +176,26 @@ class ExpectModule extends Function {
     this.moduleCache.add(target);
   }
 
-  private getDependencyTokens(providerOptions: ProviderOptions): Key[] | null {
-    if (wisClass(providerOptions)) {
-      const injections = meta.getInject(providerOptions);
+  private getDependencyTokens(options: ProviderOptions): Key[] | null {
+    if (wisClass(options)) {
+      const injections = meta.getInject(options);
       if (!wisObject(injections)) {
         return null;
       }
       return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
     }
 
-    if ('useClass' in providerOptions) {
-      const injections = meta.getInject(providerOptions.useClass);
+    if ('useClass' in options) {
+      const injections = meta.getInject(options.useClass);
       if (!wisObject(injections)) {
         return null;
       }
       return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
     }
 
-    if ('inject' in providerOptions) {
-      if (Array.isArray(providerOptions.inject)) {
-        providerOptions.inject.map((arg) => (wisKey(arg) ? arg : arg.name));
+    if ('inject' in options) {
+      if (Array.isArray(options.inject)) {
+        options.inject.map((arg) => (wisKey(arg) ? arg : arg.name));
       } else {
         return null;
       }

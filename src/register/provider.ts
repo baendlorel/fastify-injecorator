@@ -1,6 +1,13 @@
 import { inspect } from 'node:util';
-import { eisClass, eisFunction, eisKey, expect, throws, wisClass, wisFunction } from '@/asserts/index.js';
-import { ProviderOptions, InjectArg } from '@/types/injecorator.js';
+import { eisClass, eisFunction, eisKey, throws, wisClass, wisFunction } from '@/asserts/index.js';
+import {
+  InjectArg,
+  ProviderOptions,
+  ProviderUseClass,
+  ProviderUseValue,
+  ProviderUseFactory,
+  ProviderUseExisting,
+} from '@/types/injecorator.js';
 
 class Provider {
   match(
@@ -15,34 +22,32 @@ class Provider {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 
     if (wisClass(opts) && useClass) {
-      const r = useClass(opts.name, opts);
-      return r;
+      return useClass(opts.name, opts);
     }
 
     const optsStr = inspect(opts);
 
-    // todo 这里不需要in
-    if ('useClass' in opts && useClass) {
+    if (useClass) {
+      opts = opts as ProviderUseClass;
       eisClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
-      const r = useClass(opts.provide, opts.useClass);
-      return r;
+      return useClass(opts.provide, opts.useClass);
     }
 
-    if ('useValue' in opts && useValue) {
-      const r = useValue(opts.provide, opts.useValue);
-      return r;
+    if (useValue) {
+      opts = opts as ProviderUseValue;
+      return useValue(opts.provide, opts.useValue);
     }
 
-    if ('useFactory' in opts && useFactory) {
+    if (useFactory) {
+      opts = opts as ProviderUseFactory;
       eisFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
-      const r = useFactory(opts.provide, opts.useFactory, opts.inject ?? []);
-      return r;
+      return useFactory(opts.provide, opts.useFactory, opts.inject ?? []);
     }
 
-    if ('useExisting' in opts && useExisting) {
+    if (useExisting) {
+      opts = opts as ProviderUseExisting;
       eisKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
-      const r = useExisting(opts.provide, opts.useExisting);
-      return r;
+      return useExisting(opts.provide, opts.useExisting);
     }
 
     throws(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);

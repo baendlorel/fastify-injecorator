@@ -1,5 +1,7 @@
-import { Key } from '@/types/primitive.js';
-import { expectDecoratorContext } from '@/asserts/index.js';
+import { Class, Func, Key } from '@/types/primitive.js';
+import { ExecutionContext } from '@/common/execution-context.class.js';
+
+import { expectDecoratorContext, expectFunction, isClass, isFunction } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -38,9 +40,13 @@ import meta from '@/register/meta.js';
  */
 export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
-    return function (_: unknown, context: DecoratorContext) {
+    return function (target: Class | Func, context: DecoratorContext) {
       expectDecoratorContext(context, `Invalid decorator context for custom decorator with key: ${String(key)}`);
-      meta.setCustom(context, key, metadata);
+      if (isClass(target)) {
+        return meta.set<T>(context, [key], metadata);
+      } else if (isFunction(target)) {
+        return meta.set<T>(context, [target.name, key], metadata);
+      }
     };
   };
 }
@@ -69,25 +75,18 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * }
  * ```
  */
-export function getCustomMetadata<T = unknown>(key: Key, target: any): T | undefined {
+export function getCustomMetadata<T = unknown>(
+  target: Class | Func,
+  key: Key,
+  context: ExecutionContext
+): T | undefined {
   // If target is ExecutionContext, get metadata from the handler method first, then controller class
-  if (target && typeof target.getClass === 'function' && typeof target.getHandler === 'function') {
-    const controllerClass = target.getClass();
-    const handlerMethod = target.getHandler();
-
-    // Try to get from handler method first (method-level metadata takes precedence)
-    const handlerMetadata = meta.getCustomMethod<T>(controllerClass, handlerMethod.name, key);
-    if (handlerMetadata !== undefined) {
-      return handlerMetadata;
-    }
-
-    // Fall back to controller class metadata
-    return meta.getCustom<T>(controllerClass, key);
-  }
-
-  // If target is a class constructor, get metadata directly
-  if (typeof target === 'function') {
-    return meta.getCustom<T>(target, key);
+  expectFunction(context?.getClass, '__func__ Invalid target for getCustomMetadata');
+  const controllerClass = context.getClass();
+  if (isClass(target)) {
+    return meta.get<T>(target, [key]);
+  } else if (isFunction(target)) {
+    return meta.get<T>(controllerClass, [target.name, key]);
   }
 
   return undefined;

@@ -31,11 +31,11 @@ import ph from './provider.js';
  * ! Methods here should be used **AFTER** validation of parameters
  */
 class Meta {
-  private set<T = unknown>(context: DecoratorContext, keys: Key[], value: T) {
+  set<T = unknown>(context: DecoratorContext, keys: Key[], value: T) {
     return ReflectDeep.set<T>(context.metadata, [sym.root, ...keys], value);
   }
 
-  private get<T = unknown>(cls: Class, keys: Key[]) {
+  get<T = unknown>(cls: Class, keys: Key[]) {
     return ReflectDeep.get<T>(cls, [sym.metadata, sym.root, ...keys]);
   }
 
@@ -272,27 +272,6 @@ class Meta {
   // #endregion
 
   // #endregion
-  /**
-   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Custom][key]` for classes
-   * or `class[sym.metadata][sym.Root][sym.Custom][methodName][key]` for methods
-   */
-  setCustom(context: DecoratorContext, key: Key, data: unknown) {
-    if (context.kind === 'method') {
-      return this.set(context, [sym.custom, context.name, key], data);
-    }
-    return this.set(context, [sym.custom, key], data);
-  }
-
-  getCustom<T = unknown>(cls: Class, key: Key): T | undefined {
-    return this.get(cls, [sym.custom, key]);
-  }
-
-  /**
-   * Get custom metadata for a specific method
-   */
-  getCustomMethod<T = unknown>(cls: Class, methodName: Key, key: Key): T | undefined {
-    return this.get(cls, [sym.custom, methodName, key]);
-  }
 }
 
 const meta = new Meta();

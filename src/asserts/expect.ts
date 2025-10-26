@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { fnToString } from '@/common/native.js';
 import { InjectToken } from '@/types/injecorator.js';
-import { whether } from './whether.js';
-import { InjecoratorError } from './injecorator-error.class.js';
+import { InjecoratorError } from './error.js';
+import { wisClass } from './whether.js';
 
 export const throws = (msg: string): never => {
   throw new InjecoratorError(msg);
@@ -47,7 +46,7 @@ export const eisObject: <T = object>(o: any, msg: string) => asserts o is T = (o
 };
 
 export const eisKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
-  if (typeof o !== 'string' && typeof o !== 'symbol' && !whether.isClass(o)) {
+  if (typeof o !== 'string' && typeof o !== 'symbol' && !wisClass(o)) {
     throws(msg);
   }
 };

@@ -87,11 +87,11 @@ export const eisFunction: (o: any, msg: string) => asserts o is Func = (o, msg) 
  *   - If it returns `null` or `undefined`, the element is considered valid.
  *   - If it returns `boolean` and value is `true`, the element is considered valid.
  */
-export const eisArray = <T = any>(
+export const eisArray: <T = any>(
   arr: any,
   msg: string,
   predicate?: (value: T, index: number, array: T[]) => void
-): asserts arr is T[] => {
+) => asserts arr is T[] = (arr, msg, predicate) => {
   if (!Array.isArray(arr)) {
     throw new InjecoratorError(msg);
   }

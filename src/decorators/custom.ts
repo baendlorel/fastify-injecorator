@@ -1,4 +1,4 @@
-import { expect } from '@/asserts/index.js';
+import { eisDecoratorContext } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -9,7 +9,7 @@ import meta from '@/register/meta.js';
  */
 export function SetMetadata<T = unknown>(key: Key, metadata: T) {
   return function (_: unknown, context: DecoratorContext) {
-    expect.isDecoratorContext(context);
+    eisDecoratorContext(context);
     meta.setCustom(context, key, metadata);
   };
 }

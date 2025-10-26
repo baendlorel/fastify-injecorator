@@ -3,13 +3,6 @@ import { InjectToken, InjectArg, ProviderOptions, ProviderStandardOptions } from
 import meta from '@/register/meta.js';
 import { fnToString } from '@/common/native.js';
 
-/**
- * Cache for results
- */
-const moduleCache = new Set<any>();
-const controllerCache = new Set<any>();
-const injectableCache = new Set<any>();
-
 export function wisObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;
 }

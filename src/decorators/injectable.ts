@@ -1,4 +1,4 @@
-import { expect } from '@/asserts/index.js';
+import { eisArray, eisClass, eisInjectable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -6,15 +6,14 @@ import meta from '@/register/meta.js';
  */
 export function Injectable() {
   return function (target: Class, context: ClassDecoratorContext) {
-    expect.injectable(target, context);
+    eisInjectable(target, context);
     meta.setProvider(context);
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function toInjectable(target: Class, args: any[] = []) {
-  expect.isClass(target, `Target is not a class: ${String(target)}`);
-  expect.isArray(args);
+  eisClass(target, `Target is not a class: ${String(target)}`);
+  eisArray(args, 'args must be an array');
   meta.setProviderOnClass(target);
   return target;
 }

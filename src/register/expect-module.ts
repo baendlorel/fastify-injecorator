@@ -6,7 +6,6 @@ import { Sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
 import { toModuleClass } from '@/common/utils.js';
 import {
-  eincludes,
   eisArray,
   eisBoolean,
   eisClass,
@@ -16,15 +15,15 @@ import {
   eisProviderOptions,
   eisRecord,
   eisString,
-  eisUndefined,
   eorObject,
+  expect,
   wisClass,
   wisKey,
   wisObject,
   wisPathNode,
 } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
-import provider from './provider.js';
+import ph from './provider.js';
 
 /**
  * It is impossible to type the expecter as an assert function.
@@ -76,7 +75,7 @@ class ExpectModule extends Function {
 
     // Should not be a controller
     const controlled = meta.getController(target);
-    eisUndefined(controlled, `@Injectable should not be a controller`);
+    expect(controlled === undefined, `@Injectable should not be a controller`);
 
     this.injectableCache.add(target);
   }
@@ -162,7 +161,9 @@ class ExpectModule extends Function {
     }
     if (mm.exports) {
       // & exports must be a subarray of providers
-      eisArray(mm.exports, 'exports must be an array', (exported) => eincludes(mm.providers, exported));
+      eisArray(mm.exports, 'exports must be an array', (exported) =>
+        mm.providers.includes(exported) ? undefined : 'Exported providers must be a subarray of providers'
+      );
       mm.exports.forEach((t) => this.isInjectable(t));
     }
     if (mm.imports) {
@@ -181,7 +182,7 @@ class ExpectModule extends Function {
       if (!wisObject(injections)) {
         return null;
       }
-      return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
+      return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
     }
 
     if ('useClass' in providerOptions) {
@@ -189,7 +190,7 @@ class ExpectModule extends Function {
       if (!wisObject(injections)) {
         return null;
       }
-      return Object.values(injections).map((injection) => provider.getInjectToken(injection.dependency));
+      return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
     }
 
     if ('inject' in providerOptions) {
@@ -213,13 +214,11 @@ class ExpectModule extends Function {
       return;
     }
 
-    const providerName = String(provider.getToken(opts));
     for (let i = 0; i < tokens.length; i++) {
-      const tokenStr = String(tokens[i]);
-      eincludes(
-        accessibleProviderTokens,
-        tokens[i],
-        `Class '${providerName}' can only inject providers from its module, imported modules or global modules, but '${tokenStr}' is not found in the accessible providers.`
+      const includes = accessibleProviderTokens.includes(tokens[i]);
+      expect(
+        includes,
+        `${String(tokens[i])}(to ${String(ph.getToken(opts))}) is not from current/imported/global module`
       );
     }
   }

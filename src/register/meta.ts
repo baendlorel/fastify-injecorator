@@ -24,7 +24,7 @@ import { Sym } from '@/common/index.js';
 import { splitPath, toModuleClass } from '@/common/utils.js';
 import { RouteBasic, RouteConfig, RouteOptType } from '@/types/index.js';
 import collection from './collection.js';
-import provider from './provider.js';
+import ph from './provider.js';
 
 /**
  * ! Methods here should be used **AFTER** validation of parameters
@@ -145,7 +145,7 @@ class Meta {
             return self.getModule(moduleClass).exports.map((e) => e.name);
           })
           .flat();
-        const providerTokens: Key[] = this.providers.map((p: ProviderOptions) => provider.getToken(p));
+        const providerTokens: Key[] = this.providers.map((p: ProviderOptions) => ph.getToken(p));
         return [...providerTokens, ...imported, ...collection.globalProviders];
       },
       outer,

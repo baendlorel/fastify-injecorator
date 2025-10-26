@@ -7,7 +7,7 @@ import { APP_LOGGER } from '@/common/inject-keys.js';
 import { eisFunction, eisObject, expect, throws, wisClass, wisKey, wisObject } from '@/asserts/index.js';
 
 import meta from './meta.js';
-import provider from './provider.js';
+import ph from './provider.js';
 import collection from './collection.js';
 
 class LazyInjector {
@@ -89,7 +89,7 @@ class LazyInjector {
     if (wisObject<Instance>(exist)) {
       return exist;
     }
-    return provider.match(opts, {
+    return ph.match(opts, {
       useClass: (token, cls) => {
         return this.createInstanceByClass(token, cls);
       },
@@ -130,7 +130,7 @@ class LazyInjector {
     // & Inject instances
     for (let i = 0; i < this.injectList.length; i++) {
       const { provide, propertyKey, dependency } = this.injectList[i];
-      const tokenOfDependency = provider.getInjectToken(dependency);
+      const tokenOfDependency = ph.getInjectToken(dependency);
 
       expect(map.has(provide), `Provider '${String(provide)}' not found`);
       expect(
@@ -148,7 +148,7 @@ class LazyInjector {
     for (let i = 0; i < this.injectList.length; i++) {
       const { provide, propertyKey, dependency } = this.injectList[i];
       const instance = this.instanceMap.get(provide);
-      const name = provider.getInjectTokenName(dependency);
+      const name = ph.getInjectTokenName(dependency);
       expect(
         Reflect.has(instance, propertyKey),
         `${String(provide)}[${String(propertyKey)}] depends on '${name}', but it is not given`

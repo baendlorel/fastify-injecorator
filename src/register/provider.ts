@@ -96,5 +96,8 @@ class Provider {
   }
 }
 
-const provider = new Provider();
-export default provider;
+/**
+ * Provider helpers
+ */
+const ph = new Provider();
+export default ph;

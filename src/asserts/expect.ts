@@ -15,12 +15,6 @@ export const expect: (target: any, msg: string) => asserts target = (target, msg
   }
 };
 
-export const eincludes: (arr: any[], o: any, msg?: string) => void = (arr, o, msg) => {
-  if (!arr.includes(o)) {
-    throws(msg ?? `'${o}' should be one of [${arr.join(', ')}]`);
-  }
-};
-
 export const eorString: (o: any, msg: string) => asserts o is string | undefined = (o, msg) => {
   if (o !== undefined && typeof o !== 'string') {
     throws(msg);
@@ -64,12 +58,6 @@ export const eisClass: (o: any, msg: string) => asserts o is Class = (o, msg) =>
 
 export const eisBoolean: (o: any, msg: string) => asserts o is boolean = (o, msg) => {
   if (o !== true && o !== false) {
-    throws(msg);
-  }
-};
-
-export const eisUndefined: (o: any, msg: string) => asserts o is undefined = (o, msg) => {
-  if (o !== undefined) {
     throws(msg);
   }
 };

@@ -1,138 +1,139 @@
-// todo 考虑改成小写namespace
-
-import { $define } from './native.js';
-
 /**
  * Property keys used to store metadata.
  */
-export class sym extends null {
+export namespace sym {
   /**
    * Polyfill for stage2 proposal: Symbol.metadata.
    * - obj[Symbol.metadata] stores metadata for decorators.
    * @see https://github.com/tc39/proposal-decorator-metadata
    */
-  static readonly metadata =
-    typeof Symbol.metadata === 'undefined'
-      ? ($define(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
-      : Symbol.metadata;
+  export const metadata = Symbol.metadata ?? Symbol.for('Symbol.metadata');
 
-  static readonly void = Symbol('void');
+  export const none = Symbol('none');
 
-  static readonly root = Symbol('root');
+  export const root = Symbol('root');
 
   /**
    * Stores the `module` information.
    */
-  static readonly module = Symbol('module');
+  export const module = Symbol('module');
 
   /**
    * Stores the `provider` information.
    */
-  static readonly provider = Symbol('provider');
+  export const provider = Symbol('provider');
 
   /**
    * Stores the `controller` information.
    */
-  static readonly controller = Symbol('controller');
+  export const controller = Symbol('controller');
 
   /**
    * Stores injection information for fields.
    * - This is used to inject dependencies into fields of a class.
    * - The value is an object with the dependency class and other metadata.
    */
-  static readonly injection = Symbol('injection');
+  export const injection = Symbol('injection');
 
-  /**
-   * Stores route metadata
-   */
-  static readonly route = Symbol('route');
+  export namespace route {
+    /**
+     * Stores route metadata
+     */
+    export const root = Symbol('route');
+    /**
+     * Stores basic route options with interface `RouteBasic`
+     */
+    export const base = Symbol('base');
 
-  /**
-   * Stores basic route options with interface `RouteBasic`
-   */
-  static readonly routeBase = Symbol('routeBase');
+    /**
+     * Stores route options of `fastify.route(opts)`
+     * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
+     */
+    export const opt = Symbol('opt');
 
-  /**
-   * Stores route options of `fastify.route(opts)`
-   * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
-   */
-  static readonly routeOpt = Symbol('routeOpt');
+    /**
+     * Stores info schema like `summary`, `description`, etc. for swagger
+     * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
+     */
+    export const apiSchema = Symbol('apiSchema');
 
-  /**
-   * Stores info schema like `summary`, `description`, etc. for swagger
-   * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
-   */
-  static readonly routeApiSchema = Symbol('routeApiSchema');
+    /**
+     * Stores property paths of the handler argument `request: FastifyRequest`
+     * - if the handler is decorated by `@Args('body.name','body.age')`, then the handler will be called as `handler(request.body.name, request.body.age, reply)`
+     * - `reply` will always be the last argument
+     */
+    export const args = Symbol('args');
+  }
 
-  /**
-   * Stores property paths of the handler argument `request: FastifyRequest`
-   * - if the handler is decorated by `@Args('body.name','body.age')`, then the handler will be called as `handler(request.body.name, request.body.age, reply)`
-   * - `reply` will always be the last argument
-   */
-  static readonly handlerArgs = Symbol('handlerArgs');
+  export namespace interceptor {
+    /**
+     * Identify this class as an interceptor
+     */
+    export const root = Symbol('interceptor');
+    /**
+     * Stores interceptors with controller level
+     */
+    export const controller = Symbol('controller');
 
-  /**
-   * Identify this class as an interceptor
-   */
-  static readonly interceptor = Symbol('Interceptor');
+    /**
+     * Stores interceptors with handler level
+     */
+    export const handler = Symbol('handler');
+  }
 
-  /**
-   * Stores interceptors with controller level
-   */
-  static readonly controllerInterceptor = Symbol('ControllerInterceptor');
+  export namespace guard {
+    /**
+     * Identify this class as a guard
+     */
+    export const root = Symbol('guard');
 
-  /**
-   * Stores interceptors with handler level
-   */
-  static readonly handlerInterceptor = Symbol('HandlerInterceptor');
+    /**
+     * Stores guards with controller level
+     */
+    export const controller = Symbol('controller');
 
-  /**
-   * Identify this class as a guard
-   */
-  static readonly guard = Symbol('Guard');
+    /**
+     * Stores guards with handler level
+     */
+    export const handler = Symbol('handler');
+  }
 
-  /**
-   * Stores guards with controller level
-   */
-  static readonly controllerGuard = Symbol('ControllerGuard');
+  export namespace filter {
+    /**
+     * Identify this class as a filter
+     */
+    export const root = Symbol('filter');
 
-  /**
-   * Stores guards with handler level
-   */
-  static readonly handlerGuard = Symbol('HandlerGuard');
+    /**
+     * Stores filters with controller level
+     */
+    export const controller = Symbol('controller');
 
-  /**
-   * Identify this class as a filter
-   */
-  static readonly filter = Symbol('Filter');
+    /**
+     * Stores filters with handler level
+     */
+    export const handler = Symbol('handler');
+  }
 
-  /**
-   * Stores filters with controller level
-   */
-  static readonly controllerFilter = Symbol('ControllerFilter');
+  export namespace pipe {
+    /**
+     * Identify this class as a pipe
+     */
+    export const root = Symbol('pipe');
 
-  /**
-   * Stores filters with handler level
-   */
-  static readonly handlerFilter = Symbol('HandlerFilter');
+    /**
+     * Stores pipes with controller level
+     */
+    export const controller = Symbol('controller');
 
-  /**
-   * Identify this class as a pipe
-   */
-  static readonly pipe = Symbol('Pipe');
-
-  /**
-   * Stores pipes with controller level
-   */
-  static readonly controllerPipe = Symbol('controllerPipe');
-
-  /**
-   * Stores pipes with handler level
-   */
-  static readonly handlerPipe = Symbol('handlerPipe');
+    /**
+     * Stores pipes with handler level
+     */
+    export const handler = Symbol('handler');
+  }
 
   /**
    * Custom metadata stored in this field
    */
-  static readonly custom = Symbol('custom');
+  export const custom = Symbol('custom');
 }

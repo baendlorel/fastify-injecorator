@@ -42,7 +42,7 @@ class BasicTransformer {
 
   private handleResult(validator: Validator, result: ValidatorReturn) {
     if (result === true) {
-      return sym.void; // Validation passed
+      return sym.none; // Validation passed
     }
 
     if (validator.errors && validator.errors.length > 0) {
@@ -61,7 +61,7 @@ class BasicTransformer {
       return result.value;
     }
 
-    return sym.void; // Validation passed
+    return sym.none; // Validation passed
   }
 
   private getNeededSchema(httpPart: HttpPart, schema?: PipeFullSchema) {
@@ -97,7 +97,7 @@ class BasicTransformer {
 
     const rawResult = await promiseTry(validator, null, data);
     const result = this.handleResult(validator, rawResult);
-    if (result !== sym.void) {
+    if (result !== sym.none) {
       args[0] = result; // Update the first argument with the validated data
     }
     return args;

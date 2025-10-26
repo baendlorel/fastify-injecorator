@@ -3,7 +3,7 @@ import { inspect } from 'node:util';
 import { InjectMetadata, ProviderOptions } from '@/types/injecorator.js';
 import { Class, Key } from '@/types/primitive.js';
 
-import { Sym } from '@/common/index.js';
+import { sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
 import { toModuleClass } from '@/common/utils.js';
 import {
@@ -108,10 +108,10 @@ export function eisController(target: unknown) {
   expectRecord<RouteConfig>(
     routes,
     (v: RouteConfig) => {
-      const basic = v[Sym.routeBase];
+      const basic = v[sym.route.base];
       expectKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
       expectArray(basic.route, 'Route should be a string array', pred);
-      expectOrObject(v[Sym.routeOpt], `${target.name}: opts should be an object`);
+      expectOrObject(v[sym.route.opt], `${target.name}: opts should be an object`);
     },
     `${target.name}: should have a record of route metadata`
   );

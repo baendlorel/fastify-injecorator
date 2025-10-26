@@ -2,7 +2,7 @@ import { ReflectDeep } from 'reflect-deep';
 import { ModuleMetadata, DynamicModule } from '@/types/injecorator.js';
 import { Class } from '@/types/primitive.js';
 
-import { Sym } from '@/common/index.js';
+import { sym } from '@/common/index.js';
 import { createNamedClass } from '@/common/utils.js';
 import { expectClassNotDecorated, expectModulable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
@@ -36,12 +36,12 @@ interface ToModuleOptions {
  */
 export function toModule(outerProvider: Class, opt?: Partial<ToModuleOptions>): DynamicModule {
   const { isGlobal = false, args = [] } = Object(opt) as ToModuleOptions;
-  expectClassNotDecorated(outerProvider, Sym.provider);
+  expectClassNotDecorated(outerProvider, sym.provider);
 
   const injectable = toInjectable(outerProvider, args);
   // & Directly set everything in a temp class, not via `meta.setXXX`
   const temp = createNamedClass(`${outerProvider.name}Module`);
-  ReflectDeep.set<ModuleMetadata>(temp, [Sym.metadata, Sym.root, Sym.module], {
+  ReflectDeep.set<ModuleMetadata>(temp, [sym.metadata, sym.root, sym.module], {
     imports: [],
     providers: [injectable],
     controllers: [],

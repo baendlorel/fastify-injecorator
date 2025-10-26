@@ -2,7 +2,7 @@ import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
 import { Class } from '@/types/primitive.js';
 import { InjectArg } from '@/types/injecorator.js';
-import { Sym } from '@/common/index.js';
+import { sym } from '@/common/index.js';
 
 import { expectClass, expectObject, throws } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';
@@ -15,30 +15,30 @@ export const expectInjectToken = (o: any, msg: string) => {
 };
 
 export const expectRouted = (context: ClassMethodDecoratorContext) => {
-  const o = ReflectDeep.get(context.metadata, [Sym.root, Sym.route, context.name]);
+  const o = ReflectDeep.get(context.metadata, [sym.root, sym.route.root, context.name]);
   expectObject(o, 'Should be decorated with route decorators(like @Post) first');
 };
 
 export const expectInjectable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Injectable/@Controller can only be used on classes');
   expectClassDecoratorContext(context, '@Injectable/@Controller can only be used on classes');
-  expectNotDecorated(context, Sym.provider);
+  expectNotDecorated(context, sym.provider);
 };
 
 export const expectModulable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Module can only be used on classes');
   expectClassDecoratorContext(context, '@Module can only be used on classes');
-  expectNotDecorated(context, Sym.module);
+  expectNotDecorated(context, sym.module);
 };
 
 export const expectNotDecorated = (context: DecoratorContext, flag: symbol) => {
-  if (ReflectDeep.has(context.metadata, [Sym.root, flag])) {
+  if (ReflectDeep.has(context.metadata, [sym.root, flag])) {
     throws(`'${String(context.name)}' is already decorated`);
   }
 };
 
 export const expectClassNotDecorated = (cls: Class, flag: symbol) => {
-  if (ReflectDeep.has(cls, [Sym.metadata, Sym.root, flag])) {
+  if (ReflectDeep.has(cls, [sym.metadata, sym.root, flag])) {
     throws(`'${String(cls.name)}' is already decorated`);
   }
 };

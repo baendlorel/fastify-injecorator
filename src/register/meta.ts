@@ -22,7 +22,7 @@ import {
   PipeFullSchema,
 } from '@/types/middleware.js';
 
-import { Sym } from '@/common/index.js';
+import { sym } from '@/common/index.js';
 import { splitPath, toModuleClass } from '@/common/utils.js';
 import collection from './collection.js';
 import ph from './provider.js';
@@ -32,25 +32,25 @@ import ph from './provider.js';
  */
 class Meta {
   private set<T = unknown>(context: DecoratorContext, keys: Key[], value: T) {
-    return ReflectDeep.set<T>(context.metadata, [Sym.root, ...keys], value);
+    return ReflectDeep.set<T>(context.metadata, [sym.root, ...keys], value);
   }
 
   private get<T = unknown>(cls: Class, keys: Key[]) {
-    return ReflectDeep.get<T>(cls, [Sym.metadata, Sym.root, ...keys]);
+    return ReflectDeep.get<T>(cls, [sym.metadata, sym.root, ...keys]);
   }
 
   setController(context: ClassDecoratorContext, prefix?: string): boolean {
     const data: ProviderMetadata = { args: [] };
     const controlled: ControllerMetadata = { prefix: splitPath(prefix) };
-    return this.set(context, [Sym.provider], data) && this.set(context, [Sym.controller], controlled);
+    return this.set(context, [sym.provider], data) && this.set(context, [sym.controller], controlled);
   }
 
   getController(cls: Class): ControllerMetadata {
-    return this.get(cls, [Sym.controller]) as ControllerMetadata;
+    return this.get(cls, [sym.controller]) as ControllerMetadata;
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteBasic]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Route][context.name][sym.RouteBasic]`
    */
   setRoute(context: ClassMethodDecoratorContext, httpMethod: string, route?: string): boolean {
     const basic: RouteBasic = {
@@ -58,72 +58,72 @@ class Meta {
       route: splitPath(route),
       field: context.name,
     };
-    return this.set(context, [Sym.route, context.name, Sym.routeBase], basic);
+    return this.set(context, [sym.route.root, context.name, sym.route.base], basic);
   }
 
   getRoute(cls: Class): Record<Key, RouteConfig> {
-    return this.get(cls, [Sym.route]) as Record<Key, RouteConfig>;
+    return this.get(cls, [sym.route.root]) as Record<Key, RouteConfig>;
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteOpt]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Route][context.name][sym.RouteOpt]`
    */
   setOpt(context: ClassMethodDecoratorContext, opts: RouteOptType): boolean {
-    return this.set(context, [Sym.route, context.name, Sym.routeOpt], opts);
+    return this.set(context, [sym.route.root, context.name, sym.route.opt], opts);
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.RouteSchema]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Route][context.name][sym.RouteSchema]`
    */
   setSchema(context: ClassMethodDecoratorContext, schema: RouteApiSchema): boolean {
-    return this.set(context, [Sym.route, context.name, Sym.routeApiSchema], schema);
+    return this.set(context, [sym.route.root, context.name, sym.route.apiSchema], schema);
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Route][context.name][Sym.HandlerArgs]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Route][context.name][sym.HandlerArgs]`
    */
   setHandlerArgs(context: ClassMethodDecoratorContext, propertyPaths: string[][]) {
-    return this.set(context, [Sym.route, context.name, Sym.handlerArgs], propertyPaths);
+    return this.set(context, [sym.route.root, context.name, sym.route.args], propertyPaths);
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Inject][context.name]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Inject][context.name]`
    */
   setInject(context: ClassFieldDecoratorContext, dependency: InjectArg): boolean {
     const o: InjectMetadata = {
       dependency,
     };
-    return this.set(context, [Sym.injection, context.name], o);
+    return this.set(context, [sym.injection, context.name], o);
   }
 
   getInject(cls: Class): Record<Key, InjectMetadata> | undefined {
-    return this.get<Record<Key, InjectMetadata>>(cls, [Sym.injection]);
+    return this.get<Record<Key, InjectMetadata>>(cls, [sym.injection]);
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Provider]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    */
   setProvider(context: ClassDecoratorContext, args: unknown[] = []): boolean {
     const data: ProviderMetadata = { args };
-    return this.set(context, [Sym.provider], data);
+    return this.set(context, [sym.provider], data);
   }
 
   /**
    * Directly set metadata on a class, used for `toModule(...)`
    *
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Provider]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    */
   setProviderOnClass(target: Class, args: unknown[] = []): boolean {
     const data: ProviderMetadata = { args };
-    return ReflectDeep.set(target, [Sym.metadata, Sym.root, Sym.provider], data);
+    return ReflectDeep.set(target, [sym.metadata, sym.root, sym.provider], data);
   }
 
   getProvider(cls: Class): ProviderMetadata {
-    return this.get(cls, [Sym.provider]) as ProviderMetadata;
+    return this.get(cls, [sym.provider]) as ProviderMetadata;
   }
 
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Provider]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    * - Will deduplicate each array automatically
    *
    * **normalize in the set method but not in get, makes it easier to detect bugs**
@@ -134,7 +134,7 @@ class Meta {
 
     /* oxlint-disable typescript/no-this-alias */
     const self = this;
-    return this.set<ModuleMetadata>(context, [Sym.module], {
+    return this.set<ModuleMetadata>(context, [sym.module], {
       controllers: [...new Set(controllers)],
       providers: [...new Set(providers)],
       imports: [...new Set(imports)],
@@ -155,59 +155,59 @@ class Meta {
   }
 
   getModule(cls: Class): ModuleMetadata {
-    return this.get(cls, [Sym.module]) as ModuleMetadata;
+    return this.get(cls, [sym.module]) as ModuleMetadata;
   }
 
   // #region Interceptors/Guards
 
   setInterceptor(context: ClassDecoratorContext) {
-    return this.set(context, [Sym.interceptor], true);
+    return this.set(context, [sym.interceptor.root], true);
   }
 
   isInterceptor(cls: Class): boolean {
-    return Boolean(this.get(cls, [Sym.interceptor]));
+    return Boolean(this.get(cls, [sym.interceptor.root]));
   }
 
   setGuard(context: ClassDecoratorContext) {
-    return this.set(context, [Sym.guard], true);
+    return this.set(context, [sym.guard.root], true);
   }
 
   isGuard(cls: Class): boolean {
-    return Boolean(this.get(cls, [Sym.guard]));
+    return Boolean(this.get(cls, [sym.guard.root]));
   }
 
   setFilters(context: ClassDecoratorContext, exceptionClasses: Class[]): boolean {
-    return this.set(context, [Sym.filter], exceptionClasses);
+    return this.set(context, [sym.filter.root], exceptionClasses);
   }
 
   getFilters(cls: Class): Class[] | undefined {
-    return this.get(cls, [Sym.filter]);
+    return this.get(cls, [sym.filter.root]);
   }
 
   setPipe(context: ClassDecoratorContext): boolean {
-    return this.set(context, [Sym.pipe], true);
+    return this.set(context, [sym.pipe.root], true);
   }
 
   isPipe(cls: Class): boolean {
-    return Boolean(this.get(cls, [Sym.pipe]));
+    return Boolean(this.get(cls, [sym.pipe.root]));
   }
 
   // #region set/get+UseMiddlewares series
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Provider]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    * - Class level and method level will be stored in different symbols
    */
   setUseInterceptors(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
-      return this.set(context, [Sym.controllerInterceptor], tokens);
+      return this.set(context, [sym.interceptor.controller], tokens);
     }
 
-    return this.set(context, [Sym.handlerInterceptor, context.name], tokens);
+    return this.set(context, [sym.interceptor.handler, context.name], tokens);
   }
 
   getUseInterceptors(cls: Class): InterceptorGetter {
-    const controller = this.get<InjectToken[]>(cls, [Sym.controllerInterceptor]);
-    const handler = this.get<Record<Key, InjectToken[]>>(cls, [Sym.handlerInterceptor]) ?? {};
+    const controller = this.get<InjectToken[]>(cls, [sym.interceptor.controller]);
+    const handler = this.get<Record<Key, InjectToken[]>>(cls, [sym.interceptor.handler]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalInterceptors, controller, handler[field]);
     };
@@ -215,14 +215,14 @@ class Meta {
 
   setUseGuards(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
-      return this.set(context, [Sym.controllerGuard], tokens);
+      return this.set(context, [sym.guard.controller], tokens);
     }
-    return this.set(context, [Sym.handlerGuard, context.name], tokens);
+    return this.set(context, [sym.guard.handler, context.name], tokens);
   }
 
   getUseGuards(cls: Class): GuardGetter {
-    const controller = this.get<InjectToken[]>(cls, [Sym.controllerGuard]);
-    const handler = this.get<Record<Key, InjectToken[]>>(cls, [Sym.handlerGuard]) ?? {};
+    const controller = this.get<InjectToken[]>(cls, [sym.guard.controller]);
+    const handler = this.get<Record<Key, InjectToken[]>>(cls, [sym.guard.handler]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalGuards, controller, handler[field]);
     };
@@ -230,14 +230,14 @@ class Meta {
 
   setUseFilters(context: ClassDecoratorContext | ClassMethodDecoratorContext, tokens: InjectToken[]): boolean {
     if (context.kind === 'class') {
-      return this.set(context, [Sym.controllerFilter], tokens);
+      return this.set(context, [sym.filter.controller], tokens);
     }
-    return this.set(context, [Sym.handlerFilter, context.name], tokens);
+    return this.set(context, [sym.filter.handler, context.name], tokens);
   }
 
   getUseFilters(cls: Class): FilterGetter {
-    const controller = this.get<InjectToken[]>(cls, [Sym.controllerFilter]);
-    const handler = this.get<Record<Key, InjectToken[]>>(cls, [Sym.handlerFilter]) ?? {};
+    const controller = this.get<InjectToken[]>(cls, [sym.filter.controller]);
+    const handler = this.get<Record<Key, InjectToken[]>>(cls, [sym.filter.handler]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalFilters, controller, handler[field]);
     };
@@ -245,14 +245,14 @@ class Meta {
 
   setUsePipes(context: ClassDecoratorContext | ClassMethodDecoratorContext, pipes: PipeOptions[]): boolean {
     if (context.kind === 'class') {
-      return this.set(context, [Sym.controllerPipe], pipes);
+      return this.set(context, [sym.pipe.controller], pipes);
     }
-    return this.set(context, [Sym.handlerPipe, context.name], pipes);
+    return this.set(context, [sym.pipe.handler, context.name], pipes);
   }
 
   getUsePipes(cls: Class): PipeGetter {
-    const controller = this.get<PipeOptions[]>(cls, [Sym.controllerPipe]);
-    const handler = this.get<Record<Key, PipeOptions[]>>(cls, [Sym.handlerPipe]) ?? {};
+    const controller = this.get<PipeOptions[]>(cls, [sym.pipe.controller]);
+    const handler = this.get<Record<Key, PipeOptions[]>>(cls, [sym.pipe.handler]) ?? {};
     return function (field: Key) {
       return concatArr(collection.globalPipes, controller, handler[field]);
     };
@@ -262,7 +262,7 @@ class Meta {
    * Fisrt method pipe is used to set schema for swagger
    */
   getFirstMethodPipeSchema(cls: Class, field: Key): PipeFullSchema | undefined {
-    const methodPipes = this.get<PipeOptions[]>(cls, [Sym.handlerPipe, field]);
+    const methodPipes = this.get<PipeOptions[]>(cls, [sym.pipe.handler, field]);
     if (!methodPipes) {
       // length > 0 is already assured by @UsePipes
       return undefined;
@@ -273,14 +273,14 @@ class Meta {
 
   // #endregion
   /**
-   * Metadata is stored at: `class[Sym.metadata][Sym.Root][Sym.Custom][key]`
+   * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Custom][key]`
    */
   setCustom(context: DecoratorContext, key: Key, data: unknown) {
-    return this.set(context, [Sym.custom, key], data);
+    return this.set(context, [sym.custom, key], data);
   }
 
   getCustom<T = unknown>(cls: Class, key: Key): T | undefined {
-    return this.get(cls, [Sym.custom, key]);
+    return this.get(cls, [sym.custom, key]);
   }
 }
 

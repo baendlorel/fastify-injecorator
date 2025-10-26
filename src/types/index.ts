@@ -11,7 +11,7 @@ import {
   RouteGenericInterface,
   RouteShorthandOptions,
 } from 'fastify';
-import { Sym } from '@/common/index.js';
+import { sym } from '@/common/index.js';
 import { RouteApiSchema } from './middleware.js';
 import { Key } from './primitive.js';
 
@@ -42,8 +42,8 @@ export interface RouteBasic {
 }
 
 export interface RouteConfig {
-  [Sym.routeBase]: RouteBasic;
-  [Sym.routeOpt]?: RouteOptType;
-  [Sym.handlerArgs]?: string[][];
-  [Sym.routeApiSchema]?: RouteApiSchema;
+  [sym.route.base]: RouteBasic;
+  [sym.route.opt]?: RouteOptType;
+  [sym.route.args]?: string[][];
+  [sym.route.apiSchema]?: RouteApiSchema;
 }

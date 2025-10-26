@@ -73,7 +73,6 @@ export const expectClassAccessorDecoratorContext = (o: any, msg: string) => {
 
 export const expectDecoratorContext = (o: any, msg: string) => {
   expectObject<DecoratorContext>(o, msg);
-  expect(o.kind === 'accessor', msg);
   expectKey(o.name, msg);
   expectFunction(o.addInitializer, msg);
   expectObject(o.metadata, msg);

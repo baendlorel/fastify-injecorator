@@ -7,7 +7,7 @@ export { Body, Params, Query, Raw, Ip } from './decorators/middlewares/pipe.js';
 
 export { Inject } from './decorators/inject.js';
 export { Injectable } from './decorators/injectable.js';
-export { SetMetadata } from './decorators/custom.js';
+export { createCustomDecorator, getCustomMetadata } from './decorators/custom.js';
 export { Module, toModule } from './decorators/module.js';
 
 // middlewares
@@ -24,3 +24,4 @@ export { UseFilters } from './decorators/middlewares/filter.js';
 // export common exceptions for use
 export * from './exceptions/index.js';
 export { HttpStatus } from './common/status.js';
+export { ExecutionContext } from './common/execution-context.class.js';

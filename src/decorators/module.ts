@@ -3,7 +3,7 @@ import { ModuleMetadata, DynamicModule } from '@/types/injecorator.js';
 
 import { Sym } from '@/common/index.js';
 import { createNamedClass } from '@/common/utils.js';
-import { eclassNotDecorated, eisModule, expect } from '@/asserts/index.js';
+import { eclassNotDecorated, eisModulable, expect } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { toInjectable } from './injectable.js';
 
@@ -18,7 +18,7 @@ import { toInjectable } from './injectable.js';
  */
 export function Module(options: Partial<ModuleMetadata>) {
   return function (target: Class, context: ClassDecoratorContext) {
-    eisModule(target, context);
+    eisModulable(target, context);
     meta.setModule(context, options);
   };
 }

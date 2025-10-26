@@ -5,7 +5,7 @@ import { throws } from '@/asserts/index.js';
 import { tryToGetGlobalToken } from '@/common/inject-keys.js';
 
 import collection from './collection.js';
-import expectModule from './expect-module.js';
+import { eaccessibleProviders, eisModule } from './expect-module.js';
 import lazyInjector from './lazy-injector.js';
 import meta from './meta.js';
 import { registerController } from './route/controller.js';
@@ -68,7 +68,7 @@ class ModuleRegister {
       this.moduleStack.push(moduleClass);
     }
 
-    expectModule.isModule(moduleClass);
+    eisModule(moduleClass);
 
     // & When setting the module metadata, each array(providers, controllers, etc.)
     // & will all be set as an array
@@ -87,14 +87,14 @@ class ModuleRegister {
       if (tryToGetGlobalToken(providerOptions)) {
         continue;
       }
-      expectModule.accessibleProviders(providerOptions, m.accessibleProviderTokens);
+      eaccessibleProviders(providerOptions, m.accessibleProviderTokens);
       lazyInjector.createInstance(providerOptions);
     }
 
     // register routes
     for (let i = 0; i < m.controllers.length; i++) {
       const controller = m.controllers[i];
-      expectModule.accessibleProviders(controller, m.accessibleProviderTokens);
+      eaccessibleProviders(controller, m.accessibleProviderTokens);
       registerController(this.app, controller, fullPrefix);
     }
   }

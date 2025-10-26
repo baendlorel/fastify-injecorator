@@ -1,18 +1,18 @@
 import { FastifyInstance } from 'fastify';
 import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
 
-import expectModule from '@/register/expect-module.js';
+import { eclear, eisModule } from './expect-module.js';
 import moduleRegister from './module.js';
 
 function clear() {
-  expectModule.clear();
+  eclear();
   // lazyInjector.clear();
   // collection.clear();
 }
 
 function normalize(opts: Partial<FastifyInjecoratorOptions>): FastifyInjecoratorOptions {
   const normalized: FastifyInjecoratorOptions = Object(opts);
-  expectModule.isModule(normalized.rootModule);
+  eisModule(normalized.rootModule);
   normalized.allowCrossModuleCircularReference ??= false;
 
   return normalized;

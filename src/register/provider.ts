@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
 import { Class, Instance, Key } from '@/types/primitive.js';
-import { expectClass, expectFunction, expectKey, throws, wisClass, wisFunction } from '@/asserts/index.js';
+import { expectClass, expectFunction, expectKey, throws, isClass, isFunction } from '@/asserts/index.js';
 import {
   InjectArg,
   ProviderOptions,
@@ -22,7 +22,7 @@ class Provider {
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 
-    if (wisClass(opts) && useClass) {
+    if (isClass(opts) && useClass) {
       return useClass(opts.name, opts);
     }
 
@@ -73,11 +73,11 @@ class Provider {
       return arg;
     }
 
-    if (wisClass(arg)) {
+    if (isClass(arg)) {
       return arg.name;
     }
 
-    if (wisFunction(arg)) {
+    if (isFunction(arg)) {
       return arg().name;
     }
 
@@ -92,11 +92,11 @@ class Provider {
       return String(arg);
     }
 
-    if (wisClass(arg)) {
+    if (isClass(arg)) {
       return arg.name;
     }
 
-    if (wisFunction(arg)) {
+    if (isFunction(arg)) {
       return arg().name;
     }
   }

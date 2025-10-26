@@ -10,7 +10,7 @@ import meta from '@/register/meta.js';
  */
 export function SetMetadata<T = unknown>(key: Key, metadata: T) {
   return function (_: unknown, context: DecoratorContext) {
-    expectDecoratorContext(context);
+    expectDecoratorContext(context, 'Invalid decorator context for @SetMetadata');
     meta.setCustom(context, key, metadata);
   };
 }

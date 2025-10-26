@@ -1,6 +1,6 @@
 import { Class } from '@/types/primitive.js';
 import { DynamicModule } from '@/types/injecorator.js';
-import { throws, wisLikeModule } from '@/asserts/index.js';
+import { throws, likeModule } from '@/asserts/index.js';
 
 /**
  * Check if the given path is valid and split it into segments.
@@ -24,13 +24,13 @@ export function splitPath(p: string | undefined): string[] {
 
 // # parameter normalization
 export function toDynamicModule(mod: Class | DynamicModule): DynamicModule {
-  return wisLikeModule(mod)
+  return likeModule(mod)
     ? { moduleClass: mod, isGlobal: false }
     : { moduleClass: mod.moduleClass, isGlobal: mod.isGlobal ?? false };
 }
 
 export function toModuleClass(mod: Class | DynamicModule): Class {
-  return wisLikeModule(mod) ? mod : mod.moduleClass;
+  return likeModule(mod) ? mod : mod.moduleClass;
 }
 
 export function createNamedClass(name: string): Class {

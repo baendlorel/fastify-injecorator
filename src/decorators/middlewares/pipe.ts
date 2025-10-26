@@ -6,8 +6,8 @@ import {
   expectObject,
   expectOrObject,
   expect,
-  wisClass,
-  wisKey,
+  isClass,
+  isKey,
 } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
@@ -41,7 +41,7 @@ function predicate(opts: PipeOptions) {
   const { schema, pipe } = opts;
   expectOrObject(schema, 'Pipe options.schema must be an object or omitted');
   expectInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
-  const validPipe = isBasicPipe(pipe) || (wisClass(pipe) && meta.isPipe(pipe)) || wisKey(pipe);
+  const validPipe = isBasicPipe(pipe) || (isClass(pipe) && meta.isPipe(pipe)) || isKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }
 
@@ -54,7 +54,7 @@ function predicate(opts: PipeOptions) {
  */
 export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   expect(pipes.length > 0, '@UsePipes requires at least one pipe option or pipe class');
-  const normalized = pipes.map((pipe) => (wisClass(pipe) ? { pipe } : pipe));
+  const normalized = pipes.map((pipe) => (isClass(pipe) ? { pipe } : pipe));
   normalized.forEach(predicate);
 
   return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {

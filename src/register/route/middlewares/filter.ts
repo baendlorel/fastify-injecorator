@@ -1,6 +1,6 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { FilterTask, InjecoratorFilter } from '@/types/middleware.js';
-import { expectArray, expectClass, wisError } from '@/asserts/index.js';
+import { expectArray, expectClass, isError } from '@/asserts/index.js';
 import lazyInjector from '@/register/lazy-injector.js';
 import meta from '@/register/meta.js';
 import { InjectToken } from '@/types/injecorator.js';
@@ -8,7 +8,7 @@ import { InjectToken } from '@/types/injecorator.js';
 const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
   const http = context.switchToHttp();
   const reply = http.getReply();
-  const message = wisError(exception) ? exception.message : String(exception);
+  const message = isError(exception) ? exception.message : String(exception);
   reply.log.error(`${http.getRequest().url} - ${message}`);
 
   reply.status(400).send({

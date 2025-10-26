@@ -17,10 +17,10 @@ export function expectMiddleware(
 ) {
   if (context.kind === 'class') {
     expectClass(target as Class, 'target of class decorator must be a class');
-    expectClassDecoratorContext(context);
+    expectClassDecoratorContext(context, 'Invalid decorator context for class middleware decorator');
   } else {
     expectFunction(target, 'target of method decorator must be a function');
-    expectClassMethodDecoratorContext(context);
+    expectClassMethodDecoratorContext(context, 'Invalid decorator context for method middleware decorator');
   }
   tokens.forEach((t) => expectInjectArg(t));
 }

@@ -1,34 +1,38 @@
 import { Class, Func, Key } from '@/types/primitive.js';
-import { InjectToken, InjectArg, ProviderOptions, ProviderStandardOptions } from '@/types/injecorator.js';
+import {
+  InjectToken,
+  InjectArg,
+  ProviderOptions,
+  ProviderStandardOptions,
+  ProviderUseClass,
+  ProviderUseFactory,
+  ProviderUseExisting,
+} from '@/types/injecorator.js';
 import meta from '@/register/meta.js';
 import { fnToString } from '@/common/native.js';
 
-export function wisObject<T extends object>(o: any): o is T {
+export function isObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;
 }
 
-export function wisKey(o: unknown): o is Key {
+export function isKey(o: unknown): o is Key {
   return typeof o === 'string' || typeof o === 'symbol';
 }
 
-export function wisClass(o: any): o is Class {
+export function isClass(o: any): o is Class {
   if (typeof o !== 'function') {
     return false;
   }
-  try {
-    // No side effects, just to check if it is a class
-    new new Proxy(o, { construct: () => ({}) })();
-    return true;
-  } catch {
-    return false;
-  }
+
+  const str = fnToString.call(o);
+  return str.startsWith('class ') || str.startsWith('[class ');
 }
 
-export function wisFunction(o: any): o is Func {
+export function isFunction(o: any): o is Func {
   return typeof o === 'function';
 }
 
-export function wisPathNode(p: string): boolean {
+export function isPathNode(p: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(p);
 }
 
@@ -41,10 +45,7 @@ export function wisPathNode(p: string): boolean {
  * @param arr target array
  * @param predicate function to validate each element
  */
-export function wisArray<T = any>(
-  arr: any,
-  predicate?: (value: T, index?: number, array?: T[]) => boolean
-): arr is T[] {
+export function isArray<T = any>(arr: any, predicate?: (value: T, index: number, array: T[]) => boolean): arr is T[] {
   if (!Array.isArray(arr)) {
     return false;
   }
@@ -62,7 +63,7 @@ export function wisArray<T = any>(
   return true;
 }
 
-export function wisError<T extends Error>(o: any): o is T {
+export function isError<T extends Error>(o: any): o is T {
   return o instanceof Error;
 }
 
@@ -73,7 +74,7 @@ export function wisError<T extends Error>(o: any): o is T {
  * @see https://github.com/baendlorel/get-function-features
  * @see https://github.com/baendlorel/js-is-arrow-function
  */
-export function wisInjectedClassGetter(o: unknown): o is Func {
+export function isInjectedClassGetter(o: unknown): o is Func {
   if (typeof o !== 'function') {
     return false;
   }
@@ -87,64 +88,64 @@ export function wisInjectedClassGetter(o: unknown): o is Func {
  * @param target
  * @returns
  */
-export function wisLikeModule(target: unknown): target is Class {
-  if (!wisClass(target)) {
+export function likeModule(target: unknown): target is Class {
+  if (!isClass(target)) {
     return false;
   }
   const o = meta.getModule(target);
-  if (!wisObject(o)) {
+  if (!isObject(o)) {
     return false;
   }
 
   const arr = [o.controllers, o.exports, o.providers, o.imports];
-  if (arr.some((a) => a && !wisArray(a))) {
+  if (arr.some((a) => a && !isArray(a))) {
     return false;
   }
   return true;
 }
 
-export function wisInjectToken(target: any): target is InjectToken {
-  if (wisKey(target)) {
+export function isInjectToken(target: any): target is InjectToken {
+  if (isKey(target)) {
     return true;
   }
 
-  if (wisClass(target)) {
-    return true;
-  }
-
-  return false;
-}
-
-export function wisInjectArg(target: any): target is InjectArg {
-  if (wisKey(target)) {
-    return true;
-  }
-
-  if (wisClass(target)) {
-    return true;
-  }
-
-  if (wisFunction(target) && wisClass(target())) {
+  if (isClass(target)) {
     return true;
   }
 
   return false;
 }
 
-export function wisProviderOptions(target: unknown): target is ProviderOptions {
+export function isInjectArg(target: any): target is InjectArg {
+  if (isKey(target)) {
+    return true;
+  }
+
+  if (isClass(target)) {
+    return true;
+  }
+
+  if (isFunction(target) && isClass(target())) {
+    return true;
+  }
+
+  return false;
+}
+
+export function isProviderOptions(target: unknown): target is ProviderOptions {
   // Class provider: direct class
-  if (wisClass(target)) {
+  if (isClass(target)) {
     return true;
   }
   // Object provider: must have provide key
-  if (!wisObject<ProviderStandardOptions>(target)) {
+  if (!isObject<ProviderStandardOptions>(target)) {
     return false;
   }
-  if (!wisKey(target.provide)) {
+  if (!isKey(target.provide)) {
     return false;
   }
 
-  if (wisClass((target as any).useClass)) {
+  if (isClass((target as ProviderUseClass).useClass)) {
     return true;
   }
 
@@ -152,11 +153,11 @@ export function wisProviderOptions(target: unknown): target is ProviderOptions {
     return true;
   }
 
-  if (wisFunction((target as any).useFactory)) {
+  if (isFunction((target as ProviderUseFactory).useFactory)) {
     return true;
   }
 
-  if (wisKey((target as any).useExisting)) {
+  if (isKey((target as ProviderUseExisting).useExisting)) {
     return true;
   }
 

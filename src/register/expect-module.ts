@@ -18,10 +18,10 @@ import {
   expectString,
   expectOrObject,
   expect,
-  wisClass,
-  wisKey,
-  wisObject,
-  wisPathNode,
+  isClass,
+  isKey,
+  isObject,
+  isPathNode,
 } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import ph from './provider.js';
@@ -92,7 +92,7 @@ export function eisController(target: unknown) {
 
   // controller metadata check
   const pred = (pathNode: string) => {
-    if (!wisPathNode(pathNode)) {
+    if (!isPathNode(pathNode)) {
       return `Path node must match /^[a-zA-Z0-9_-]+$/. But got: [${pathNode}]`;
     }
     return true;
@@ -190,9 +190,9 @@ export function eclear() {
 }
 
 function getDependencyTokens(options: ProviderOptions): Key[] | null {
-  if (wisClass(options)) {
+  if (isClass(options)) {
     const injections = meta.getInject(options);
-    if (!wisObject(injections)) {
+    if (!isObject(injections)) {
       return null;
     }
     return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
@@ -200,7 +200,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
 
   if ('useClass' in options) {
     const injections = meta.getInject(options.useClass);
-    if (!wisObject(injections)) {
+    if (!isObject(injections)) {
       return null;
     }
     return Object.values(injections).map((injection) => ph.getInjectToken(injection.dependency));
@@ -210,7 +210,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
     // todo 缓存native方法
     if (Array.isArray(options.inject)) {
       // ?? 这里原本arg的类型是什么来着
-      options.inject.map((arg: Key | Class) => (wisKey(arg) ? arg : arg.name));
+      options.inject.map((arg: Key | Class) => (isKey(arg) ? arg : arg.name));
     } else {
       return null;
     }

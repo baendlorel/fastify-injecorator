@@ -3,7 +3,7 @@ import { InjectToken } from '@/types/injecorator.js';
 
 import { fnToString } from '@/common/native.js';
 import { InjecoratorError } from './error.js';
-import { wisClass } from './whether.js';
+import { isClass } from './whether.js';
 
 export const throws = (msg: string): never => {
   throw new InjecoratorError(msg);
@@ -42,7 +42,7 @@ export const expectObject: <T = object>(o: any, msg: string) => asserts o is T =
 };
 
 export const expectKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
-  if (typeof o !== 'string' && typeof o !== 'symbol' && !wisClass(o)) {
+  if (typeof o !== 'string' && typeof o !== 'symbol' && !isClass(o)) {
     throws(msg);
   }
 };

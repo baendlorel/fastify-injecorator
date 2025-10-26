@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Func, Class } from '@/types/primitive.js';
 import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
-import { expectArray } from '@/asserts/expect.js';
+import { expectArray, isFunction } from '@/asserts/index.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
 
 async function run(fns: Func[]) {
@@ -43,7 +43,7 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
       // todo pipe也要第二次运行，用来返回值校验
 
       // Interceptor leave
-      const leaves = interceptResult.results.filter((v) => typeof v === 'function').reverse();
+      const leaves = interceptResult.results.filter(isFunction).reverse();
       await run(leaves);
 
       return result;

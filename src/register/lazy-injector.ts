@@ -5,7 +5,7 @@ import { Class, Func, Instance, Key } from '@/types/primitive.js';
 
 import { toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
-import { expectFunction, expectObject, expect, throws, wisClass, wisKey, wisObject } from '@/asserts/index.js';
+import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@/asserts/index.js';
 
 import meta from './meta.js';
 import ph from './provider.js';
@@ -23,11 +23,11 @@ class LazyInjector {
   private readonly instanceMap = new Map<Key, Instance | null>();
 
   private getProvide(opts: ProviderOptions) {
-    return wisClass(opts) ? opts.name : opts.provide;
+    return isClass(opts) ? opts.name : opts.provide;
   }
 
   get<T extends object>(token: InjectToken) {
-    return this.instanceMap.get(wisKey(token) ? token : token.name) as T | undefined;
+    return this.instanceMap.get(isKey(token) ? token : token.name) as T | undefined;
   }
 
   internalCreateInstanceByClass(cls: Class) {
@@ -41,7 +41,7 @@ class LazyInjector {
    */
   getMiddlewareHooks<T extends InjecoratorMiddleware>(tokens: InjectToken[], handlerName: keyof T & Key): Func[] {
     return tokens.map((token) => {
-      const instance = this.get(wisKey(token) ? token : token.name);
+      const instance = this.get(isKey(token) ? token : token.name);
       expectObject<T>(instance, `Cannot find class for token: ${String(token)}`);
       const handler = instance[handlerName];
       expectFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
@@ -50,7 +50,7 @@ class LazyInjector {
   }
 
   getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
-    const instance = this.instanceMap.get(wisKey(token) ? token : token.name) as T;
+    const instance = this.instanceMap.get(isKey(token) ? token : token.name) as T;
     const cls = (Reflect.getPrototypeOf(instance)?.constructor ?? null) as Class | null;
     return { instance, cls };
   }
@@ -87,7 +87,7 @@ class LazyInjector {
   createInstance(opts: ProviderOptions): Instance {
     const token = this.getProvide(opts);
     const exist = this.instanceMap.get(token);
-    if (wisObject<Instance>(exist)) {
+    if (isObject<Instance>(exist)) {
       return exist;
     }
     return ph.match(opts, {
@@ -100,14 +100,14 @@ class LazyInjector {
       },
       // ! This means the injections must be created after instanceMap being filled up
       useFactory: (token, factory, inject) => {
-        const instances = inject.map((arg) => this.instanceMap.get(wisKey(arg) ? arg : arg.name));
+        const instances = inject.map((arg) => this.instanceMap.get(isKey(arg) ? arg : arg.name));
         const instance = factory(...instances);
         this.instanceMap.set(token, instance);
         return instance;
       },
       useExisting: (token, existingToken) => {
         const instance = this.instanceMap.get(existingToken);
-        if (!wisObject(instance)) {
+        if (!isObject(instance)) {
           throws(`Cannot find existing provider: ${String(existingToken)}`);
         }
         this.instanceMap.set(token, instance);

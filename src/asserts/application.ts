@@ -6,10 +6,10 @@ import { Sym } from '@/common/index.js';
 
 import { expectClass, expectObject, throws } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';
-import { wisInjectToken, wisInjectArg, wisProviderOptions, wisFunction } from './whether.js';
+import { isInjectToken, isInjectArg, isProviderOptions, isFunction } from './whether.js';
 
 export const expectInjectToken = (o: any, msg: string) => {
-  if (!wisInjectToken(o)) {
+  if (!isInjectToken(o)) {
     throws(msg);
   }
 };
@@ -44,13 +44,13 @@ export const expectClassNotDecorated = (cls: Class, flag: symbol) => {
 };
 
 export const expectInjectArg = (target: InjectArg, msg?: string) => {
-  if (!wisInjectArg(target)) {
+  if (!isInjectArg(target)) {
     throws(`${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(target)}`);
   }
 };
 
 export const expectProviderOptions = (target: unknown) => {
-  if (!wisProviderOptions(target)) {
+  if (!isProviderOptions(target)) {
     throws(`Should be a provider options object, got: ${inspect(target)}`);
   }
 };
@@ -63,7 +63,7 @@ export const expectHasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: s
   const proto = target.prototype as T;
   expectObject(proto, 'Prototype should be an object');
   for (let i = 0; i < hooks.length; i++) {
-    if (wisFunction(proto[hooks[i]])) {
+    if (isFunction(proto[hooks[i]])) {
       return;
     }
   }

@@ -3,7 +3,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Func, Class } from '@/types/primitive.js';
 import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
-import { eisArray } from '@/asserts/expect.js';
+import { expectArray } from '@/asserts/expect.js';
 import { ExecutionContext } from '@/common/execution-context.class.js';
 
 async function run(fns: Func[]) {
@@ -34,7 +34,7 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
       if (piped.trivial) {
         piped.value = [request, reply];
       } else {
-        eisArray(piped.value, `Pipe must return an array, but got: ${String(piped)}`);
+        expectArray(piped.value, `Pipe must return an array, but got: ${String(piped)}`);
       }
 
       // Handler

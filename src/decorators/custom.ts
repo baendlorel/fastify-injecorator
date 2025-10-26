@@ -1,5 +1,5 @@
 import { Key } from '@/types/primitive.js';
-import { eisDecoratorContext } from '@/asserts/index.js';
+import { expectDecoratorContext } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -10,7 +10,7 @@ import meta from '@/register/meta.js';
  */
 export function SetMetadata<T = unknown>(key: Key, metadata: T) {
   return function (_: unknown, context: DecoratorContext) {
-    eisDecoratorContext(context);
+    expectDecoratorContext(context);
     meta.setCustom(context, key, metadata);
   };
 }

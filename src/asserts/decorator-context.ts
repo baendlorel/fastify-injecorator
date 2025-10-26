@@ -1,106 +1,85 @@
 import { Func } from '@/types/primitive.js';
-import { eisBoolean, eisFunction, eisKey, eisObject, eisString, expect } from './expect.js';
+import { expectBoolean, expectFunction, expectKey, expectObject, expectString, expect } from './expect.js';
 
-export const eisClassDecoratorContext: (o: any, msg?: string) => asserts o is ClassDecoratorContext = (
-  o,
-  msg = 'Should be a ClassDecoratorContext'
-) => {
-  eisObject<ClassDecoratorContext>(o, msg);
+export const expectClassDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassDecoratorContext>(o, msg);
   expect(o.kind === 'class', msg);
-  eisString(o.name, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectString(o.name, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisClassMethodDecoratorContext: (o: any, msg?: string) => asserts o is ClassMethodDecoratorContext = (
-  o,
-  msg = 'Should be a ClassMethodDecoratorContext'
-) => {
-  eisObject<ClassMethodDecoratorContext>(o, msg);
+export const expectClassMethodDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassMethodDecoratorContext>(o, msg);
   expect(o.kind === 'method', msg);
-  eisKey(o.name, msg);
-  eisBoolean(o.static, msg);
-  eisBoolean(o.private, msg);
-  eisFunction(o.access?.has, msg);
-  eisFunction(o.access?.get, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectBoolean(o.static, msg);
+  expectBoolean(o.private, msg);
+  expectFunction(o.access?.has, msg);
+  expectFunction(o.access?.get, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisClassGetterDecoratorContext: (o: any, msg?: string) => asserts o is ClassGetterDecoratorContext = (
-  o,
-  msg = 'Should be a ClassGetterDecoratorContext'
-) => {
-  eisObject<ClassGetterDecoratorContext>(o, msg);
+export const expectClassGetterDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassGetterDecoratorContext>(o, msg);
   expect(o.kind === 'getter', msg);
-  eisKey(o.name, msg);
-  eisBoolean(o.static, msg);
-  eisBoolean(o.private, msg);
-  eisFunction(o.access?.has, msg);
-  eisFunction(o.access?.get, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectBoolean(o.static, msg);
+  expectBoolean(o.private, msg);
+  expectFunction(o.access?.has, msg);
+  expectFunction(o.access?.get, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisClassSetterDecoratorContext: (o: any, msg?: string) => asserts o is ClassSetterDecoratorContext = (
-  o,
-  msg = 'Should be a ClassSetterDecoratorContext'
-) => {
-  eisObject<ClassSetterDecoratorContext>(o, msg);
+export const expectClassSetterDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassSetterDecoratorContext>(o, msg);
   expect(o.kind === 'setter', msg);
-  eisKey(o.name, msg);
-  eisBoolean(o.static, msg);
-  eisBoolean(o.private, msg);
-  eisFunction(o.access?.has, msg);
-  eisFunction(o.access?.set, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectBoolean(o.static, msg);
+  expectBoolean(o.private, msg);
+  expectFunction(o.access?.has, msg);
+  expectFunction(o.access?.set, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisClassFieldDecoratorContext: (o: any, msg?: string) => asserts o is ClassFieldDecoratorContext = (
-  o,
-  msg = 'Should be a ClassFieldDecoratorContext'
-) => {
-  eisObject<ClassFieldDecoratorContext>(o, msg);
+export const expectClassFieldDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassFieldDecoratorContext>(o, msg);
   expect(o.kind === 'field', msg);
-  eisKey(o.name, msg);
-  eisBoolean(o.static, msg);
-  eisBoolean(o.private, msg);
-  eisFunction(o.access?.has, msg);
-  eisFunction(o.access?.get, msg);
-  eisFunction(o.access?.set, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectBoolean(o.static, msg);
+  expectBoolean(o.private, msg);
+  expectFunction(o.access?.has, msg);
+  expectFunction(o.access?.get, msg);
+  expectFunction(o.access?.set, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisClassAccessorDecoratorContext: (o: any, msg?: string) => asserts o is ClassAccessorDecoratorContext = (
-  o,
-  msg = 'Should be a ClassAccessorDecoratorContext'
-) => {
-  eisObject<ClassAccessorDecoratorContext>(o, msg);
+export const expectClassAccessorDecoratorContext = (o: any, msg: string) => {
+  expectObject<ClassAccessorDecoratorContext>(o, msg);
   expect(o.kind === 'accessor', msg);
-  eisKey(o.name, msg);
-  eisBoolean(o.static, msg);
-  eisBoolean(o.private, msg);
-  eisFunction(o.access?.has, msg);
-  eisFunction(o.access?.get, msg);
-  eisFunction(o.access?.set, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectBoolean(o.static, msg);
+  expectBoolean(o.private, msg);
+  expectFunction(o.access?.has, msg);
+  expectFunction(o.access?.get, msg);
+  expectFunction(o.access?.set, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisDecoratorContext: (o: any, msg?: string) => asserts o is DecoratorContext = (
-  o,
-  msg = 'Should be a DecoratorContext'
-) => {
-  eisObject<DecoratorContext>(o, msg);
+export const expectDecoratorContext = (o: any, msg: string) => {
+  expectObject<DecoratorContext>(o, msg);
   expect(o.kind === 'accessor', msg);
-  eisKey(o.name, msg);
-  eisFunction(o.addInitializer, msg);
-  eisObject(o.metadata, msg);
+  expectKey(o.name, msg);
+  expectFunction(o.addInitializer, msg);
+  expectObject(o.metadata, msg);
 };
 
-export const eisMethodDecorator: (target: Func, context: ClassMethodDecoratorContext) => void = (target, context) => {
-  eisFunction(target, 'Target should be a function');
-  eisClassMethodDecoratorContext(context);
+export const expectMethodDecorator = (target: Func, context: ClassMethodDecoratorContext) => {
+  expectFunction(target, 'Target should be a function');
+  expectClassMethodDecoratorContext(context, 'Must be used on a method');
 };

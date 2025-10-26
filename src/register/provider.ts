@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
 import { Class, Instance, Key } from '@/types/primitive.js';
-import { eisClass, eisFunction, eisKey, throws, wisClass, wisFunction } from '@/asserts/index.js';
+import { expectClass, expectFunction, expectKey, throws, wisClass, wisFunction } from '@/asserts/index.js';
 import {
   InjectArg,
   ProviderOptions,
@@ -30,7 +30,7 @@ class Provider {
 
     if (useClass) {
       opts = opts as ProviderUseClass;
-      eisClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
+      expectClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
       return useClass(opts.provide, opts.useClass);
     }
 
@@ -41,13 +41,13 @@ class Provider {
 
     if (useFactory) {
       opts = opts as ProviderUseFactory;
-      eisFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
+      expectFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
       return useFactory(opts.provide, opts.useFactory, opts.inject ?? []);
     }
 
     if (useExisting) {
       opts = opts as ProviderUseExisting;
-      eisKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
+      expectKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
       return useExisting(opts.provide, opts.useExisting);
     }
 
@@ -56,7 +56,7 @@ class Provider {
 
   getToken(providerOptions: ProviderOptions) {
     const token = 'provide' in providerOptions ? providerOptions.provide : providerOptions.name;
-    eisKey(token, `ProviderOptions must have a valid token, got '${providerOptions}'`);
+    expectKey(token, `ProviderOptions must have a valid token, got '${providerOptions}'`);
     return token;
   }
 

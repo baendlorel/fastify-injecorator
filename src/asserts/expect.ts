@@ -17,37 +17,37 @@ export const expect: (target: any, msg: string) => asserts target = (target, msg
   }
 };
 
-export const eorString: (o: any, msg: string) => asserts o is string | undefined = (o, msg) => {
+export const expectOrString: (o: any, msg: string) => asserts o is string | undefined = (o, msg) => {
   if (o !== undefined && typeof o !== 'string') {
     throws(msg);
   }
 };
 
-export const eisString: (o: any, msg: string) => asserts o is string = (o, msg) => {
+export const expectString: (o: any, msg: string) => asserts o is string = (o, msg) => {
   if (typeof o !== 'string') {
     throws(msg);
   }
 };
 
-export const eorObject: (o: any, msg: string) => asserts o is object | undefined = (o, msg) => {
+export const expectOrObject: (o: any, msg: string) => asserts o is object | undefined = (o, msg) => {
   if (o !== undefined && (typeof o !== 'object' || o === null)) {
     throws(msg);
   }
 };
 
-export const eisObject: <T = object>(o: any, msg: string) => asserts o is T = (o, msg) => {
+export const expectObject: <T = object>(o: any, msg: string) => asserts o is T = (o, msg) => {
   if (typeof o !== 'object' || o === null) {
     throws(msg);
   }
 };
 
-export const eisKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
+export const expectKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
   if (typeof o !== 'string' && typeof o !== 'symbol' && !wisClass(o)) {
     throws(msg);
   }
 };
 
-export const eisClass: (o: any, msg: string) => asserts o is Class = (o, msg) => {
+export const expectClass: (o: any, msg: string) => asserts o is Class = (o, msg) => {
   if (typeof o !== 'function') {
     throws(msg);
   }
@@ -58,13 +58,13 @@ export const eisClass: (o: any, msg: string) => asserts o is Class = (o, msg) =>
   }
 };
 
-export const eisBoolean: (o: any, msg: string) => asserts o is boolean = (o, msg) => {
+export const expectBoolean: (o: any, msg: string) => asserts o is boolean = (o, msg) => {
   if (o !== true && o !== false) {
     throws(msg);
   }
 };
 
-export const eisFunction: (o: any, msg: string) => asserts o is Func = (o, msg) => {
+export const expectFunction: (o: any, msg: string) => asserts o is Func = (o, msg) => {
   if (typeof o !== 'function') {
     throws(msg);
   }
@@ -77,7 +77,7 @@ export const eisFunction: (o: any, msg: string) => asserts o is Func = (o, msg) 
  *   - If it returns `null` or `undefined`, the element is considered valid.
  *   - If it returns `boolean` and value is `true`, the element is considered valid.
  */
-export const eisArray: <T = any>(
+export const expectArray: <T = any>(
   arr: any,
   msg: string,
   predicate?: (value: T, index: number, array: T[]) => void
@@ -93,12 +93,12 @@ export const eisArray: <T = any>(
   }
 };
 
-export const eisRecord: <V>(
+export const expectRecord: <V>(
   target: unknown,
   predicate: (value: V, key?: Key) => void,
   msg: string
 ) => asserts target is Record<Key, V> = (target, predicate, msg) => {
-  eisObject(target, msg);
+  expectObject(target, msg);
   for (const [key, value] of Object.entries(target)) {
     predicate(value, key);
   }

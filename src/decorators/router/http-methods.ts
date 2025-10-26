@@ -1,13 +1,13 @@
 import { Func } from '@/types/primitive.js';
-import { eisMethodDecorator, eisString, eorString } from '@/asserts/index.js';
+import { expectMethodDecorator, expectString, expectOrString } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 function registerRoute(method: string) {
   return function (route?: string) {
     return function (target: Func, context: ClassMethodDecoratorContext) {
-      eisMethodDecorator(target, context);
-      eisString(method, 'Method must be a string');
-      eorString(route, 'Given route must be string or undefined');
+      expectMethodDecorator(target, context);
+      expectString(method, 'Method must be a string');
+      expectOrString(route, 'Given route must be string or undefined');
       meta.setRoute(context, method, route);
     };
   };

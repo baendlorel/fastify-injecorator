@@ -1,5 +1,5 @@
 import { Class } from '@/types/primitive.js';
-import { eisInjectable, eorString } from '@/asserts/index.js';
+import { eisInjectable, expectOrString } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -9,7 +9,7 @@ import meta from '@/register/meta.js';
 export function Controller(prefix?: string) {
   return function (target: Class, context: ClassDecoratorContext) {
     eisInjectable(target, context);
-    eorString(prefix, 'Controller prefix must be a string or undefined');
+    expectOrString(prefix, 'Controller prefix must be a string or undefined');
     meta.setController(context, prefix);
   };
 }

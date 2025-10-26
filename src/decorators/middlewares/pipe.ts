@@ -1,6 +1,14 @@
 import { Class, Func } from '@/types/primitive.js';
 import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
-import { ehasOneHook, eisInjectToken, eisObject, eorObject, expect, wisClass, wisKey } from '@/asserts/index.js';
+import {
+  ehasOneHook,
+  eisInjectToken,
+  expectObject,
+  expectOrObject,
+  expect,
+  wisClass,
+  wisKey,
+} from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 import { Injectable } from '../injectable.js';
@@ -25,9 +33,9 @@ export function Pipe() {
 }
 
 function predicate(opts: PipeOptions) {
-  eisObject(opts, 'Pipe options must be an object');
+  expectObject(opts, 'Pipe options must be an object');
   const { schema, pipe } = opts;
-  eorObject(schema, 'Pipe options.schema must be an object or omitted');
+  expectOrObject(schema, 'Pipe options.schema must be an object or omitted');
   eisInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
   const validPipe = isBasicPipe(pipe) || (wisClass(pipe) && meta.isPipe(pipe)) || wisKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');

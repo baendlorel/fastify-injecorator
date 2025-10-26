@@ -5,7 +5,7 @@ import { Class, Func, Instance, Key } from '@/types/primitive.js';
 
 import { toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
-import { eisFunction, eisObject, expect, throws, wisClass, wisKey, wisObject } from '@/asserts/index.js';
+import { expectFunction, expectObject, expect, throws, wisClass, wisKey, wisObject } from '@/asserts/index.js';
 
 import meta from './meta.js';
 import ph from './provider.js';
@@ -42,9 +42,9 @@ class LazyInjector {
   getMiddlewareHooks<T extends InjecoratorMiddleware>(tokens: InjectToken[], handlerName: keyof T & Key): Func[] {
     return tokens.map((token) => {
       const instance = this.get(wisKey(token) ? token : token.name);
-      eisObject<T>(instance, `Cannot find class for token: ${String(token)}`);
+      expectObject<T>(instance, `Cannot find class for token: ${String(token)}`);
       const handler = instance[handlerName];
-      eisFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
+      expectFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
       return (...args) => handler.apply(instance, args);
     });
   }

@@ -1,5 +1,5 @@
 import { Class } from '@/types/primitive.js';
-import { eisArray, eisClass, eisInjectable } from '@/asserts/index.js';
+import { expectArray, expectClass, eisInjectable } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 
 /**
@@ -13,8 +13,8 @@ export function Injectable() {
 }
 
 export function toInjectable(target: Class, args: any[] = []) {
-  eisClass(target, `Target is not a class: ${String(target)}`);
-  eisArray(args, 'args must be an array');
+  expectClass(target, `Target is not a class: ${String(target)}`);
+  expectArray(args, 'args must be an array');
   meta.setProviderOnClass(target);
   return target;
 }

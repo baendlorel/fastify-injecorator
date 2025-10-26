@@ -1,6 +1,6 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { FilterTask, InjecoratorFilter } from '@/types/middleware.js';
-import { eisArray, eisClass, wisError } from '@/asserts/index.js';
+import { expectArray, expectClass, wisError } from '@/asserts/index.js';
 import lazyInjector from '@/register/lazy-injector.js';
 import meta from '@/register/meta.js';
 import { InjectToken } from '@/types/injecorator.js';
@@ -29,11 +29,11 @@ const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
 export function createFilter(tokens: InjectToken[]): TaskifyAsync<FilterTask> {
   const catches = tokens.map((token) => {
     const { cls } = lazyInjector.getDetail<InjecoratorFilter>(token);
-    eisClass(cls, `Filter token '${String(token)}' must refer to a class, but got ${String(cls)}`);
+    expectClass(cls, `Filter token '${String(token)}' must refer to a class, but got ${String(cls)}`);
 
     const exceptionClasses = meta.getFilters(cls) ?? [];
-    eisArray(exceptionClasses, 'exceptions classes must be an array', (c) =>
-      eisClass(c, `Filter token expected to be a class, but got ${String(c)}`)
+    expectArray(exceptionClasses, 'exceptions classes must be an array', (c) =>
+      expectClass(c, `Filter token expected to be a class, but got ${String(c)}`)
     );
     return exceptionClasses;
   });

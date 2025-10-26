@@ -7,16 +7,16 @@ import { Sym } from '@/common/index.js';
 import { RouteConfig } from '@/types/index.js';
 import { toModuleClass } from '@/common/utils.js';
 import {
-  eisArray,
-  eisBoolean,
-  eisClass,
+  expectArray,
+  expectBoolean,
+  expectClass,
   eisInjectArg,
-  eisKey,
-  eisObject,
+  expectKey,
+  expectObject,
   eisProviderOptions,
-  eisRecord,
-  eisString,
-  eorObject,
+  expectRecord,
+  expectString,
+  expectOrObject,
   expect,
   wisClass,
   wisKey,
@@ -38,19 +38,19 @@ const injectableCache = new Set<any>();
  * - injections?: a record of class dependencies
  */
 export function eisProvider(target: unknown): asserts target is Class {
-  eisClass(target, `Target is not a class: ${String(target)}`);
+  expectClass(target, `Target is not a class: ${String(target)}`);
 
   // Should have args[]
   const providerMetadata = meta.getProvider(target);
-  eisObject(providerMetadata, `class '${target.name}' is not a provider`);
-  eisArray(providerMetadata.args, 'provider metadata.args should be an array');
+  expectObject(providerMetadata, `class '${target.name}' is not a provider`);
+  expectArray(providerMetadata.args, 'provider metadata.args should be an array');
 
   // If have injections
   const inject = meta.getInject(target);
   if (inject) {
     const msg = `class '${target.name}': Inject metadata should be a record of class dependencies`;
-    eisObject(inject, msg);
-    eisRecord<InjectMetadata>(inject, (value) => (eisObject(value, msg), eisInjectArg(value.dependency)), msg);
+    expectObject(inject, msg);
+    expectRecord<InjectMetadata>(inject, (value) => (expectObject(value, msg), eisInjectArg(value.dependency)), msg);
   }
 }
 
@@ -99,23 +99,23 @@ export function eisController(target: unknown) {
   };
 
   const controlled = meta.getController(target);
-  eisObject(controlled, `class '${target.name}': is not a controller`);
-  eisArray(controlled.prefix, `class '${target.name}': prefix should be a string array`, pred);
+  expectObject(controlled, `class '${target.name}': is not a controller`);
+  expectArray(controlled.prefix, `class '${target.name}': prefix should be a string array`, pred);
 
   const routes = meta.getRoute(target);
-  eisObject(routes, `${target.name}: should have routes`);
-  eisRecord<RouteConfig>(
+  expectObject(routes, `${target.name}: should have routes`);
+  expectRecord<RouteConfig>(
     routes,
     (v: RouteConfig) => {
       const basic = v[Sym.RouteBasic];
-      eisKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
-      eisArray(basic.route, 'Route should be a string array', pred);
-      eorObject(v[Sym.RouteOpt], `${target.name}: opts should be an object`);
+      expectKey(basic.field, `${target.name}: field of this route config should be a string/symbol`);
+      expectArray(basic.route, 'Route should be a string array', pred);
+      expectOrObject(v[Sym.RouteOpt], `${target.name}: opts should be an object`);
     },
     `${target.name}: should have a record of route metadata`
   );
 
-  eisArray(controlled.prefix, 'controller prefix must be a string', (p, i) => {
+  expectArray(controlled.prefix, 'controller prefix must be a string', (p, i) => {
     if (typeof p !== 'string') {
       return `Prefix should be string[], but the ${i}th element got ${typeof p}`;
     }
@@ -135,30 +135,30 @@ export function eisModule(target: unknown): asserts target is Class {
     return;
   }
 
-  eisClass(target, `Should be a module class, got: ${inspect(target)}`);
+  expectClass(target, `Should be a module class, got: ${inspect(target)}`);
   const mm = meta.getModule(target);
 
-  eisString(mm.prefix, 'Module metadata.prefix should be a string');
-  eisBoolean(mm.outer, 'Module metadata.outer should be a boolean');
+  expectString(mm.prefix, 'Module metadata.prefix should be a string');
+  expectBoolean(mm.outer, 'Module metadata.outer should be a boolean');
 
-  eisObject(mm, 'Module metadata should be an object');
+  expectObject(mm, 'Module metadata should be an object');
   if (mm.controllers) {
-    eisArray(mm.controllers, 'controllers must be an array');
+    expectArray(mm.controllers, 'controllers must be an array');
     mm.controllers.forEach((t) => eisController(t));
   }
   if (mm.providers) {
-    eisArray(mm.providers, 'providers must be an array');
+    expectArray(mm.providers, 'providers must be an array');
     mm.providers.forEach((t) => eisProviderOptions(t));
   }
   if (mm.exports) {
     // & exports must be a subarray of providers
-    eisArray(mm.exports, 'exports must be an array', (exported) =>
+    expectArray(mm.exports, 'exports must be an array', (exported) =>
       mm.providers.includes(exported) ? undefined : 'Exported providers must be a subarray of providers'
     );
     mm.exports.forEach((t) => eisInjectable(t));
   }
   if (mm.imports) {
-    eisArray(mm.imports, 'imports must be an array');
+    expectArray(mm.imports, 'imports must be an array');
     mm.imports.forEach((m) => {
       const moduleClass = toModuleClass(m);
       eisModule(moduleClass);

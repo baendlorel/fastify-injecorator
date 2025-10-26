@@ -5,7 +5,7 @@ import { $define } from './native.js';
 /**
  * Property keys used to store metadata.
  */
-export class Sym extends null {
+export class sym extends null {
   /**
    * Polyfill for stage2 proposal: Symbol.metadata.
    * - obj[Symbol.metadata] stores metadata for decorators.
@@ -16,137 +16,123 @@ export class Sym extends null {
       ? ($define(Symbol, 'metadata', { value: Symbol.for('Symbol.metadata') }), Symbol.metadata)
       : Symbol.metadata;
 
-  // # signs
   static readonly void = Symbol('void');
 
-  // # metadata keys
-
-  static readonly Root = Symbol('Injectorator');
-
-  /**
-   * Global configurations stored here
-   * - access by global[Sym.GlobalOptions]
-   */
-  static readonly GlobalOptions = Symbol('GlobalOptions');
-
-  /**
-   * Stores modules that are registered with `isGlobal: true`.
-   */
-  static readonly GlobalModules = Symbol('GlobalModules');
+  static readonly root = Symbol('root');
 
   /**
    * Stores the `module` information.
    */
-  static readonly Module = Symbol('Module');
+  static readonly module = Symbol('module');
 
   /**
    * Stores the `provider` information.
    */
-  static readonly Provider = Symbol('Provider');
+  static readonly provider = Symbol('provider');
 
   /**
    * Stores the `controller` information.
    */
-  static readonly Controller = Symbol('Controller');
+  static readonly controller = Symbol('controller');
 
   /**
    * Stores injection information for fields.
    * - This is used to inject dependencies into fields of a class.
    * - The value is an object with the dependency class and other metadata.
    */
-  static readonly Injection = Symbol('Injection');
+  static readonly injection = Symbol('injection');
 
   /**
    * Stores route metadata
    */
-  static readonly Route = Symbol('Route');
+  static readonly route = Symbol('route');
 
   /**
    * Stores basic route options with interface `RouteBasic`
    */
-  static readonly RouteBasic = Symbol('RouteBasic');
+  static readonly routeBase = Symbol('routeBase');
 
   /**
    * Stores route options of `fastify.route(opts)`
    * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
    */
-  static readonly RouteOpt = Symbol('RouteOpt');
+  static readonly routeOpt = Symbol('routeOpt');
 
   /**
    * Stores info schema like `summary`, `description`, etc. for swagger
    * - Priority: `opts.schema` < `Symbol(RouteApiSchema)` < `@Pipe({ schema })`
    */
-  static readonly RouteApiSchema = Symbol('RouteApiSchema');
+  static readonly routeApiSchema = Symbol('routeApiSchema');
 
   /**
    * Stores property paths of the handler argument `request: FastifyRequest`
    * - if the handler is decorated by `@Args('body.name','body.age')`, then the handler will be called as `handler(request.body.name, request.body.age, reply)`
    * - `reply` will always be the last argument
    */
-  static readonly HandlerArgs = Symbol('HandlerArgs');
+  static readonly handlerArgs = Symbol('handlerArgs');
 
   /**
    * Identify this class as an interceptor
    */
-  static readonly Interceptor = Symbol('Interceptor');
+  static readonly interceptor = Symbol('Interceptor');
 
   /**
    * Stores interceptors with controller level
    */
-  static readonly ControllerInterceptor = Symbol('ControllerInterceptor');
+  static readonly controllerInterceptor = Symbol('ControllerInterceptor');
 
   /**
    * Stores interceptors with handler level
    */
-  static readonly HandlerInterceptor = Symbol('HandlerInterceptor');
+  static readonly handlerInterceptor = Symbol('HandlerInterceptor');
 
   /**
    * Identify this class as a guard
    */
-  static readonly Guard = Symbol('Guard');
+  static readonly guard = Symbol('Guard');
 
   /**
    * Stores guards with controller level
    */
-  static readonly ControllerGuard = Symbol('ControllerGuard');
+  static readonly controllerGuard = Symbol('ControllerGuard');
 
   /**
    * Stores guards with handler level
    */
-  static readonly HandlerGuard = Symbol('HandlerGuard');
+  static readonly handlerGuard = Symbol('HandlerGuard');
 
   /**
    * Identify this class as a filter
    */
-  static readonly Filter = Symbol('Filter');
+  static readonly filter = Symbol('Filter');
 
   /**
    * Stores filters with controller level
    */
-  static readonly ControllerFilter = Symbol('ControllerFilter');
+  static readonly controllerFilter = Symbol('ControllerFilter');
 
   /**
    * Stores filters with handler level
    */
-  static readonly HandlerFilter = Symbol('HandlerFilter');
+  static readonly handlerFilter = Symbol('HandlerFilter');
 
   /**
    * Identify this class as a pipe
    */
-  static readonly Pipe = Symbol('Pipe');
+  static readonly pipe = Symbol('Pipe');
 
   /**
    * Stores pipes with controller level
    */
-  static readonly ControllerPipe = Symbol('ControllerPipe');
+  static readonly controllerPipe = Symbol('controllerPipe');
 
   /**
    * Stores pipes with handler level
    */
-  static readonly HandlerPipe = Symbol('HandlerPipe');
+  static readonly handlerPipe = Symbol('handlerPipe');
 
   /**
    * Custom metadata stored in this field
    */
-  static readonly Custom = Symbol('Custom');
+  static readonly custom = Symbol('custom');
 }

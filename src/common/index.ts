@@ -1,3 +1,3 @@
-export { Sym } from './sym.js';
+export { sym as Sym } from './sym.js';
 export * from './utils.js';
 export * from './native.js';

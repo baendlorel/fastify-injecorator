@@ -3,7 +3,7 @@ import { PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { isFunction, isObject } from '@/asserts/whether.js';
 
 import { ExecutionContext } from '@/common/execution-context.class.js';
-import { Sym } from '@/common/sym.js';
+import { sym } from '@/common/sym.js';
 import { promiseTry } from '@/common/promise-try.js';
 import { BadRequestException } from '@/exceptions/index.js';
 
@@ -42,7 +42,7 @@ class BasicTransformer {
 
   private handleResult(validator: Validator, result: ValidatorReturn) {
     if (result === true) {
-      return Sym.void; // Validation passed
+      return sym.void; // Validation passed
     }
 
     if (validator.errors && validator.errors.length > 0) {
@@ -61,7 +61,7 @@ class BasicTransformer {
       return result.value;
     }
 
-    return Sym.void; // Validation passed
+    return sym.void; // Validation passed
   }
 
   private getNeededSchema(httpPart: HttpPart, schema?: PipeFullSchema) {
@@ -97,7 +97,7 @@ class BasicTransformer {
 
     const rawResult = await promiseTry(validator, null, data);
     const result = this.handleResult(validator, rawResult);
-    if (result !== Sym.void) {
+    if (result !== sym.void) {
       args[0] = result; // Update the first argument with the validated data
     }
     return args;

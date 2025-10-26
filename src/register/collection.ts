@@ -59,7 +59,7 @@ class Collection {
 
   assembleGlobalProviders() {
     this.globalModules.forEach((m) => {
-      const moduleMetadata = ReflectDeep.get(m, [Sym.metadata, Sym.Root, Sym.Module]) as ModuleMetadata;
+      const moduleMetadata = ReflectDeep.get(m, [Sym.metadata, Sym.root, Sym.module]) as ModuleMetadata;
       moduleMetadata.exports.forEach((exported) => this.globalProviders.add(exported.name));
     });
     [...this.globalFilters, ...this.globalGuards, ...this.globalInterceptors].forEach((token) =>

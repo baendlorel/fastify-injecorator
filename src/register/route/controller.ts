@@ -37,10 +37,10 @@ export function registerController(app: FastifyInstance, controller: Class, modu
   const getPipes = meta.getUsePipes(controller);
 
   $values(routes).forEach((routeConfig) => {
-    const { field, method, route } = routeConfig[Sym.RouteBasic];
+    const { field, method, route } = routeConfig[Sym.routeBase];
     const url = concatRoute(modulePrefix, controllerPrefix, route);
-    const opts = routeConfig[Sym.RouteOpt] ?? {};
-    const ApiSchema = routeConfig[Sym.RouteApiSchema]; // Schema info, includes `summary`, `description`, etc.
+    const opts = routeConfig[Sym.routeOpt] ?? {};
+    const ApiSchema = routeConfig[Sym.routeApiSchema]; // Schema info, includes `summary`, `description`, etc.
 
     const origin = (...args: any[]) => instance[field].apply(instance, args);
     const interceptor = createInterceptor(getInterceptors(field));

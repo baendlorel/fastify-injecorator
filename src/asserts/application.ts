@@ -15,30 +15,30 @@ export const expectInjectToken = (o: any, msg: string) => {
 };
 
 export const expectRouted = (context: ClassMethodDecoratorContext) => {
-  const o = ReflectDeep.get(context.metadata, [Sym.Root, Sym.Route, context.name]);
+  const o = ReflectDeep.get(context.metadata, [Sym.root, Sym.route, context.name]);
   expectObject(o, 'Should be decorated with route decorators(like @Post) first');
 };
 
 export const expectInjectable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Injectable/@Controller can only be used on classes');
   expectClassDecoratorContext(context, '@Injectable/@Controller can only be used on classes');
-  expectNotDecorated(context, Sym.Provider);
+  expectNotDecorated(context, Sym.provider);
 };
 
 export const expectModulable = (target: Class, context: ClassDecoratorContext) => {
   expectClass(target, '@Module can only be used on classes');
   expectClassDecoratorContext(context, '@Module can only be used on classes');
-  expectNotDecorated(context, Sym.Module);
+  expectNotDecorated(context, Sym.module);
 };
 
 export const expectNotDecorated = (context: DecoratorContext, flag: symbol) => {
-  if (ReflectDeep.has(context.metadata, [Sym.Root, flag])) {
+  if (ReflectDeep.has(context.metadata, [Sym.root, flag])) {
     throws(`'${String(context.name)}' is already decorated`);
   }
 };
 
 export const expectClassNotDecorated = (cls: Class, flag: symbol) => {
-  if (ReflectDeep.has(cls, [Sym.metadata, Sym.Root, flag])) {
+  if (ReflectDeep.has(cls, [Sym.metadata, Sym.root, flag])) {
     throws(`'${String(cls.name)}' is already decorated`);
   }
 };

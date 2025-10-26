@@ -42,8 +42,8 @@ export interface RouteBasic {
 }
 
 export interface RouteConfig {
-  [Sym.RouteBasic]: RouteBasic;
-  [Sym.RouteOpt]?: RouteOptType;
-  [Sym.HandlerArgs]?: string[][];
-  [Sym.RouteApiSchema]?: RouteApiSchema;
+  [Sym.routeBase]: RouteBasic;
+  [Sym.routeOpt]?: RouteOptType;
+  [Sym.handlerArgs]?: string[][];
+  [Sym.routeApiSchema]?: RouteApiSchema;
 }

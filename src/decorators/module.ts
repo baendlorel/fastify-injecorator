@@ -1,5 +1,5 @@
 import { ReflectDeep } from 'reflect-deep';
-import { ModuleMetadata, DynamicModule } from '@/types/injecorator.js';
+import { ModuleMeta, DynamicModule } from '@/types/injecorator.js';
 import { Class } from '@/types/primitive.js';
 
 import { sym } from '@/common/index.js';
@@ -17,7 +17,7 @@ import { toInjectable } from './injectable.js';
  * - Modules can import other modules, but cannot export controllers.
  * - Modules can export providers, which can be injected into other modules.
  */
-export function Module(options: Partial<ModuleMetadata>) {
+export function Module(options: Partial<ModuleMeta>) {
   return function (target: Class, context: ClassDecoratorContext) {
     expectModulable(target, context);
     meta.setModule(context, options);
@@ -41,7 +41,7 @@ export function toModule(outerProvider: Class, opt?: Partial<ToModuleOptions>): 
   const injectable = toInjectable(outerProvider, args);
   // & Directly set everything in a temp class, not via `meta.setXXX`
   const temp = createNamedClass(`${outerProvider.name}Module`);
-  ReflectDeep.set<ModuleMetadata>(temp, [sym.metadata, sym.root, sym.module], {
+  ReflectDeep.set<ModuleMeta>(temp, [sym.metadata, sym.root, sym.module], {
     imports: [],
     providers: [injectable],
     controllers: [],

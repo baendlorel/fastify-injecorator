@@ -123,11 +123,11 @@ export interface InjectMetadata {
   dependency: InjectArg;
 }
 
-export interface ControllerMetadata {
+export interface ControllerMeta {
   prefix: string[];
 }
 
-export interface ProviderMetadata {
+export interface ProviderMeta {
   /**
    * !Not supported yet
    * @todo
@@ -135,7 +135,7 @@ export interface ProviderMetadata {
   args: any[];
 }
 
-export interface ModuleMetadata {
+export interface ModuleMeta {
   /**
    * Services provided by this module
    */
@@ -173,6 +173,6 @@ export interface ModuleMetadata {
   readonly outer: boolean;
 }
 
-export interface InheritedModuleMetadata {
+export interface InheritedModuleMeta {
   readonly prefix: string[];
 }

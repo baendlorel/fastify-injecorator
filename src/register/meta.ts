@@ -3,11 +3,11 @@ import { concatArr } from 'concat-arr';
 import { Class, Key } from '@/types/primitive.js';
 import { RouteBasic, RouteConfig, RouteOptType } from '@/types/index.js';
 import {
-  ProviderMetadata,
-  ControllerMetadata,
+  ProviderMeta,
+  ControllerMeta,
   InjectArg,
   InjectMetadata,
-  ModuleMetadata,
+  ModuleMeta,
   DynamicModule,
   ProviderOptions,
   InjectToken,
@@ -40,13 +40,13 @@ class Meta {
   }
 
   setController(context: ClassDecoratorContext, prefix?: string): boolean {
-    const data: ProviderMetadata = { args: [] };
-    const controlled: ControllerMetadata = { prefix: splitPath(prefix) };
+    const data: ProviderMeta = { args: [] };
+    const controlled: ControllerMeta = { prefix: splitPath(prefix) };
     return this.set(context, [sym.provider], data) && this.set(context, [sym.controller], controlled);
   }
 
-  getController(cls: Class): ControllerMetadata {
-    return this.get(cls, [sym.controller]) as ControllerMetadata;
+  getController(cls: Class): ControllerMeta {
+    return this.get(cls, [sym.controller]) as ControllerMeta;
   }
 
   /**
@@ -104,7 +104,7 @@ class Meta {
    * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    */
   setProvider(context: ClassDecoratorContext, args: unknown[] = []): boolean {
-    const data: ProviderMetadata = { args };
+    const data: ProviderMeta = { args };
     return this.set(context, [sym.provider], data);
   }
 
@@ -114,12 +114,12 @@ class Meta {
    * Metadata is stored at: `class[sym.metadata][sym.Root][sym.Provider]`
    */
   setProviderOnClass(target: Class, args: unknown[] = []): boolean {
-    const data: ProviderMetadata = { args };
+    const data: ProviderMeta = { args };
     return ReflectDeep.set(target, [sym.metadata, sym.root, sym.provider], data);
   }
 
-  getProvider(cls: Class): ProviderMetadata {
-    return this.get(cls, [sym.provider]) as ProviderMetadata;
+  getProvider(cls: Class): ProviderMeta {
+    return this.get(cls, [sym.provider]) as ProviderMeta;
   }
 
   /**
@@ -129,12 +129,12 @@ class Meta {
    * **normalize in the set method but not in get, makes it easier to detect bugs**
    * - some errors might be hidden when returning empty normalized metadata in get.
    */
-  setModule(context: ClassDecoratorContext, options: Partial<ModuleMetadata>): boolean {
+  setModule(context: ClassDecoratorContext, options: Partial<ModuleMeta>): boolean {
     const { controllers = [], providers = [], imports = [], exports = [], outer = false, prefix = '' } = options;
 
     /* oxlint-disable typescript/no-this-alias */
     const self = this;
-    return this.set<ModuleMetadata>(context, [sym.module], {
+    return this.set<ModuleMeta>(context, [sym.module], {
       controllers: [...new Set(controllers)],
       providers: [...new Set(providers)],
       imports: [...new Set(imports)],
@@ -154,8 +154,8 @@ class Meta {
     });
   }
 
-  getModule(cls: Class): ModuleMetadata {
-    return this.get(cls, [sym.module]) as ModuleMetadata;
+  getModule(cls: Class): ModuleMeta {
+    return this.get(cls, [sym.module]) as ModuleMeta;
   }
 
   // #region Interceptors/Guards

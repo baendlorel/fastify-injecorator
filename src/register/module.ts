@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMetadata } from '@/types/injecorator.js';
+import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@/types/injecorator.js';
 import { Class } from '@/types/primitive.js';
 
 import { toDynamicModule, toModuleClass } from '@/common/index.js';
@@ -56,7 +56,7 @@ class ModuleRegister {
     }
   }
 
-  visit(mod: Class | DynamicModule, inherited: InheritedModuleMetadata = { prefix: [] }): void {
+  visit(mod: Class | DynamicModule, inherited: InheritedModuleMeta = { prefix: [] }): void {
     const moduleClass = toModuleClass(mod);
 
     if (this.moduleStack.includes(moduleClass)) {

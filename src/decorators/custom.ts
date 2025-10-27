@@ -1,8 +1,8 @@
-import { Class, Func, Key } from '@/types/primitive.js';
+import { Key } from '@/types/primitive.js';
 
-import { expectDecoratorContext, expectFunction, isClass, isFunction, throws } from '@/asserts/index.js';
+import { expectDecoratorContext } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
-import { sym } from '@/common/sym.js';
+import { ExecutionContext } from '@/common/execution-context.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path
@@ -40,15 +40,9 @@ import { sym } from '@/common/sym.js';
  */
 export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
-    return function (target: Class | Func | undefined, context: DecoratorContext) {
+    return function (_: unknown, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
-      if (isClass(target)) {
-        meta.set<T>(context, [key], metadata);
-      } else if (isFunction(target)) {
-        meta.set<T>(context, [sym.custom.method, target.name, key], metadata);
-      } else if (target === undefined) {
-        meta.set<T>(context, [sym.custom.field, context.name as Key, key], metadata);
-      }
+      meta.set<T>(context, [key], metadata);
     };
   };
 }
@@ -78,20 +72,6 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * }
  * ```
  */
-// todo get的入参顺序有点奇怪，是否还是直接class，target，key比较好?
-export function getCustomMetadata<T = unknown>(
-  target: Class | Func | Key,
-  key: Key,
-  sourceClass: Class
-): T | undefined {
-  // If target is ExecutionContext, get metadata from the handler method first, then controller class
-  if (isClass(target)) {
-    return meta.get<T>(sourceClass, [key]);
-  } else if (isFunction(target)) {
-    return meta.get<T>(sourceClass, [sym.custom.method, target.name, key]);
-  } else if (target === undefined) {
-    return meta.get<T>(sourceClass, [sym.custom.field, target, key]);
-  }
-
-  throws(`__func__ Invalid target for getCustomMetadata, got ${typeof target}`);
+export function getCustomMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
+  return meta.get<T>(context.getClass(), [key]);
 }

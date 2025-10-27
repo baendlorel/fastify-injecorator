@@ -4,7 +4,7 @@ import { InjectToken } from '@/types/injecorator.js';
 
 import { ForbiddenException } from '@/exceptions/index.js';
 import lazyInjector from '@/register/lazy-injector.js';
-import { ExecutionContext } from '@/common/execution-context.class.js';
+import { ExecutionContext } from '@/common/execution-context.js';
 
 /**
  * Create a preValidation hook for the route

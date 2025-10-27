@@ -8,6 +8,9 @@ import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
 const hooks: (keyof InjecoratorGuard)[] = ['canActivate'];
+/**
+ * Use to define a Guard class
+ */
 export function Guard() {
   return function (target: Class, context: ClassDecoratorContext) {
     expectHasOneHook<InjecoratorGuard>(

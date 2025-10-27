@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifySchema } from 'fastify';
-import { ExecutionContext } from '@/common/execution-context.class.js';
+import { ExecutionContext } from '@/common/execution-context.ts';
 import { OrPromise } from '@/types/utils.js';
 
 /**

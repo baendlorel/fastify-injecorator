@@ -2,7 +2,7 @@ import { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fas
 import { PipeSchema, PipeFullSchema } from '@/types/middleware.js';
 import { isFunction, isObject } from '@/asserts/whether.js';
 
-import { ExecutionContext } from '@/common/execution-context.class.js';
+import { ExecutionContext } from '@/common/execution-context.js';
 import { sym } from '@/common/sym.js';
 import { promiseTry } from '@/common/promise-try.js';
 import { BadRequestException } from '@/exceptions/index.js';

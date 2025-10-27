@@ -24,4 +24,4 @@ export { UseFilters } from './decorators/middlewares/filter.js';
 // export common exceptions for use
 export * from './exceptions/index.js';
 export { HttpStatus } from './common/status.js';
-export { ExecutionContext } from './common/execution-context.class.js';
+export { ExecutionContext } from './common/execution-context.js';

@@ -4,7 +4,7 @@ import { Func, Class } from '@/types/primitive.js';
 import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middleware.js';
 
 import { expectArray, isFunction } from '@/asserts/index.js';
-import { ExecutionContext } from '@/common/execution-context.class.js';
+import { ExecutionContext } from '@/common/execution-context.js';
 
 async function run(fns: Func[]) {
   for (let i = 0; i < fns.length; i++) {

@@ -1,8 +1,9 @@
-import { Key } from '@/types/primitive.js';
+import { Class, Func, Key } from '@/types/primitive.js';
 
-import { expectDecoratorContext } from '@/asserts/index.js';
+import { expectDecoratorContext, isClass, isFunction, throws } from '@/asserts/index.js';
 import meta from '@/register/meta.js';
 import { ExecutionContext } from '@/common/execution-context.js';
+import { sym } from '@/common/sym.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path
@@ -40,20 +41,21 @@ import { ExecutionContext } from '@/common/execution-context.js';
  */
 export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
-    return function (_: unknown, context: DecoratorContext) {
+    return function (target: Class | Func, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
-      meta.set<T>(context, [key], metadata);
+      if (isClass(target)) {
+        meta.set<T>(context, [sym.custom.root, key], metadata);
+      } else if (isFunction(target)) {
+        meta.set<T>(context, [sym.custom.root, sym.custom.method, target.name, key], metadata);
+      }
+
+      throws(`Invalid target for custom decorator with key "${String(key)}", must be class/method`);
     };
   };
 }
 
 /**
- * Retrieves custom metadata from a class or execution context
- *
- * @param target Class\Method\FieldName
- * @param key - The key used when creating the custom decorator
- * @param target - Either a class constructor or ExecutionContext
- * @returns The stored metadata or undefined if not found
+ * Retrieves custom metadata
  *
  * @example
  * ```typescript
@@ -62,16 +64,40 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * class MyGuard implements InjecoratorGuard {
  *   canActivate(context: ExecutionContext): boolean {
  *     // Get metadata from the controller class
- *     const controllerRoles = getCustomMetadata<string[]>('roles', context.getClass());
+ *     const controllerRoles = getCustomClassMetadata<string[]>(context, 'roles');
  *
  *     // Get metadata from the handler method via execution context
- *     const handlerRoles = getCustomMetadata<string[]>('roles', context);
+ *     const handlerRoles = getCustomMethodMetadata<string[]>(context, 'roles');
  *
  *     return checkPermissions(controllerRoles, handlerRoles);
  *   }
  * }
  * ```
  */
-export function getCustomMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
-  return meta.get<T>(context.getClass(), [key]);
+export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
+  return meta.get<T>(context.getClass(), [sym.custom.root, key]);
+}
+
+/**
+ * Retrieves custom metadata
+ *
+ * @example
+ * ```typescript
+ * // In a guard, interceptor, pipe, or filter
+ * @Guard()
+ * class MyGuard implements InjecoratorGuard {
+ *   canActivate(context: ExecutionContext): boolean {
+ *     // Get metadata from the controller class
+ *     const controllerRoles = getCustomClassMetadata<string[]>(context, 'roles');
+ *
+ *     // Get metadata from the handler method via execution context
+ *     const handlerRoles = getCustomMethodMetadata<string[]>(context, 'roles');
+ *
+ *     return checkPermissions(controllerRoles, handlerRoles);
+ *   }
+ * }
+ * ```
+ */
+export function getCustomMethodMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
+  return meta.get<T>(context.getClass(), [sym.custom.root, sym.custom.method, context.getHandler().name, key]);
 }

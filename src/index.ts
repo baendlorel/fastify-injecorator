@@ -7,7 +7,7 @@ export { Body, Params, Query, Raw, Ip } from './decorators/middlewares/pipe.js';
 
 export { Inject } from './decorators/inject.js';
 export { Injectable } from './decorators/injectable.js';
-export { createCustomDecorator, getCustomMetadata } from './decorators/custom.js';
+export { createCustomDecorator, getCustomClassMetadata, getCustomMethodMetadata } from './decorators/custom.js';
 export { Module, toModule } from './decorators/module.js';
 
 // middlewares

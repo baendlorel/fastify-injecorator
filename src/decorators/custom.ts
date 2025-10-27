@@ -43,13 +43,16 @@ export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
     return function (target: Class | Func, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
-      if (isClass(target)) {
-        meta.set<T>(context, [sym.custom.root, key], metadata);
-      } else if (isFunction(target)) {
-        meta.set<T>(context, [sym.custom.root, sym.custom.method, target.name, key], metadata);
-      }
 
-      throws(`Invalid target for custom decorator with key "${String(key)}", must be class/method`);
+      if (context.kind === 'class') {
+        meta.set<T>(context, [sym.custom.root, key], metadata);
+      } else if (context.kind === 'method') {
+        meta.set<T>(context, [sym.custom.root, sym.custom.method, context.name, key], metadata);
+      } else {
+        throws(
+          `Invalid decorator context for custom decorator with key "${String(key)}", must be class or method, got: ${context.kind}`
+        );
+      }
     };
   };
 }

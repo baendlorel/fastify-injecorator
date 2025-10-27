@@ -31,10 +31,16 @@ import ph from './provider.js';
  * ! Methods here should be used **AFTER** validation of parameters
  */
 namespace meta {
+  /**
+   * Directly set metadata on the context
+   */
   export function set<T = unknown>(context: DecoratorContext, keys: Key[], value: T) {
     return ReflectDeep.set<T>(context.metadata, [sym.root, ...keys], value);
   }
 
+  /**
+   * Directly get metadata on the context
+   */
   export function get<T = unknown>(cls: Class, keys: Key[]) {
     return ReflectDeep.get<T>(cls, [sym.metadata, sym.root, ...keys]);
   }

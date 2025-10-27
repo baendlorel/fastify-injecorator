@@ -62,6 +62,7 @@ const userService = moduleRef.get<UserService>(UserService);
 - 没有统一的配置管理机制
 - 环境变量处理分散，缺少类型安全
 - 没有配置验证和默认值支持
+- _注：NestJS 也没有内置配置管理，需要单独安装 @nestjs/config 包_
 
 **建议实现**:
 
@@ -134,6 +135,8 @@ export interface OnApplicationShutdown {
 ---
 
 ## 🚀 P1 级功能 - 重要补充
+
+> **关于配置管理优先级的说明**：虽然配置管理被列为 P0 级，但考虑到 NestJS 也没有内置此功能，实际上可以降为 P1 级。开发者可以暂时使用 `dotenv` + 自定义 ConfigService 的方式。
 
 ### 4. Authentication & Authorization (认证授权)
 

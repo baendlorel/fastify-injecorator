@@ -80,5 +80,5 @@ export const expectDecoratorContext = (o: any, msg: string) => {
 
 export const expectMethodDecorator = (target: Func, context: ClassMethodDecoratorContext) => {
   expectFunction(target, 'Target should be a function');
-  expectClassMethodDecoratorContext(context, 'Must be used on a method');
+  expectClassMethodDecoratorContext(context, 'Must be used on a class method');
 };

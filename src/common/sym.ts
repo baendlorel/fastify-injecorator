@@ -148,4 +148,6 @@ export namespace sym {
      */
     export const field = Symbol('field');
   }
+
+  export const cron = Symbol('cron');
 }

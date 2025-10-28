@@ -11,9 +11,9 @@ import { throws } from '@/asserts/expect.js';
 
 const defaultArgsGetter = () => [];
 
-export function Cron(options: CronOptions): MethodDecorator;
-export function Cron(expression: string): MethodDecorator;
-export function Cron(arg: CronOptions | string): MethodDecorator {
+export function Cron(options: CronOptions): Func;
+export function Cron(expression: string): Func;
+export function Cron(arg: CronOptions | string): Func {
   if (isObject(arg) && typeof arg.expression === 'string' && orFunction(arg.argsGetter)) {
     // keep
     arg.argsGetter ??= defaultArgsGetter;

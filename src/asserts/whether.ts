@@ -32,6 +32,10 @@ export function isFunction(o: any): o is Func {
   return typeof o === 'function';
 }
 
+export function orFunction(o: any): o is Func | undefined {
+  return typeof o === 'function' || o === undefined;
+}
+
 export function isPathNode(p: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(p);
 }

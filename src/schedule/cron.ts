@@ -1,23 +1,68 @@
-import { expectMethodDecorator } from '@/asserts/decorator-context.js';
-import { sym } from '@/common/sym.js';
-import meta from '@/register/meta.js';
+import { CronExpressionParser } from 'cron-parser';
+import { Class, Func, Instance } from '@/types/primitive.js';
 import { CronOptions } from '@/types/cron.js';
-import { Func } from '@/types/primitive.js';
 
-export function Cron(expression: string) {
+import { sym } from '@/common/sym.js';
+import { expectMethodDecorator } from '@/asserts/decorator-context.js';
+import meta from '@/register/meta.js';
+import { $entries } from '@/common/native.js';
+import { isObject, orFunction } from '@/asserts/whether.js';
+import { throws } from '@/asserts/expect.js';
+
+const defaultArgsGetter = () => [];
+
+export function Cron(options: CronOptions): MethodDecorator;
+export function Cron(expression: string): MethodDecorator;
+export function Cron(arg: CronOptions | string): MethodDecorator {
+  if (isObject(arg) && typeof arg.expression === 'string' && orFunction(arg.argsGetter)) {
+    // keep
+    arg.argsGetter ??= defaultArgsGetter;
+  } else if (typeof arg === 'string') {
+    arg = { expression: arg, argsGetter: defaultArgsGetter };
+  } else {
+    throws(`Invalid argument for @Cron(): ${typeof arg}`);
+  }
+
   return function (target: Func, context: ClassMethodDecoratorContext) {
     expectMethodDecorator(target, context);
-    meta.set<CronOptions>(context, [sym.cron, context.name], { expression });
+    meta.set<CronOptions>(context, [sym.cron, context.name], arg);
   };
 }
 
+const cronJobs: Func[] = [];
+
 // todo 在lazy injector中使用，把cronjob都绑定好
-export function bindCronJob() {}
+export function bindCronJob(instance: Instance, sourceClass: Class) {
+  const cronMeta = meta.get<Record<string, CronOptions>>(sourceClass, [sym.cron]);
+  if (!cronMeta) {
+    return;
+  }
+
+  const entries = $entries(cronMeta);
+  for (let i = 0; i < entries.length; i++) {
+    const methodName = entries[i][0];
+    const { argsGetter, expression } = entries[i][1];
+    const job = () => {
+      const args = argsGetter();
+      const next = CronExpressionParser.parse(expression).next();
+      const delta = next.getTime() - Date.now();
+      setTimeout(() => {
+        instance[methodName](...args);
+        job(); // to the next call
+      }, delta);
+    };
+    cronJobs.push(job);
+  }
+}
 
 // todo 所有模块初始化完成，项目启动了，可以开始运行cronjob了
-export function startCronJobs() {}
+export function startCronJobs() {
+  for (let i = 0; i < cronJobs.length; i++) {
+    cronJobs[i]();
+  }
+}
 
-export namespace CronExpression {
+export namespace CronExpressions {
   export const EVERY_SECOND = '* * * * * *';
   export const EVERY_30_SECONDS = '*/30 * * * * *';
   export const EVERY_MINUTE = '* * * * *';

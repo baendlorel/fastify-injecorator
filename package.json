@@ -56,6 +56,14 @@
     "to-assigned": "^1.1.1",
     "zod": "^3.25.67"
   },
+  "peerDependencies": {
+    "@fastify/multipart": "^9.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@fastify/multipart": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@anatine/zod-mock": "^3.14.0",
     "@babel/plugin-proposal-decorators": "^7.28.0",

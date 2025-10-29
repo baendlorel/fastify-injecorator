@@ -150,4 +150,9 @@ export namespace sym {
   }
 
   export const cron = Symbol('cron');
+
+  /**
+   * Stores file upload metadata for multipart/form-data
+   */
+  export const file = Symbol('file');
 }

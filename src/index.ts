@@ -25,3 +25,7 @@ export { UseFilters } from './decorators/middlewares/filter.js';
 export * from './exceptions/index.js';
 export { HttpStatus } from './common/status.js';
 export { ExecutionContext } from './common/execution-context.js';
+
+// multipart/file upload support (requires @fastify/multipart peer dependency)
+export { File, Files, PipeFile, UploadedFile } from './multipart/index.js';
+export type { MultipartFile, FileUploadOptions, FileUploadMeta } from './types/multipart.js';

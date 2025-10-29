@@ -16,3 +16,8 @@
 3. 常用认证
 
 但我们一步一步来,首先，现在请你用nestjs的办法来实现cron
+
+---
+
+现在，我以devdependency的形式安装了`@fastify/multipart`插件，这是为了极简化考虑，不强迫开发者一定要用文件上传功能。你觉得这样合适吗？
+如果合适，请你帮我以类似nestjs，但是使用stage3 js装饰器来写完文件上传的支持，此模块写在src/multipart文件夹下

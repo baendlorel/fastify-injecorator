@@ -13,6 +13,7 @@ import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
 import { BadRequestException } from '../../../src/exceptions/index.js';
 
+// todo 这里要换一个可以配置的地址
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const UPLOAD_DIR = join(__dirname, '..', '..', 'files');

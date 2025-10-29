@@ -10,6 +10,14 @@ export class HttpExceptionFilter implements InjecoratorFilter {
     const reply = http.getReply();
     const request = http.getRequest();
 
+    console.error('🔥 HttpExceptionFilter caught error:', {
+      url: request.url,
+      exception,
+      isHttpException: exception instanceof HttpException,
+      message: exception instanceof Error ? exception.message : String(exception),
+      stack: exception instanceof Error ? exception.stack : undefined,
+    });
+
     if (exception instanceof HttpException) {
       const response = exception.getResponse();
 
@@ -24,12 +32,15 @@ export class HttpExceptionFilter implements InjecoratorFilter {
       reply.status(exception.statusCode).send(errorResponse);
     } else {
       // Handle non-HTTP exceptions
+      const errorMessage = exception instanceof Error ? exception.message : 'Internal server error';
+
       reply.status(500).send({
         success: false,
         statusCode: 500,
         timestamp: new Date().toISOString(),
         path: request.url,
-        message: 'Internal server error',
+        message: errorMessage,
+        error: exception instanceof Error ? exception.stack : String(exception),
       });
     }
   }

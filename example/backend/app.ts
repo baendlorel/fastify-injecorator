@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import { fastifyMultipart } from '@fastify/multipart';
+import multipart from '@fastify/multipart';
 import staticFiles from '@fastify/static';
 import { join } from 'path';
 
@@ -22,7 +22,7 @@ async function bootstrap() {
   });
 
   // Register multipart for file upload support
-  await app.register(fastifyMultipart as any, {
+  await app.register(multipart as any, {
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB
       files: 10,

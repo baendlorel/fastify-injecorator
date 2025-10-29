@@ -8,31 +8,14 @@ import { UploadedFile } from '../uploaded-file.js';
 import { Pipe } from '@/decorators/middlewares/pipe.js';
 
 /**
- * Check if @fastify/multipart is available
- */
-function checkMultipartAvailable() {
-  try {
-    require.resolve('@fastify/multipart');
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-// todo 等lost feature都完成，这里一定要在example里人工测试通过
-/**
  * Pipe for handling file uploads
  * Integrates with @fastify/multipart to process uploaded files
+ *
+ * Note: Requires @fastify/multipart to be installed and registered with Fastify
  */
 @Pipe()
 export class PipeFile implements InjecoratorPipe {
   async transform(context: ExecutionContext, input?: any[]): Promise<any[]> {
-    if (!checkMultipartAvailable()) {
-      throws(
-        'File upload requires @fastify/multipart to be installed. ' + 'Please run: npm install @fastify/multipart'
-      );
-    }
-
     const request = context.switchToHttp().getRequest();
     const sourceClass = context.getClass();
 

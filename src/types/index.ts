@@ -15,6 +15,8 @@ import { sym } from '@/common/index.js';
 import { RouteApiSchema } from './middleware.js';
 import { Key } from './primitive.js';
 
+export * from './auth.js';
+
 export type RouteOptType<
   RawServer extends RawServerBase = RawServerDefault,
   RawRequest extends RawRequestDefaultExpression<RawServer> = RawRequestDefaultExpression<RawServer>,

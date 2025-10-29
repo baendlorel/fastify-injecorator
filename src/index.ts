@@ -29,3 +29,7 @@ export { ExecutionContext } from './common/execution-context.js';
 // multipart/file upload support (requires @fastify/multipart peer dependency)
 export { File, Files, PipeFile, UploadedFile } from './multipart/index.js';
 export type { MultipartFile, FileUploadOptions, FileUploadMeta } from './types/multipart.js';
+
+// JWT authentication support
+export { JwtService, JwtGuard } from './auth/index.js';
+export type { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from './types/auth.js';

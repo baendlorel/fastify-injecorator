@@ -22,30 +22,32 @@ namespace ph {
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 
+    // Handle direct class provider
     if (isClass(opts) && useClass) {
       return useClass(opts.name, opts);
     }
 
     const optsStr = inspect(opts);
 
-    if (useClass) {
+    // Check actual provider type and call corresponding callback
+    if ('useClass' in opts && useClass) {
       opts = opts as ProviderUseClass;
       expectClass(opts.useClass, `ProviderOptions must have a valid useClass, got: ${optsStr}`);
       return useClass(opts.provide, opts.useClass);
     }
 
-    if (useValue) {
+    if ('useValue' in opts && useValue) {
       opts = opts as ProviderUseValue;
       return useValue(opts.provide, opts.useValue);
     }
 
-    if (useFactory) {
+    if ('useFactory' in opts && useFactory) {
       opts = opts as ProviderUseFactory;
       expectFunction(opts.useFactory, `ProviderOptions must have a valid useFactory, got: ${optsStr}`);
       return useFactory(opts.provide, opts.useFactory, opts.inject ?? []);
     }
 
-    if (useExisting) {
+    if ('useExisting' in opts && useExisting) {
       opts = opts as ProviderUseExisting;
       expectKey(opts.useExisting, `ProviderOptions must have a valid useExisting, got: ${optsStr}`);
       return useExisting(opts.provide, opts.useExisting);

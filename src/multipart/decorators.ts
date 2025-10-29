@@ -1,8 +1,9 @@
 import { sym } from '@/common/sym.js';
-import { expectMethodDecorator } from '@/asserts/decorator-context.js';
 import meta from '@/register/meta.js';
 import { FileUploadOptions, FileUploadMeta } from '@/types/multipart.js';
 import { Func } from '@/types/primitive.js';
+import { UsePipes } from '@/decorators/middlewares/pipe.js';
+import { PipeFile } from './pipes/file.pipe.js';
 
 /**
  * Decorator to handle single file upload
@@ -42,19 +43,22 @@ export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: 
   }
 
   return function (target: Func, context: ClassMethodDecoratorContext) {
-    expectMethodDecorator(target, context);
-
     const uploadMeta: FileUploadMeta = {
       ...opts,
       fieldName: fieldName || opts.fieldName,
       multiple: false,
     };
 
+    // Store metadata for pipe to use
     meta.set<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
-  };
-}
 
-/**
+    // Apply the PipeFile automatically - call UsePipes but don't return its result
+    UsePipes({ pipe: PipeFile })(target, context);
+
+    // Return the original target to preserve method name
+    return target;
+  };
+} /**
  * Decorator to handle multiple file uploads
  * Transforms the handler to receive an array of uploaded files as first argument
  *
@@ -90,14 +94,19 @@ export function Files(fieldNameOrOptions?: string | FileUploadOptions, options?:
   }
 
   return function (target: Func, context: ClassMethodDecoratorContext) {
-    expectMethodDecorator(target, context);
-
     const uploadMeta: FileUploadMeta = {
       ...opts,
       fieldName: fieldName || opts.fieldName,
       multiple: true,
     };
 
+    // Store metadata for pipe to use
     meta.set<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
+
+    // Apply the PipeFile automatically - call UsePipes but don't return its result
+    UsePipes({ pipe: PipeFile })(target, context);
+
+    // Return the original target to preserve method name
+    return target;
   };
 }

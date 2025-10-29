@@ -3,6 +3,7 @@ import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
 
 import { eclear, eisModule } from './expect-module.js';
 import moduleRegister from './module.js';
+import { startCronJobs } from '@/schedule/cron.js';
 
 function clear() {
   eclear();
@@ -26,4 +27,7 @@ export async function apply(app: FastifyInstance, partialOpts: Partial<FastifyIn
   clear();
 
   app.log.info(`Modules are all registered`);
+
+  // Start cron jobs after all modules are initialized
+  startCronJobs();
 }

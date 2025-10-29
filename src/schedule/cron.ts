@@ -31,7 +31,10 @@ export function Cron(arg: CronOptions | string): Func {
 
 const cronJobs: Func[] = [];
 
-// todo 在lazy injector中使用，把cronjob都绑定好
+/**
+ * Bind cron jobs for a given instance
+ * This function is called in lazy injector after all instances are created
+ */
 export function bindCronJob(instance: Instance, sourceClass: Class) {
   const cronMeta = meta.get<Record<string, CronOptions>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
@@ -55,7 +58,10 @@ export function bindCronJob(instance: Instance, sourceClass: Class) {
   }
 }
 
-// todo 所有模块初始化完成，项目启动了，可以开始运行cronjob了
+/**
+ * Start all registered cron jobs
+ * This function is called after all modules are initialized and the application is ready
+ */
 export function startCronJobs() {
   for (let i = 0; i < cronJobs.length; i++) {
     cronJobs[i]();

@@ -3,13 +3,14 @@ import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@/
 import { InjecoratorMiddleware } from '@/types/middleware.js';
 import { Class, Func, Instance, Key } from '@/types/primitive.js';
 
-import { toModuleClass } from '@/common/index.js';
+import { $construct, $getPrototypeOf, $has, $ownKeys, toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
 import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@/asserts/index.js';
 
 import meta from './meta.js';
 import ph from './provider.js';
 import collection from './collection.js';
+import { bindCronJob } from '@/schedule/cron.js';
 
 class LazyInjector {
   /**
@@ -51,7 +52,7 @@ class LazyInjector {
 
   getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
     const instance = this.instanceMap.get(isKey(token) ? token : token.name) as T;
-    const cls = (Reflect.getPrototypeOf(instance)?.constructor ?? null) as Class | null;
+    const cls = ($getPrototypeOf(instance)?.constructor ?? null) as Class | null;
     return { instance, cls };
   }
 
@@ -63,12 +64,12 @@ class LazyInjector {
    */
   createInstanceByClass(token: Key, cls: Class) {
     const { args } = meta.getProvider(cls);
-    const instance = Reflect.construct(cls, args);
+    const instance = $construct(cls, args);
     this.instanceMap.set(token, instance);
 
     const injects = meta.getInject(cls);
     if (injects) {
-      const propertyKeys = Reflect.ownKeys(injects);
+      const propertyKeys = $ownKeys(injects);
       for (let i = 0; i < propertyKeys.length; i++) {
         const propertyKey = propertyKeys[i];
         this.injectList.push({
@@ -119,6 +120,7 @@ class LazyInjector {
   /**
    * 1. Set `app.log` as `APP_LOGGER`
    * 2. Assign injected fields as `injectList` recorded
+   * 3. Bind cron jobs for all instances
    */
   apply(app: FastifyInstance) {
     const map = this.instanceMap;
@@ -143,6 +145,16 @@ class LazyInjector {
       // deal key/class/()=>class
       instance[propertyKey] = map.get(tokenOfDependency);
     }
+
+    // & Bind cron jobs for all instances
+    for (const instance of map.values()) {
+      if (isObject(instance)) {
+        const cls = $getPrototypeOf(instance)?.constructor as Class | undefined;
+        if (cls) {
+          bindCronJob(instance, cls);
+        }
+      }
+    }
   }
 
   checkMissedDependency() {
@@ -150,10 +162,7 @@ class LazyInjector {
       const { provide, propertyKey, dependency } = this.injectList[i];
       const instance = this.instanceMap.get(provide);
       const name = ph.getInjectTokenName(dependency);
-      expect(
-        Reflect.has(instance, propertyKey),
-        `${String(provide)}[${String(propertyKey)}] depends on '${name}', but it is not given`
-      );
+      expect(propertyKey in instance, `${String(provide)}[${String(propertyKey)}] depends on '${name}' but not given`);
     }
   }
 

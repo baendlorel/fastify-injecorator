@@ -1,4 +1,5 @@
 import { ProviderStandardOptions, ProviderOptions } from '@/types/injecorator.js';
+import { $get } from './native.js';
 
 export const APP_LOGGER = Symbol('APP_LOGGER');
 export const APP_INTERCEPTOR = Symbol('APP_INTERCEPTOR');
@@ -9,7 +10,7 @@ export const APP_PIPE = Symbol('APP_PIPE');
 const tokenField: keyof ProviderStandardOptions = 'provide';
 
 export function tryToGetGlobalToken(opts: ProviderOptions): symbol | null {
-  const token = Reflect.get(Object(opts), tokenField);
+  const token = $get(Object(opts), tokenField);
 
   return token === APP_LOGGER ||
     token === APP_INTERCEPTOR ||

@@ -35,7 +35,7 @@ class BasicTransformer {
       return this.schemaMap.get(schema) as Validator;
     }
 
-    const newValidator = Reflect.apply(this.validatorCompiler, null, [{ schema }]) as Validator;
+    const newValidator = this.validatorCompiler({ schema } as any) as Validator;
     this.schemaMap.set(schema, newValidator);
     return newValidator;
   }

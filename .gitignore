@@ -65,3 +65,7 @@ test/types/index.js
 dist
 
 /src/generated/prisma
+
+# example uploaded files
+example/files/*
+!example/files/.gitkeep

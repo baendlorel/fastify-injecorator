@@ -1,0 +1,36 @@
+import { Filter } from '../../../src/decorators/middlewares/filter.js';
+import { ExecutionContext } from '../../../src/common/execution-context.js';
+import { InjecoratorFilter } from '../../../src/types/middleware.js';
+import { HttpException } from '../../../src/exceptions/index.js';
+
+@Filter(HttpException)
+export class HttpExceptionFilter implements InjecoratorFilter {
+  catch(context: ExecutionContext, exception: unknown) {
+    const http = context.switchToHttp();
+    const reply = http.getReply();
+    const request = http.getRequest();
+
+    if (exception instanceof HttpException) {
+      const response = exception.getResponse();
+
+      const errorResponse = {
+        success: false,
+        statusCode: exception.statusCode,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        message: typeof response === 'string' ? response : (response as any).message || 'Internal server error',
+      };
+
+      reply.status(exception.statusCode).send(errorResponse);
+    } else {
+      // Handle non-HTTP exceptions
+      reply.status(500).send({
+        success: false,
+        statusCode: 500,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+        message: 'Internal server error',
+      });
+    }
+  }
+}

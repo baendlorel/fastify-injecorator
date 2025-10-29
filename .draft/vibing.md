@@ -31,3 +31,12 @@ multipart牵扯的文件较多，比较复杂。你编写一个multipart.test.ts
 我们已经很接近完成了。现在请你制作最后一个缺失特性：JWT认证。
 nestjs里有类似于JWTGuard的守卫，你可以模仿之。请在src/auth下完成。类型写在src/types下
 具体怎么做我也不太懂，仰仗你了
+
+---
+
+好了，最关键的一步到来了。你要在example文件夹下建立一个完整的服务器，拥有文件上传\jwt等等所有特性、功能。并且有一个简易的前端页面包含index.html main.js style.css。
+
+1. main.js中要包装一个fetch方法，免得每次都写很长的请求
+2. 测试上传的文件上传到example/files文件夹中，此文件夹将加入gitignore
+3. 一定要包含src文件夹下代码的所有功能和特性，要全面展示
+4. css样式要极简，主要为测试所有特性的链接或按钮的列表

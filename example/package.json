@@ -1,0 +1,31 @@
+{
+  "name": "fastify-injecorator-example",
+  "version": "1.0.0",
+  "description": "Comprehensive example showcasing all Fastify Injecorator features",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "tsx watch backend/app.ts",
+    "build": "tsc --project tsconfig.json",
+    "check": "tsc --noEmit"
+  },
+  "keywords": [
+    "fastify",
+    "injecorator",
+    "example",
+    "decorator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/multipart": "^9.0.3",
+    "@fastify/static": "^8.2.0",
+    "fastify": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "pino-pretty": "^14.0.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

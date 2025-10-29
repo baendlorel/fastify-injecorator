@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fastify Injecorator Example</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>🚀 Fastify Injecorator Demo</h1>
+      <p>A comprehensive example showcasing all features</p>
+    </header>
+
+    <section class="auth-section">
+      <h2>🔐 Authentication (JWT)</h2>
+      <div class="form">
+        <input type="text" id="username" placeholder="Username (admin/user/guest)" value="admin" />
+        <input type="password" id="password" placeholder="Password" value="password" />
+        <button onclick="login()">Login</button>
+      </div>
+      <div id="auth-result" class="result"></div>
+      <div class="button-group">
+        <button onclick="getProfile()">Get Profile (Protected)</button>
+        <button onclick="verifyToken()">Verify Token</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>👥 User Management (CRUD + Guards)</h2>
+      <div class="button-group">
+        <button onclick="getAllUsers()">Get All Users</button>
+        <button onclick="getUserById()">Get User By ID (1)</button>
+        <button onclick="getUsersByRole()">Filter By Role (admin)</button>
+      </div>
+      <div class="form">
+        <h3>Create User (Admin Only)</h3>
+        <input type="text" id="new-username" placeholder="Username" />
+        <input type="text" id="new-email" placeholder="Email" />
+        <select id="new-role">
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+          <option value="guest">guest</option>
+        </select>
+        <button onclick="createUser()">Create User</button>
+      </div>
+      <div class="button-group">
+        <button onclick="updateUser()">Update User (Admin Only)</button>
+        <button onclick="deleteUser()">Delete User (Admin Only)</button>
+      </div>
+      <div id="user-result" class="result"></div>
+    </section>
+
+    <section>
+      <h2>📁 File Upload (Multipart)</h2>
+      <div class="form">
+        <h3>Single File Upload</h3>
+        <input type="file" id="single-file" />
+        <button onclick="uploadSingle()">Upload Single File</button>
+      </div>
+      <div class="form">
+        <h3>Multiple Files Upload</h3>
+        <input type="file" id="multiple-files" multiple />
+        <button onclick="uploadMultiple()">Upload Multiple Files</button>
+      </div>
+      <div id="upload-result" class="result"></div>
+    </section>
+
+    <section>
+      <h2>📝 Logging (Interceptors)</h2>
+      <p>All API requests are logged by LoggingInterceptor</p>
+      <div class="button-group">
+        <button onclick="getLogs()">Get Logs</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+      </div>
+      <div id="logs-result" class="result"></div>
+    </section>
+
+    <section>
+      <h2>⏰ Cron Jobs (Scheduled Tasks)</h2>
+      <p>Background tasks running automatically:</p>
+      <ul>
+        <li>Task 1: Runs every minute</li>
+        <li>Task 2: Runs every 30 seconds</li>
+      </ul>
+      <p>Check the logs to see cron job execution records</p>
+    </section>
+
+    <section>
+      <h2>🎯 Features Demonstrated</h2>
+      <ul class="features">
+        <li>✅ <strong>Decorators:</strong> @Controller, @Get, @Post, @Patch, @Delete</li>
+        <li>✅ <strong>Dependency Injection:</strong> @Injectable, @Inject, @Module</li>
+        <li>✅ <strong>Guards:</strong> @Guard, @UseGuards, JwtGuard, RolesGuard</li>
+        <li>✅ <strong>Interceptors:</strong> @Interceptor, @UseInterceptors, LoggingInterceptor, TransformInterceptor</li>
+        <li>✅ <strong>Pipes:</strong> @Pipe, @UsePipes, @Body, ValidationPipe, ParseIntPipe</li>
+        <li>✅ <strong>Filters:</strong> @Filter, @UseFilters, HttpExceptionFilter</li>
+        <li>✅ <strong>Custom Decorators:</strong> createCustomDecorator, @Roles</li>
+        <li>✅ <strong>JWT Authentication:</strong> JwtService, JwtGuard</li>
+        <li>✅ <strong>File Upload:</strong> @File, @Files (multipart)</li>
+        <li>✅ <strong>Cron Jobs:</strong> @Cron, Scheduled tasks</li>
+        <li>✅ <strong>Exception Handling:</strong> HttpException, BadRequestException, UnauthorizedException</li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>
+        Token: <span id="token-display">Not logged in</span>
+        <button onclick="logout()">Logout</button>
+      </p>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

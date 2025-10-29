@@ -50,12 +50,12 @@ section {
 
 section.auth-section {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
   border-left-color: #f5576c;
+  font-family: consolas, monospace;
 }
 
 section.auth-section h2 {
-  color: white;
+  font-family: consolas, monospace;
 }
 
 h2 {

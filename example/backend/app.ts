@@ -1,15 +1,10 @@
 import fastify from 'fastify';
-import multipart from '@fastify/multipart';
+import { fastifyMultipart } from '@fastify/multipart';
 import staticFiles from '@fastify/static';
 import { join } from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
 import { apply } from '../../src/register/index.js';
 import { AppModule } from './app.module.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 async function bootstrap() {
   const app = fastify({
@@ -27,7 +22,7 @@ async function bootstrap() {
   });
 
   // Register multipart for file upload support
-  await app.register(multipart, {
+  await app.register(fastifyMultipart as any, {
     limits: {
       fileSize: 10 * 1024 * 1024, // 10MB
       files: 10,
@@ -41,7 +36,7 @@ async function bootstrap() {
   });
 
   // Apply Injecorator modules
-  await apply(app, { rootModule: AppModule });
+  await apply(app as any, { rootModule: AppModule });
 
   // Start the server
   const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

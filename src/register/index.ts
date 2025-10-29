@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
+import { startCronJobs } from '@/schedule/cron.js';
 
 import { eclear, eisModule } from './expect-module.js';
 import moduleRegister from './module.js';
-import { startCronJobs } from '@/schedule/cron.js';
 
 function clear() {
   eclear();

@@ -36,7 +36,7 @@ async function bootstrap() {
 
   // Serve static files (frontend)
   await app.register(staticFiles, {
-    root: join(__dirname, '..', 'frontend'),
+    root: join(import.meta.dirname, '..', 'frontend'),
     prefix: '/',
   });
 

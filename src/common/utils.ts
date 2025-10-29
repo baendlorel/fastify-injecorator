@@ -2,6 +2,8 @@ import { Class } from '@/types/primitive.js';
 import { DynamicModule } from '@/types/injecorator.js';
 import { throws, likeModule } from '@/asserts/index.js';
 
+const PATH_REGEX = /^\/?(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)(\/(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+))*$/;
+
 /**
  * Check if the given path is valid and split it into segments.
  * - The path must start with a slash and can only contain alphanumeric characters, slashes,
@@ -16,8 +18,8 @@ export function splitPath(p: string | undefined): string[] {
     p = p.replace(/[/]+$/, ''); // Remove trailing slash if present
   }
 
-  if (!/^[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*$/.test(p)) {
-    throws(`Path must match /^[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*$/. But got: [${p}]`);
+  if (!PATH_REGEX.test(p)) {
+    throws(`Path must match ${PATH_REGEX.toString()}. But got: [${p}]`);
   }
   return p.split('/').filter((s) => s !== '');
 }

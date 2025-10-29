@@ -1,0 +1,4 @@
+- [x] Cron job
+- [x] requests
+- [x] JWT - Maybe worked
+- [ ] File upload

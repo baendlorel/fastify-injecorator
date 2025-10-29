@@ -27,6 +27,7 @@ mkdir(UPLOAD_DIR, { recursive: true }).catch(() => {});
 export class UploadController {
   @Post('single')
   @File()
+  // todo 文件上传是否要带着表单一起？
   async uploadSingle(file: MultipartFile) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
@@ -53,7 +54,7 @@ export class UploadController {
   @Post('multiple')
   @Files()
   async uploadMultiple(files: MultipartFile[]) {
-    if (!files || files.length === 0) {
+    if (!files || !Array.isArray(files) || files.length === 0) {
       throw new BadRequestException('No files uploaded');
     }
 

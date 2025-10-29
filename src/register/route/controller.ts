@@ -42,7 +42,10 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     const opts = routeConfig[sym.route.opt] ?? {};
     const ApiSchema = routeConfig[sym.route.apiSchema]; // Schema info, includes `summary`, `description`, etc.
 
-    const origin = (...args: any[]) => instance[field].apply(instance, args);
+    // fixme 应该在这里就解决函数名字问题
+    // Get the original method from the instance
+    const originalMethod = instance[field];
+
     const interceptor = createInterceptor(getInterceptors(field));
     const guard = createGuard(getGuards(field));
     const filter = createFilter(getFilters(field));
@@ -50,7 +53,8 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     const firstMethodPipeSchema = meta.getFirstMethodPipeSchema(controller, field);
     opts.schema = toAssigned(opts.schema, ApiSchema, firstMethodPipeSchema); // Here schema is for swagger
 
-    const handler = createHandler(controller, origin, { interceptor, guard, filter, pipe });
+    // Pass the original method (with correct name) and instance for 'this' binding
+    const handler = createHandler(controller, originalMethod, { interceptor, guard, filter, pipe });
 
     app.log.info(`${url} (${method.toUpperCase()})`);
 

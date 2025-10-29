@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { toAssigned } from 'to-assigned';
 import { Class } from '@/types/primitive.js';
 
-import { sym, $values } from '@/common/index.js';
+import { sym, $values, $define } from '@/common/index.js';
 import lazyInjector from '../lazy-injector.js';
 import meta from '../meta.js';
 
@@ -42,9 +42,10 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     const opts = routeConfig[sym.route.opt] ?? {};
     const ApiSchema = routeConfig[sym.route.apiSchema]; // Schema info, includes `summary`, `description`, etc.
 
-    // fixme 应该在这里就解决函数名字问题
     // Get the original method from the instance
-    const originalMethod = instance[field];
+    const origin = (...args: any[]) => instance[field](...args);
+    // & Must have same name as before, then metadata can be accessed correctly
+    $define(origin, 'name', { value: field, configurable: true });
 
     const interceptor = createInterceptor(getInterceptors(field));
     const guard = createGuard(getGuards(field));
@@ -54,7 +55,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     opts.schema = toAssigned(opts.schema, ApiSchema, firstMethodPipeSchema); // Here schema is for swagger
 
     // Pass the original method (with correct name) and instance for 'this' binding
-    const handler = createHandler(controller, originalMethod, { interceptor, guard, filter, pipe });
+    const handler = createHandler(controller, origin, { interceptor, guard, filter, pipe });
 
     app.log.info(`${url} (${method.toUpperCase()})`);
 

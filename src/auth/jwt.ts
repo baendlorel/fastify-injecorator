@@ -5,31 +5,26 @@ import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '
 import { $get, $set } from '@/common/native.js';
 import { sym } from '@/common/sym.js';
 
-// todo 是否要把所有函数都单独导出？
-
 /**
  * Simple JWT Service implementation
  * - Uses Node.js built-in crypto for signing and verification
  * - Supports HS256 algorithm by default
  */
 export class JwtService {
-  // # static methods
-  static get default() {
-    return defaultJwtService;
-  }
-
+  // # actually static but not static methods
   /**
-   * Using your own jwt service with your options
+   * Create a different jwt service instance with your own options
+   * - but usually, using `this.configure` method is enough
    */
-  static setDefault(service: JwtService) {
-    defaultJwtService = service;
+  create(options?: JwtModuleOptions) {
+    return new JwtService(options);
   }
 
-  static setUserToRequest(request: FastifyRequest, user: any): boolean {
+  setUserToRequest(request: FastifyRequest, user: any): boolean {
     return $set(request, sym.user, user);
   }
 
-  static getUserFromRequest(request: FastifyRequest): any {
+  getUserFromRequest(request: FastifyRequest): any {
     return $get(request, sym.user);
   }
 
@@ -226,5 +221,4 @@ export class JwtService {
     }
   }
 }
-
-let defaultJwtService = new JwtService();
+export const jwt = new JwtService();

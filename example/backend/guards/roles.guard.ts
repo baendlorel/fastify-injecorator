@@ -2,7 +2,7 @@ import { Guard } from '../../../src/decorators/middlewares/guard.js';
 import { ExecutionContext } from '../../../src/common/execution-context.js';
 import { InjecoratorGuard } from '../../../src/types/middleware.js';
 import { getCustomMethodMetadata, getCustomClassMetadata } from '../../../src/decorators/custom.js';
-import { JwtService } from '../../../src/index.js';
+import { jwt } from '../../../src/index.js';
 
 @Guard()
 export class RolesGuard implements InjecoratorGuard {
@@ -19,7 +19,7 @@ export class RolesGuard implements InjecoratorGuard {
 
     const http = context.switchToHttp();
     const request = http.getRequest();
-    const user = JwtService.getUserFromRequest(request);
+    const user = jwt.getUserFromRequest(request);
 
     if (!user?.role) {
       return false;

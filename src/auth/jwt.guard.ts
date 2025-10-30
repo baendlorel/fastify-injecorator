@@ -3,9 +3,9 @@ import { InjecoratorGuard } from '@/types/middleware.js';
 
 import { Guard } from '@/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@/common/execution-context.js';
-import { JwtService } from './jwt.js';
+import { jwt as defaultJwt } from './jwt.js';
 
-const guards = new Map<JwtService, Class<InjecoratorGuard>>();
+const guards = new Map<typeof defaultJwt, Class<InjecoratorGuard>>();
 
 /**
  * JWT Guard - protects routes by validating JWT tokens
@@ -13,6 +13,8 @@ const guards = new Map<JwtService, Class<InjecoratorGuard>>();
  * - validates token using JwtService
  * - attaches decoded payload to request[sym.user]
  * - this function uses cache and will not create a new instance everytime
+ *
+ * @param jwt - instance of JwtService to use, omit it to use default jwt instance
  *
  * Usage:
  * ```typescript
@@ -26,7 +28,7 @@ const guards = new Map<JwtService, Class<InjecoratorGuard>>();
  * }
  * ```
  */
-export function JwtGuard(jwt = JwtService.default) {
+export function JwtGuard(jwt = defaultJwt) {
   const guardClass = guards.get(jwt);
   if (guardClass) {
     return guardClass;
@@ -50,7 +52,7 @@ export function JwtGuard(jwt = JwtService.default) {
         const payload = jwt.verify(token);
 
         // Attach user to request object
-        JwtService.setUserToRequest(request, payload);
+        jwt.setUserToRequest(request, payload);
 
         return true;
       } catch (error) {

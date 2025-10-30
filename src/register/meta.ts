@@ -160,32 +160,6 @@ export function metaSetModule(context: ClassDecoratorContext, options: Partial<M
 export function metaGetModule(cls: Class): ModuleMeta {
   return metaGet(cls, [sym.module]) as ModuleMeta;
 }
-export function setModule(context: ClassDecoratorContext, options: Partial<ModuleMeta>): boolean {
-  const { controllers = [], providers = [], imports = [], exports = [], outer = false, prefix = '' } = options;
-
-  return metaSet<ModuleMeta>(context, [sym.module], {
-    controllers: [...new Set(controllers)],
-    providers: [...new Set(providers)],
-    imports: [...new Set(imports)],
-    exports: [...new Set(exports)],
-    get accessibleProviderTokens() {
-      const imported: Key[] = imports
-        .map((m: Class | DynamicModule) => {
-          const moduleClass = toModuleClass(m);
-          return getModule(moduleClass).exports.map((e) => e.name);
-        })
-        .flat();
-      const providerTokens: Key[] = providers.map((p: ProviderOptions) => ph.getToken(p));
-      return [...providerTokens, ...imported, ...collection.globalProviders];
-    },
-    outer,
-    prefix,
-  });
-}
-
-export function getModule(cls: Class): ModuleMeta {
-  return metaGet(cls, [sym.module]) as ModuleMeta;
-}
 
 // #region middlewares
 

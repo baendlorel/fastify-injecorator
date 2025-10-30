@@ -83,5 +83,6 @@ class Collection {
   }
 }
 
+// todo 管管导出单例的Collection
 const collection = new Collection();
 export default collection;

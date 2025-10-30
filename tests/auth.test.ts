@@ -81,7 +81,6 @@ describe('JWT Authentication', () => {
           provide: 'JwtService',
           useValue: jwtServiceInstance,
         },
-        JwtGuard,
       ],
     })
     class AppModule {}

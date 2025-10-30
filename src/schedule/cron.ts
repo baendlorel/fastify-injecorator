@@ -4,7 +4,7 @@ import { CronOptions } from '@/types/cron.js';
 
 import { sym } from '@/common/sym.js';
 import { expectMethodDecorator } from '@/asserts/decorator-context.js';
-import meta from '@/register/meta.js';
+import { metaGet, metaSet } from '@/register/meta.js';
 import { $entries } from '@/common/native.js';
 import { isObject, orFunction } from '@/asserts/whether.js';
 import { throws } from '@/asserts/expect.js';
@@ -25,7 +25,7 @@ export function Cron(arg: CronOptions | string): Func {
 
   return function (target: Func, context: ClassMethodDecoratorContext) {
     expectMethodDecorator(target, context);
-    meta.set<CronOptions>(context, [sym.cron, context.name], arg);
+    metaSet<CronOptions>(context, [sym.cron, context.name], arg);
   };
 }
 
@@ -36,7 +36,7 @@ const cronJobs: Func[] = [];
  * This function is called in lazy injector after all instances are created
  */
 export function bindCronJob(instance: Instance, sourceClass: Class) {
-  const cronMeta = meta.get<Record<string, CronOptions>>(sourceClass, [sym.cron]);
+  const cronMeta = metaGet<Record<string, CronOptions>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
     return;
   }

@@ -4,7 +4,15 @@ import { Class } from '@/types/primitive.js';
 
 import { sym, $values, $define } from '@/common/index.js';
 import lazyInjector from '../lazy-injector.js';
-import meta from '../meta.js';
+import {
+  metaGetController,
+  metaGetFirstMethodPipeSchema,
+  metaGetRoute,
+  metaGetUseFilters,
+  metaGetUseGuards,
+  metaGetUseInterceptors,
+  metaGetUsePipes,
+} from '../meta.js';
 
 // middlewares
 import { createHandler } from './handler.js';
@@ -26,15 +34,15 @@ function concatRoute(...routes: string[][]): string {
 }
 
 export function registerController(app: FastifyInstance, controller: Class, modulePrefix: string[]) {
-  const controllerPrefix = meta.getController(controller).prefix;
-  const routes = meta.getRoute(controller);
+  const controllerPrefix = metaGetController(controller).prefix;
+  const routes = metaGetRoute(controller);
   const instance = lazyInjector.createInstance(controller);
 
   // middlewares
-  const getInterceptors = meta.getUseInterceptors(controller);
-  const getGuards = meta.getUseGuards(controller);
-  const getFilters = meta.getUseFilters(controller);
-  const getPipes = meta.getUsePipes(controller);
+  const getInterceptors = metaGetUseInterceptors(controller);
+  const getGuards = metaGetUseGuards(controller);
+  const getFilters = metaGetUseFilters(controller);
+  const getPipes = metaGetUsePipes(controller);
 
   $values(routes).forEach((routeConfig) => {
     const { field, method, route } = routeConfig[sym.route.base];
@@ -51,7 +59,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     const guard = createGuard(getGuards(field));
     const filter = createFilter(getFilters(field));
     const pipe = createPipe(getPipes(field));
-    const firstMethodPipeSchema = meta.getFirstMethodPipeSchema(controller, field);
+    const firstMethodPipeSchema = metaGetFirstMethodPipeSchema(controller, field);
     opts.schema = toAssigned(opts.schema, ApiSchema, firstMethodPipeSchema); // Here schema is for swagger
 
     // Pass the original method (with correct name) and instance for 'this' binding

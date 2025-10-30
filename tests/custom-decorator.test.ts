@@ -15,7 +15,7 @@ import {
 import { apply } from '@/register/index.js';
 import { InjecoratorGuard } from '@/types/middleware.js';
 import lazyInjector from '@/register/lazy-injector.js';
-import meta from '@/register/meta.js';
+import { metaGet } from '@/register/meta.js';
 import { sym } from '@/common/sym.js';
 
 describe('Custom Decorator Factory', () => {
@@ -95,9 +95,9 @@ describe('Custom Decorator Factory', () => {
       }
     }
 
-    // Check metadata paths manually using meta.get
-    const classMetadata = meta.get<string[]>(MetadataController, [sym.custom.root, 'roles']);
-    const methodMetadata = meta.get<string[]>(MetadataController, [
+    // Check metadata paths manually using metaGet
+    const classMetadata = metaGet<string[]>(MetadataController, [sym.custom.root, 'roles']);
+    const methodMetadata = metaGet<string[]>(MetadataController, [
       sym.custom.root,
       sym.custom.method,
       'testMethod',

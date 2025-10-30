@@ -3,14 +3,14 @@ import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@/
 import { InjecoratorMiddleware } from '@/types/middleware.js';
 import { Class, Func, Instance, Key } from '@/types/primitive.js';
 
-import { $construct, $getPrototypeOf, $has, $ownKeys, toModuleClass } from '@/common/index.js';
+import { $construct, $getPrototypeOf, $ownKeys, toModuleClass } from '@/common/index.js';
 import { APP_LOGGER } from '@/common/inject-keys.js';
 import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@/asserts/index.js';
+import { bindCronJob } from '@/schedule/cron.js';
 
-import meta from './meta.js';
+import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
 import collection from './collection.js';
-import { bindCronJob } from '@/schedule/cron.js';
 
 class LazyInjector {
   /**
@@ -63,11 +63,11 @@ class LazyInjector {
    *   - This list will be used by `this.apply` after all instances are created
    */
   createInstanceByClass(token: Key, cls: Class) {
-    const { args } = meta.getProvider(cls);
+    const { args } = metaGetProvider(cls);
     const instance = $construct(cls, args);
     this.instanceMap.set(token, instance);
 
-    const injects = meta.getInject(cls);
+    const injects = metaGetInject(cls);
     if (injects) {
       const propertyKeys = $ownKeys(injects);
       for (let i = 0; i < propertyKeys.length; i++) {
@@ -176,7 +176,7 @@ class LazyInjector {
         throws(`Circular dependency detected: ${chain} -> ${String(moduleClass.name)}`);
       }
       stack.push(moduleClass);
-      const moduleMetadata = meta.getModule(moduleClass);
+      const moduleMetadata = metaGetModule(moduleClass);
       moduleMetadata.imports.forEach(visit);
       stack.pop();
     };
@@ -195,5 +195,6 @@ class LazyInjector {
   }
 }
 
+// todo 管管导出单例的LazyInjector
 const lazyInjector = new LazyInjector();
 export default lazyInjector;

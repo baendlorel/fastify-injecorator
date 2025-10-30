@@ -5,7 +5,7 @@ import { Injectable } from '@/decorators/injectable.js';
 import { Inject } from '@/decorators/inject.js';
 import { Module } from '@/decorators/module.js';
 import { apply } from '@/register/index.js';
-import meta from '@/register/meta.js';
+import { metaGetModule, metaGetProvider } from '@/register/meta.js';
 import lazyInjector from '@/register/lazy-injector.js';
 describe('Decorators Functionality', () => {
   afterEach(() => {
@@ -15,7 +15,7 @@ describe('Decorators Functionality', () => {
   it('Injectable should mark class as provider', () => {
     @Injectable()
     class Service {}
-    const providerMeta = meta.getProvider(Service);
+    const providerMeta = metaGetProvider(Service);
     expect(providerMeta).toEqual({ args: [] });
   });
 
@@ -47,7 +47,7 @@ describe('Decorators Functionality', () => {
     class Svc {}
     @Module({ providers: [Svc] })
     class Mod {}
-    const modMeta = meta.getModule(Mod);
+    const modMeta = metaGetModule(Mod);
     expect(modMeta.providers).toContain(Svc);
   });
 

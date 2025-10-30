@@ -9,7 +9,7 @@ import { tryToGetGlobalToken } from '@/common/inject-keys.js';
 import collection from './collection.js';
 import { expectAccessible, expectModule } from './expect-module.js';
 import lazyInjector from './lazy-injector.js';
-import meta from './meta.js';
+import { metaGetModule } from './meta.js';
 import { registerController } from './route/controller.js';
 
 // internal basic pipes
@@ -39,7 +39,7 @@ class ModuleRegister {
       }
     }
 
-    const m = meta.getModule(moduleClass);
+    const m = metaGetModule(moduleClass);
     for (let i = 0; i < m.imports.length; i++) {
       this.collectGlobal(m.imports[i]);
     }
@@ -74,7 +74,7 @@ class ModuleRegister {
 
     // & When setting the module metadata, each array(providers, controllers, etc.)
     // & will all be set as an array
-    const m = meta.getModule(moduleClass);
+    const m = metaGetModule(moduleClass);
     const fullPrefix = [...inherited.prefix, m.prefix];
 
     // imports modules recursively

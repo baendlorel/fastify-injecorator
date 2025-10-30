@@ -1,6 +1,6 @@
 import { Class } from '@/types/primitive.js';
 import { expectInjectable, expectOrString } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetController } from '@/register/meta.js';
 
 /**
  * Use to register a controller.
@@ -10,6 +10,6 @@ export function Controller(prefix?: string) {
   return function (target: Class, context: ClassDecoratorContext) {
     expectInjectable(target, context);
     expectOrString(prefix, 'Controller prefix must be a string or undefined');
-    meta.setController(context, prefix);
+    metaSetController(context, prefix);
   };
 }

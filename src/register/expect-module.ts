@@ -23,7 +23,7 @@ import {
   isObject,
   isPathNode,
 } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@/register/meta.js';
 import ph from './provider.js';
 import { $isArray, $values } from '@/common/native.js';
 
@@ -38,16 +38,16 @@ const injectableCache = new Set<any>();
  *   - args: an array of constructor arguments
  * - injections?: a record of class dependencies
  */
-export function eisProvider(target: unknown): asserts target is Class {
+export function expectProvider(target: unknown): asserts target is Class {
   expectClass(target, `Target is not a class: ${String(target)}`);
 
   // Should have args[]
-  const providerMetadata = meta.getProvider(target);
+  const providerMetadata = metaGetProvider(target);
   expectObject(providerMetadata, `class '${target.name}' is not a provider`);
   expectArray(providerMetadata.args, 'provider metadata.args should be an array');
 
   // If have injections
-  const inject = meta.getInject(target);
+  const inject = metaGetInject(target);
   if (inject) {
     const msg = `class '${target.name}': Inject metadata should be a record of class dependencies`;
     expectObject(inject, msg);
@@ -60,14 +60,14 @@ export function eisProvider(target: unknown): asserts target is Class {
  * - same feature as a provider
  * - no features from a controller
  */
-export function eisInjectable(target: unknown) {
+export function expectInjectable(target: unknown) {
   if (injectableCache.has(target)) {
     return;
   }
-  eisProvider(target);
+  expectProvider(target);
 
   // Should not be a controller
-  expect(meta.getController(target) === undefined, `@Injectable should not be a controller`);
+  expect(metaGetController(target) === undefined, `@Injectable should not be a controller`);
 
   injectableCache.add(target);
 }
@@ -84,12 +84,12 @@ export function eisInjectable(target: unknown) {
  *   - route: an array of path nodes
  *   - opts?: an object of route options
  */
-export function eisController(target: unknown) {
+export function expectController(target: unknown) {
   if (controllerCache.has(target)) {
     return;
   }
 
-  eisProvider(target);
+  expectProvider(target);
 
   // controller metadata check
   const pred = (pathNode: string) => {
@@ -99,11 +99,11 @@ export function eisController(target: unknown) {
     return true;
   };
 
-  const controlled = meta.getController(target);
+  const controlled = metaGetController(target);
   expectObject(controlled, `class '${target.name}': is not a controller`);
   expectArray(controlled.prefix, `class '${target.name}': prefix should be a string array`, pred);
 
-  const routes = meta.getRoute(target);
+  const routes = metaGetRoute(target);
   expectObject(routes, `${target.name}: should have routes`);
   expectRecord<RouteConfig>(
     routes,
@@ -131,13 +131,13 @@ export function eisController(target: unknown) {
  * @param target
  * @returns
  */
-export function eisModule(target: unknown): asserts target is Class {
+export function expectModule(target: unknown): asserts target is Class {
   if (moduleCache.has(target)) {
     return;
   }
 
   expectClass(target, `Should be a module class, got: ${inspect(target)}`);
-  const mm = meta.getModule(target);
+  const mm = metaGetModule(target);
 
   expectString(mm.prefix, 'Module metadata.prefix should be a string');
   expectBoolean(mm.outer, 'Module metadata.outer should be a boolean');
@@ -145,7 +145,7 @@ export function eisModule(target: unknown): asserts target is Class {
   expectObject(mm, 'Module metadata should be an object');
   if (mm.controllers) {
     expectArray(mm.controllers, 'controllers must be an array');
-    mm.controllers.forEach((t) => eisController(t));
+    mm.controllers.forEach((t) => expectController(t));
   }
   if (mm.providers) {
     expectArray(mm.providers, 'providers must be an array');
@@ -156,13 +156,13 @@ export function eisModule(target: unknown): asserts target is Class {
     expectArray(mm.exports, 'exports must be an array', (exported) =>
       mm.providers.includes(exported) ? undefined : 'Exported providers must be a subarray of providers'
     );
-    mm.exports.forEach((t) => eisInjectable(t));
+    mm.exports.forEach((t) => expectInjectable(t));
   }
   if (mm.imports) {
     expectArray(mm.imports, 'imports must be an array');
     mm.imports.forEach((m) => {
       const moduleClass = toModuleClass(m);
-      eisModule(moduleClass);
+      expectModule(moduleClass);
     });
   }
   moduleCache.add(target);
@@ -172,7 +172,7 @@ export function eisModule(target: unknown): asserts target is Class {
  * @param opts Will only check when it is a class
  * @param apTokens accessible provider tokens
  */
-export function eaccessibleProviders(opts: ProviderOptions, apTokens: Key[]) {
+export function expectAccessible(opts: ProviderOptions, apTokens: Key[]) {
   const tks = getDependencyTokens(opts);
   if (!tks) {
     return;
@@ -184,7 +184,7 @@ export function eaccessibleProviders(opts: ProviderOptions, apTokens: Key[]) {
   }
 }
 
-export function eclear() {
+export function clearExpectCache() {
   moduleCache.clear();
   controllerCache.clear();
   injectableCache.clear();
@@ -192,7 +192,7 @@ export function eclear() {
 
 function getDependencyTokens(options: ProviderOptions): Key[] | null {
   if (isClass(options)) {
-    const injections = meta.getInject(options);
+    const injections = metaGetInject(options);
     if (!isObject(injections)) {
       return null;
     }
@@ -200,7 +200,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
   }
 
   if ('useClass' in options) {
-    const injections = meta.getInject(options.useClass);
+    const injections = metaGetInject(options.useClass);
     if (!isObject(injections)) {
       return null;
     }

@@ -8,8 +8,9 @@ import {
   ProviderUseFactory,
   ProviderUseExisting,
 } from '@/types/injecorator.js';
-import meta from '@/register/meta.js';
+
 import { $fnToString, $isArray } from '@/common/native.js';
+import { metaGetModule } from '@/register/meta.js';
 
 export function isObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;
@@ -96,7 +97,7 @@ export function likeModule(target: unknown): target is Class {
   if (!isClass(target)) {
     return false;
   }
-  const o = meta.getModule(target);
+  const o = metaGetModule(target);
   if (!isObject(o)) {
     return false;
   }

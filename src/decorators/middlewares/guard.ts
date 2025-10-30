@@ -3,7 +3,7 @@ import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorGuard } from '@/types/middleware.js';
 
 import { expectHasOneHook, expect } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetGuard, metaSetUseGuards } from '@/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
@@ -20,7 +20,7 @@ export function Guard() {
     );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
-    meta.setGuard(context);
+    metaSetGuard(context);
   };
 }
 
@@ -34,6 +34,6 @@ export function UseGuards(...guards: InjectToken[]) {
   return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(guards, target, context);
 
-    meta.setUseGuards(context, guards);
+    metaSetUseGuards(context, guards);
   };
 }

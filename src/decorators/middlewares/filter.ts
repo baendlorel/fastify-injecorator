@@ -3,7 +3,7 @@ import { InjectToken } from '@/types/injecorator.js';
 import { InjecoratorFilter } from '@/types/middleware.js';
 
 import { expectHasOneHook, expect } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetFilters, metaSetUseFilters } from '@/register/meta.js';
 import { subclassOf } from '@/common/subclass-of.js';
 
 import { Injectable } from '../injectable.js';
@@ -18,22 +18,16 @@ const hooks: (keyof InjecoratorFilter)[] = ['catch'];
  */
 export function Filter(...exceptionClasses: Class[]) {
   return function (target: Class, context: ClassDecoratorContext) {
-    expectHasOneHook<InjecoratorFilter>(
-      target,
-      hooks,
-      `Filter class must implement at least one hook: [${hooks.join(', ')}]`
-    );
+    expectHasOneHook<InjecoratorFilter>(target, hooks, `Filters must implement one of [${hooks.join(', ')}]`);
 
-    exceptionClasses.forEach((exceptionClass) =>
-      expect(
-        subclassOf(exceptionClass, Error),
-        `Error registered by @Filters must be an Error class or its sub class, got '${exceptionClass.name}'`
-      )
-    );
+    exceptionClasses.forEach((exceptionClass) => {
+      const msg = `Error registered by @Filters must extend Error, got '${exceptionClass.name}'`;
+      expect(subclassOf(exceptionClass, Error), msg);
+    });
 
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
-    meta.setFilters(context, exceptionClasses);
+    metaSetFilters(context, exceptionClasses);
   };
 }
 
@@ -47,6 +41,6 @@ export function UseFilters(...filters: InjectToken[]) {
   return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(filters, target, context);
 
-    meta.setUseFilters(context, filters);
+    metaSetUseFilters(context, filters);
   };
 }

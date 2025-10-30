@@ -2,7 +2,7 @@ import { Func } from '@/types/primitive.js';
 import { RouteApiSchema } from '@/types/middleware.js';
 
 import { expectMethodDecorator, expectObject } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetSchema } from '@/register/meta.js';
 
 /**
  * Set api schema info, **not validation schema**
@@ -13,6 +13,6 @@ export function ApiSchema<T extends RouteApiSchema>(schema: T) {
     expectMethodDecorator(target, context);
     expectObject(schema, `Given opts must be a RouteShorthandOptions of Fastify`);
 
-    meta.setSchema(context, schema);
+    metaSetSchema(context, schema);
   };
 }

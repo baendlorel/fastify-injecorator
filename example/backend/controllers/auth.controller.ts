@@ -1,3 +1,4 @@
+import { FastifyRequest } from 'fastify';
 import { Controller } from '../../../src/decorators/router/controller.js';
 import { Get, Post } from '../../../src/decorators/router/http-methods.js';
 import { Body } from '../../../src/decorators/middlewares/pipe.js';
@@ -5,14 +6,13 @@ import { UseGuards } from '../../../src/decorators/middlewares/guard.js';
 import { UseInterceptors } from '../../../src/decorators/middlewares/interceptor.js';
 import { UseFilters } from '../../../src/decorators/middlewares/filter.js';
 import { Inject } from '../../../src/decorators/inject.js';
-import type { FastifyRequest } from 'fastify';
 
 import { UserService } from '../services/user.service.js';
 import { JwtGuard } from '../../../src/auth/jwt.guard.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
 import { UnauthorizedException } from '../../../src/exceptions/index.js';
-import { JwtService } from '../../../src/index.js';
+import { jwt, JwtService } from '../../../src/index.js';
 
 @Controller('api/auth')
 @UseInterceptors(TransformInterceptor)
@@ -38,7 +38,7 @@ export class AuthController {
       throw new UnauthorizedException('Password is required');
     }
 
-    const token = JwtService.default.sign({
+    const token = jwt.sign({
       userId: user.id,
       username: user.username,
       role: user.role,
@@ -74,7 +74,7 @@ export class AuthController {
     }
 
     try {
-      const payload = JwtService.default.verify(token);
+      const payload = jwt.verify(token);
       return {
         valid: true,
         payload,

@@ -1,5 +1,5 @@
 import { sym } from '@/common/sym.js';
-import meta from '@/register/meta.js';
+import { metaSet } from '@/register/meta.js';
 import { FileUploadOptions, FileUploadMeta } from '@/types/multipart.js';
 import { Func } from '@/types/primitive.js';
 import { UsePipes } from '@/decorators/middlewares/pipe.js';
@@ -50,7 +50,7 @@ export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: 
     };
 
     // Store metadata for pipe to use
-    meta.set<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
+    metaSet<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
 
     // Apply the PipeFile automatically - call UsePipes but don't return its result
     UsePipes({ pipe: PipeFile })(target, context);
@@ -101,7 +101,7 @@ export function Files(fieldNameOrOptions?: string | FileUploadOptions, options?:
     };
 
     // Store metadata for pipe to use
-    meta.set<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
+    metaSet<FileUploadMeta>(context, [sym.file, context.name], uploadMeta);
 
     // Apply the PipeFile automatically - call UsePipes but don't return its result
     UsePipes({ pipe: PipeFile })(target, context);

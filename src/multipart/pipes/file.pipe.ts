@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@/common/execution-context.js';
 import { sym } from '@/common/sym.js';
 import { throws } from '@/asserts/expect.js';
-import meta from '@/register/meta.js';
+import { metaGet } from '@/register/meta.js';
 import { InjecoratorPipe } from '@/types/middleware.js';
 import { FileUploadMeta, MultipartFile } from '@/types/multipart.js';
 import { UploadedFile } from '../uploaded-file.js';
@@ -21,7 +21,7 @@ export class PipeFile implements InjecoratorPipe {
     const handler = context.getHandler();
     const handlerName = handler.name;
 
-    const fileMeta = meta.get<Record<string, FileUploadMeta>>(sourceClass, [sym.file]);
+    const fileMeta = metaGet<Record<string, FileUploadMeta>>(sourceClass, [sym.file]);
 
     if (!fileMeta) {
       return input || [];

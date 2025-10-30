@@ -5,7 +5,7 @@ import { Class } from '@/types/primitive.js';
 import { sym } from '@/common/index.js';
 import { createNamedClass } from '@/common/utils.js';
 import { expectClassNotDecorated, expectModulable } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetModule } from '@/register/meta.js';
 import { toInjectable } from './injectable.js';
 
 /**
@@ -20,7 +20,7 @@ import { toInjectable } from './injectable.js';
 export function Module(options: Partial<ModuleMeta>) {
   return function (target: Class, context: ClassDecoratorContext) {
     expectModulable(target, context);
-    meta.setModule(context, options);
+    metaSetModule(context, options);
   };
 }
 

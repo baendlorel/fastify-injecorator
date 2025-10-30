@@ -1,7 +1,7 @@
 import { Class, Func, Key } from '@/types/primitive.js';
 
-import { expectDecoratorContext, isClass, isFunction, throws } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { expectDecoratorContext, throws } from '@/asserts/index.js';
+import { metaGet, metaSet } from '@/register/meta.js';
 import { ExecutionContext } from '@/common/execution-context.js';
 import { sym } from '@/common/sym.js';
 
@@ -45,9 +45,9 @@ export function createCustomDecorator<T = unknown>(key: Key) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
 
       if (context.kind === 'class') {
-        meta.set<T>(context, [sym.custom.root, key], metadata);
+        metaSet<T>(context, [sym.custom.root, key], metadata);
       } else if (context.kind === 'method') {
-        meta.set<T>(context, [sym.custom.root, sym.custom.method, context.name, key], metadata);
+        metaSet<T>(context, [sym.custom.root, sym.custom.method, context.name, key], metadata);
       } else {
         throws(
           `Invalid decorator context for custom decorator with key "${String(key)}", must be class or method, got: ${context.kind}`
@@ -78,7 +78,7 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * ```
  */
 export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
-  return meta.get<T>(context.getClass(), [sym.custom.root, key]);
+  return metaGet<T>(context.getClass(), [sym.custom.root, key]);
 }
 
 /**
@@ -102,5 +102,5 @@ export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, k
  * ```
  */
 export function getCustomMethodMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
-  return meta.get<T>(context.getClass(), [sym.custom.root, sym.custom.method, context.getHandler().name, key]);
+  return metaGet<T>(context.getClass(), [sym.custom.root, sym.custom.method, context.getHandler().name, key]);
 }

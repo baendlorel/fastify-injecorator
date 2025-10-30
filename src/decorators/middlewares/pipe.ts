@@ -9,7 +9,8 @@ import {
   isClass,
   isKey,
 } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@/register/meta.js';
+import { $assign } from '@/common/native.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -21,7 +22,6 @@ import { PipeQuery } from './pipes/query.pipe.js';
 import { PipeIp } from './pipes/ip.pipe.js';
 import { PipeRaw } from './pipes/raw.pipe.js';
 import { isBasicPipe } from './pipes/is-basic-pipe.js';
-import { $assign } from '@/common/native.js';
 
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
@@ -33,7 +33,7 @@ export function Pipe() {
     );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
-    meta.setPipe(context);
+    metaSetPipe(context);
   };
 }
 
@@ -42,7 +42,7 @@ function predicate(opts: PipeOptions) {
   const { schema, pipe } = opts;
   expectOrObject(schema, 'Pipe options.schema must be an object or omitted');
   expectInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
-  const validPipe = isBasicPipe(pipe) || (isClass(pipe) && meta.isPipe(pipe)) || isKey(pipe);
+  const validPipe = isBasicPipe(pipe) || (isClass(pipe) && metaIsPipe(pipe)) || isKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }
 
@@ -61,7 +61,7 @@ export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware([], target, context);
 
-    meta.setUsePipes(context, normalized);
+    metaSetUsePipes(context, normalized);
   };
 }
 

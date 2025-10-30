@@ -2,18 +2,18 @@ import { FastifyInstance } from 'fastify';
 import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
 import { startCronJobs } from '@/schedule/cron.js';
 
-import { eclear, eisModule } from './expect-module.js';
+import { clearExpectCache, expectModule } from './expect-module.js';
 import moduleRegister from './module.js';
 
 function clear() {
-  eclear();
+  clearExpectCache();
   // lazyInjector.clear();
   // collection.clear();
 }
 
 function normalize(opts: Partial<FastifyInjecoratorOptions>): FastifyInjecoratorOptions {
   const normalized: FastifyInjecoratorOptions = Object(opts);
-  eisModule(normalized.rootModule);
+  expectModule(normalized.rootModule);
   normalized.allowCrossModuleCircularReference ??= false;
 
   return normalized;

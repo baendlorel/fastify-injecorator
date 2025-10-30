@@ -2,7 +2,7 @@ import { Func } from '@/types/primitive.js';
 import { RouteOptType } from '@/types/index.js';
 
 import { expectObject, expectMethodDecorator } from '@/asserts/index.js';
-import meta from '@/register/meta.js';
+import { metaSetOpt } from '@/register/meta.js';
 
 /**
  * Set route options
@@ -13,6 +13,6 @@ export function Opt<T extends RouteOptType>(opts: T) {
   return function (target: Func, context: ClassMethodDecoratorContext) {
     expectMethodDecorator(target, context);
     expectObject(opts, `Given opts must be a RouteShorthandOptions of Fastify`);
-    meta.setOpt(context, opts);
+    metaSetOpt(context, opts);
   };
 }

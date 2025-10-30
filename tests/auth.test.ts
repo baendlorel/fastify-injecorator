@@ -5,12 +5,12 @@ import { Controller } from '@/decorators/router/controller.js';
 import { Get, Post } from '@/decorators/router/http-methods.js';
 import { UseGuards } from '@/decorators/middlewares/guard.js';
 import { apply } from '@/register/index.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import { JwtService, JwtGuard } from '@/auth/index.js';
 
 describe('JWT Authentication', () => {
   afterEach(() => {
-    lazyInjector.clear();
+    injector.clear();
   });
 
   it('should sign and verify JWT token', async () => {
@@ -54,7 +54,7 @@ describe('JWT Authentication', () => {
       @Post('login')
       async login(req: FastifyRequest) {
         const body = req.body as { username: string };
-        const jwtService = lazyInjector.get<JwtService>('JwtService');
+        const jwtService = injector.get<JwtService>('JwtService');
         if (!jwtService) {
           throw new Error('JwtService not found');
         }

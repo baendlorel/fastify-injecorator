@@ -14,13 +14,13 @@ import {
 } from '@/index.js';
 import { apply } from '@/register/index.js';
 import { InjecoratorGuard } from '@/types/middleware.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import { metaGet } from '@/register/meta.js';
 import { sym } from '@/common/sym.js';
 
 describe('Custom Decorator Factory', () => {
   afterEach(() => {
-    lazyInjector.clear();
+    injector.clear();
   });
 
   it('should create and use custom decorators with metadata', async () => {

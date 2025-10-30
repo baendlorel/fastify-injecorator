@@ -1,7 +1,7 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { FilterTask, InjecoratorFilter } from '@/types/middleware.js';
 import { expectArray, expectClass, isError } from '@/asserts/index.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import { metaGetFilters } from '@/register/meta.js';
 import { InjectToken } from '@/types/injecorator.js';
 
@@ -28,7 +28,7 @@ const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
 
 export function createFilter(tokens: InjectToken[]): TaskifyAsync<FilterTask> {
   const catches = tokens.map((token) => {
-    const { cls } = lazyInjector.getDetail<InjecoratorFilter>(token);
+    const { cls } = injector.getDetail<InjecoratorFilter>(token);
     expectClass(cls, `Filter token '${String(token)}' must refer to a class, but got ${String(cls)}`);
 
     const exceptionClasses = metaGetFilters(cls) ?? [];
@@ -43,7 +43,7 @@ export function createFilter(tokens: InjectToken[]): TaskifyAsync<FilterTask> {
   }
 
   return createSerialTaskAsync<FilterTask>({
-    tasks: lazyInjector.getMiddlewareHooks<InjecoratorFilter>(tokens, 'catch'),
+    tasks: injector.getMiddlewareHooks<InjecoratorFilter>(tokens, 'catch'),
     resultWrapper: (_task, _i, _tasks, args) => args,
     breakCondition: () => false,
     skipCondition: (_task, i, _tasks, args) => catches[i].some((cls) => args[1] instanceof cls),

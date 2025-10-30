@@ -3,7 +3,7 @@ import { GuardTask, InjecoratorGuard } from '@/types/middleware.js';
 import { InjectToken } from '@/types/injecorator.js';
 
 import { ForbiddenException } from '@/exceptions/index.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import { ExecutionContext } from '@/common/execution-context.js';
 
 /**
@@ -11,7 +11,7 @@ import { ExecutionContext } from '@/common/execution-context.js';
  */
 export function createGuard(tokens: InjectToken[]): TaskifyAsync<GuardTask> {
   const task = createSerialTaskAsync<GuardTask>({
-    tasks: lazyInjector.getMiddlewareHooks<InjecoratorGuard>(tokens, 'canActivate'),
+    tasks: injector.getMiddlewareHooks<InjecoratorGuard>(tokens, 'canActivate'),
     resultWrapper: (_task, _i, _tasks, args) => args,
     breakCondition: (_task, _i, _tasks, _args, lastReturn) => lastReturn === false,
     skipCondition: () => false,

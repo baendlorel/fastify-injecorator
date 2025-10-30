@@ -4,7 +4,7 @@ import multipart from '@fastify/multipart';
 
 import { Controller, Post, File, Files, Module } from '@/index.js';
 import { apply } from '@/register/index.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import type { MultipartFile } from '@/types/multipart.js';
 import { PipeFile } from '@/multipart/pipes/file.pipe.js';
 
@@ -23,7 +23,7 @@ describe('Multipart File Upload', () => {
 
   afterEach(async () => {
     await app.close();
-    lazyInjector.clear();
+    injector.clear();
   });
 
   it('should upload single file with @File decorator', async () => {

@@ -8,7 +8,7 @@ import { tryToGetGlobalToken } from '@/common/inject-keys.js';
 
 import collection from './collection.js';
 import { expectAccessible, expectModule } from './expect-module.js';
-import lazyInjector from './lazy-injector.js';
+import { injector } from './lazy-injector.js';
 import { metaGetModule } from './meta.js';
 import { registerController } from './route/controller.js';
 
@@ -51,7 +51,7 @@ class ModuleRegister {
       if (globalToken) {
         // & this will automically detect global tokens and add them
         collection.addGlobalMiddleware(globalToken);
-        lazyInjector.createInstance(providerOptions);
+        injector.createInstance(providerOptions);
       }
     }
   }
@@ -90,7 +90,7 @@ class ModuleRegister {
         continue;
       }
       expectAccessible(providerOptions, m.accessibleProviderTokens);
-      lazyInjector.createInstance(providerOptions);
+      injector.createInstance(providerOptions);
     }
 
     // register routes
@@ -102,11 +102,11 @@ class ModuleRegister {
   }
 
   createBasicPipes() {
-    lazyInjector.internalCreateInstanceByClass(PipeBody);
-    lazyInjector.internalCreateInstanceByClass(PipeParams);
-    lazyInjector.internalCreateInstanceByClass(PipeIp);
-    lazyInjector.internalCreateInstanceByClass(PipeQuery);
-    lazyInjector.internalCreateInstanceByClass(PipeRaw);
+    injector.internalCreateInstanceByClass(PipeBody);
+    injector.internalCreateInstanceByClass(PipeParams);
+    injector.internalCreateInstanceByClass(PipeIp);
+    injector.internalCreateInstanceByClass(PipeQuery);
+    injector.internalCreateInstanceByClass(PipeRaw);
   }
 
   /**
@@ -130,7 +130,7 @@ class ModuleRegister {
 
     // register every module recursively
     this.visit(this.opts.rootModule);
-    lazyInjector.apply(this.app);
+    injector.apply(this.app);
 
     // recover thie existed
     if (existedValidatorCompiler) {

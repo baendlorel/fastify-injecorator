@@ -6,10 +6,10 @@ import { Inject } from '@/decorators/inject.js';
 import { Module } from '@/decorators/module.js';
 import { apply } from '@/register/index.js';
 import { metaGetModule, metaGetProvider } from '@/register/meta.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 describe('Decorators Functionality', () => {
   afterEach(() => {
-    lazyInjector.clear();
+    injector.clear();
   });
 
   it('Injectable should mark class as provider', () => {
@@ -38,7 +38,7 @@ describe('Decorators Functionality', () => {
 
     apply(fastify(), { rootModule: AppModule });
 
-    const instance = lazyInjector.createInstance(Target);
+    const instance = injector.createInstance(Target);
     expect(instance.dep).toBeInstanceOf(Dep);
   });
 
@@ -54,8 +54,8 @@ describe('Decorators Functionality', () => {
   it('createInstance should cache singleton', () => {
     @Injectable()
     class S {}
-    const a = lazyInjector.createInstance(S);
-    const b = lazyInjector.createInstance(S);
+    const a = injector.createInstance(S);
+    const b = injector.createInstance(S);
     expect(a).toBe(b);
   });
 });

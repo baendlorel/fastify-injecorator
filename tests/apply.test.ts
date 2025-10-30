@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import { describe, it, expect } from 'vitest';
 
 import { Injectable, Inject } from '@/index.js';
-import lazyInjector from '@/register/lazy-injector.js';
+import { injector } from '@/register/lazy-injector.js';
 import { Module } from '@/decorators/module.js';
 import { apply } from '@/register/index.js';
 import { promiseTry } from '@/common/promise-try.js';
@@ -29,7 +29,7 @@ describe('Injectorator Full', () => {
       rootModule: AppModule,
     });
 
-    const instance = lazyInjector.createInstance(Target);
+    const instance = injector.createInstance(Target);
     expect(instance.field_dep).toBeInstanceOf(Dep);
     expect(instance.field_dep.field_target).toBeInstanceOf(Target);
   });

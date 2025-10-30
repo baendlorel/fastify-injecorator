@@ -3,7 +3,7 @@ import { toAssigned } from 'to-assigned';
 import { Class } from '@/types/primitive.js';
 
 import { sym, $values, $define } from '@/common/index.js';
-import lazyInjector from '../lazy-injector.js';
+import { injector } from '../lazy-injector.js';
 import {
   metaGetController,
   metaGetFirstMethodPipeSchema,
@@ -36,7 +36,7 @@ function concatRoute(...routes: string[][]): string {
 export function registerController(app: FastifyInstance, controller: Class, modulePrefix: string[]) {
   const controllerPrefix = metaGetController(controller).prefix;
   const routes = metaGetRoute(controller);
-  const instance = lazyInjector.createInstance(controller);
+  const instance = injector.createInstance(controller);
 
   // middlewares
   const getInterceptors = metaGetUseInterceptors(controller);

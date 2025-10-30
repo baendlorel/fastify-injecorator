@@ -12,27 +12,27 @@ import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
 import collection from './collection.js';
 
-class LazyInjector {
+export namespace injector {
   /**
    * Which `instance[propertyKey]` is waiting for lazy injection of `dependency`
    */
-  private readonly injectList: LazyInjectEntry[] = [];
+  const injectList: LazyInjectEntry[] = [];
 
   /**
    * A map from token to the instance of Class
    */
-  private readonly instanceMap = new Map<Key, Instance | null>();
+  const instanceMap = new Map<Key, Instance | null>();
 
-  private getProvide(opts: ProviderOptions) {
+  function getProvide(opts: ProviderOptions) {
     return isClass(opts) ? opts.name : opts.provide;
   }
 
-  get<T extends object>(token: InjectToken) {
-    return this.instanceMap.get(isKey(token) ? token : token.name) as T | undefined;
+  export function get<T extends object>(token: InjectToken) {
+    return instanceMap.get(isKey(token) ? token : token.name) as T | undefined;
   }
 
-  internalCreateInstanceByClass(cls: Class) {
-    this.instanceMap.set(cls.name, new cls());
+  export function internalCreateInstanceByClass(cls: Class) {
+    instanceMap.set(cls.name, new cls());
   }
 
   /**
@@ -40,9 +40,12 @@ class LazyInjector {
    * @param tokens
    * @param handlerName
    */
-  getMiddlewareHooks<T extends InjecoratorMiddleware>(tokens: InjectToken[], handlerName: keyof T & Key): Func[] {
+  export function getMiddlewareHooks<T extends InjecoratorMiddleware>(
+    tokens: InjectToken[],
+    handlerName: keyof T & Key
+  ): Func[] {
     return tokens.map((token) => {
-      const instance = this.get(isKey(token) ? token : token.name);
+      const instance = get(isKey(token) ? token : token.name);
       expectObject<T>(instance, `Cannot find class for token: ${String(token)}`);
       const handler = instance[handlerName];
       expectFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
@@ -50,8 +53,8 @@ class LazyInjector {
     });
   }
 
-  getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
-    const instance = this.instanceMap.get(isKey(token) ? token : token.name) as T;
+  export function getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
+    const instance = instanceMap.get(isKey(token) ? token : token.name) as T;
     const cls = ($getPrototypeOf(instance)?.constructor ?? null) as Class | null;
     return { instance, cls };
   }
@@ -60,19 +63,19 @@ class LazyInjector {
    * This function do 2 things:
    * - Create an instance of `cls` directly, but without injections
    * - Record the token, injected field name and `injectArg` into a list
-   *   - This list will be used by `this.apply` after all instances are created
+   *   - This list will be used by `apply` after all instances are created
    */
-  createInstanceByClass(token: Key, cls: Class) {
+  export function createInstanceByClass(token: Key, cls: Class) {
     const { args } = metaGetProvider(cls);
     const instance = $construct(cls, args);
-    this.instanceMap.set(token, instance);
+    instanceMap.set(token, instance);
 
     const injects = metaGetInject(cls);
     if (injects) {
       const propertyKeys = $ownKeys(injects);
       for (let i = 0; i < propertyKeys.length; i++) {
         const propertyKey = propertyKeys[i];
-        this.injectList.push({
+        injectList.push({
           provide: token,
           propertyKey,
           dependency: injects[propertyKey].dependency,
@@ -85,33 +88,33 @@ class LazyInjector {
     return instance;
   }
 
-  createInstance(opts: ProviderOptions): Instance {
-    const token = this.getProvide(opts);
-    const exist = this.instanceMap.get(token);
+  export function createInstance(opts: ProviderOptions): Instance {
+    const token = getProvide(opts);
+    const exist = instanceMap.get(token);
     if (isObject<Instance>(exist)) {
       return exist;
     }
     return ph.match(opts, {
       useClass: (token, cls) => {
-        return this.createInstanceByClass(token, cls);
+        return createInstanceByClass(token, cls);
       },
       useValue: (token, value) => {
-        this.instanceMap.set(token, value);
+        instanceMap.set(token, value);
         return value;
       },
       // ! This means the injections must be created after instanceMap being filled up
       useFactory: (token, factory, inject) => {
-        const instances = inject.map((arg) => this.instanceMap.get(isKey(arg) ? arg : arg.name));
+        const instances = inject.map((arg) => instanceMap.get(isKey(arg) ? arg : arg.name));
         const instance = factory(...instances);
-        this.instanceMap.set(token, instance);
+        instanceMap.set(token, instance);
         return instance;
       },
       useExisting: (token, existingToken) => {
-        const instance = this.instanceMap.get(existingToken);
+        const instance = instanceMap.get(existingToken);
         if (!isObject(instance)) {
           throws(`Cannot find existing provider: ${String(existingToken)}`);
         }
-        this.instanceMap.set(token, instance);
+        instanceMap.set(token, instance);
         return instance;
       },
     });
@@ -122,8 +125,8 @@ class LazyInjector {
    * 2. Assign injected fields as `injectList` recorded
    * 3. Bind cron jobs for all instances
    */
-  apply(app: FastifyInstance) {
-    const map = this.instanceMap;
+  export function apply(app: FastifyInstance) {
+    const map = instanceMap;
     // & Give default APP_LOGGER
     if (!map.has(APP_LOGGER)) {
       map.set(APP_LOGGER, app.log);
@@ -131,8 +134,8 @@ class LazyInjector {
     }
 
     // & Inject instances
-    for (let i = 0; i < this.injectList.length; i++) {
-      const { provide, propertyKey, dependency } = this.injectList[i];
+    for (let i = 0; i < injectList.length; i++) {
+      const { provide, propertyKey, dependency } = injectList[i];
       const tokenOfDependency = ph.getInjectToken(dependency);
 
       expect(map.has(provide), `Provider '${String(provide)}' not found`);
@@ -157,16 +160,16 @@ class LazyInjector {
     }
   }
 
-  checkMissedDependency() {
-    for (let i = 0; i < this.injectList.length; i++) {
-      const { provide, propertyKey, dependency } = this.injectList[i];
-      const instance = this.instanceMap.get(provide);
+  export function checkMissedDependency() {
+    for (let i = 0; i < injectList.length; i++) {
+      const { provide, propertyKey, dependency } = injectList[i];
+      const instance = instanceMap.get(provide);
       const name = ph.getInjectTokenName(dependency);
       expect(propertyKey in instance, `${String(provide)}[${String(propertyKey)}] depends on '${name}' but not given`);
     }
   }
 
-  checkCircularDependency(rootModule: Class) {
+  export function checkCircularDependency(rootModule: Class) {
     const stack: Class[] = [];
 
     const visit = (m: Class | DynamicModule) => {
@@ -189,12 +192,8 @@ class LazyInjector {
    * - instanceMap
    * - injectList
    */
-  clear() {
-    this.injectList.splice(0);
-    this.instanceMap.clear();
+  export function clear() {
+    injectList.splice(0);
+    instanceMap.clear();
   }
 }
-
-// todo 管管导出单例的LazyInjector
-const lazyInjector = new LazyInjector();
-export default lazyInjector;

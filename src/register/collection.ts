@@ -9,13 +9,13 @@ import { expect } from '@/asserts/index.js';
 /**
  * Collection of some global metadata
  */
-class Collection {
-  readonly globalModules = new Set<Class>();
-  readonly globalProviders = new Set<Key>();
-  readonly globalInterceptors: symbol[] = [];
-  readonly globalGuards: symbol[] = [];
-  readonly globalFilters: symbol[] = [];
-  readonly globalPipes: symbol[] = [];
+export namespace collection {
+  export const globalModules = new Set<Class>();
+  export const globalProviders = new Set<Key>();
+  export const globalInterceptors: symbol[] = [];
+  export const globalGuards: symbol[] = [];
+  export const globalFilters: symbol[] = [];
+  export const globalPipes: symbol[] = [];
 
   /**
    * Add global middleware with specific token.
@@ -23,24 +23,24 @@ class Collection {
    * @param middleware tokens like `APP_FILTER`...
    * @returns
    */
-  addGlobalMiddleware(middleware: Key) {
+  export function addGlobalMiddleware(middleware: Key) {
     const name = typeof middleware === 'symbol' ? middleware.description : middleware;
     switch (middleware) {
       case APP_FILTER:
-        expect(this.globalFilters.length === 0, `${name} can only be registered once`);
-        return this.globalFilters.push(APP_FILTER);
+        expect(globalFilters.length === 0, `${name} can only be registered once`);
+        return globalFilters.push(APP_FILTER);
       case APP_GUARD:
-        expect(this.globalGuards.length === 0, `${name} can only be registered once`);
-        return this.globalGuards.push(APP_GUARD);
+        expect(globalGuards.length === 0, `${name} can only be registered once`);
+        return globalGuards.push(APP_GUARD);
       case APP_INTERCEPTOR:
-        expect(this.globalInterceptors.length === 0, `${name} can only be registered once`);
-        return this.globalInterceptors.push(APP_INTERCEPTOR);
+        expect(globalInterceptors.length === 0, `${name} can only be registered once`);
+        return globalInterceptors.push(APP_INTERCEPTOR);
       case APP_PIPE:
-        expect(this.globalPipes.length === 0, `${name} can only be registered once`);
-        return this.globalPipes.push(APP_PIPE);
+        expect(globalPipes.length === 0, `${name} can only be registered once`);
+        return globalPipes.push(APP_PIPE);
       case APP_LOGGER:
-        expect(!this.globalProviders.has(APP_LOGGER), `${name} can only be registered once`);
-        return this.globalProviders.add(APP_LOGGER);
+        expect(!globalProviders.has(APP_LOGGER), `${name} can only be registered once`);
+        return globalProviders.add(APP_LOGGER);
       default:
         break;
     }
@@ -49,26 +49,24 @@ class Collection {
   /**
    * @returns whether this module is already added
    */
-  addGlobalModule(moduleClass: Class): boolean {
-    if (this.globalModules.has(moduleClass)) {
+  export function addGlobalModule(moduleClass: Class): boolean {
+    if (globalModules.has(moduleClass)) {
       return false;
     }
-    this.globalModules.add(moduleClass);
+    globalModules.add(moduleClass);
     return true;
   }
 
-  assembleGlobalProviders() {
-    this.globalModules.forEach((m) => {
+  export function assembleGlobalProviders() {
+    globalModules.forEach((m) => {
       const moduleMetadata = ReflectDeep.get(m, [sym.metadata, sym.root, sym.module]) as ModuleMeta;
-      moduleMetadata.exports.forEach((exported) => this.globalProviders.add(exported.name));
+      moduleMetadata.exports.forEach((exported) => globalProviders.add(exported.name));
     });
-    [...this.globalFilters, ...this.globalGuards, ...this.globalInterceptors].forEach((token) =>
-      this.globalProviders.add(token)
-    );
+    [...globalFilters, ...globalGuards, ...globalInterceptors].forEach((token) => globalProviders.add(token));
 
     // Always has the APP_LOGGER
     // Default value is fastifyInstance.log
-    this.globalProviders.add(APP_LOGGER);
+    globalProviders.add(APP_LOGGER);
   }
 
   /**
@@ -77,12 +75,8 @@ class Collection {
    * - globalModules
    * - metadata(exclude sym.Custom) of injecoratorClasses
    */
-  clear() {
-    this.globalProviders.clear();
-    this.globalModules.clear();
+  export function clear() {
+    globalProviders.clear();
+    globalModules.clear();
   }
 }
-
-// todo 管管导出单例的Collection
-const collection = new Collection();
-export default collection;

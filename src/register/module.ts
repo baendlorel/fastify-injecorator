@@ -6,7 +6,7 @@ import { toDynamicModule, toModuleClass } from '@/common/index.js';
 import { throws } from '@/asserts/index.js';
 import { tryToGetGlobalToken } from '@/common/inject-keys.js';
 
-import collection from './collection.js';
+import { collection } from './collection.js';
 import { expectAccessible, expectModule } from './expect-module.js';
 import { injector } from './lazy-injector.js';
 import { metaGetModule } from './meta.js';

@@ -24,7 +24,7 @@ import {
 
 import { sym } from '@/common/index.js';
 import { splitPath, toModuleClass } from '@/common/utils.js';
-import collection from './collection.js';
+import { collection } from './collection.js';
 import ph from './provider.js';
 
 /**

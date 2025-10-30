@@ -10,7 +10,7 @@ import { bindCronJob } from '@/schedule/cron.js';
 
 import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
-import collection from './collection.js';
+import { collection } from './collection.js';
 
 export namespace injector {
   /**

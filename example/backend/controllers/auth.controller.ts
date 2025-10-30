@@ -38,7 +38,7 @@ export class AuthController {
       throw new UnauthorizedException('Password is required');
     }
 
-    const token = jwt.sign({
+    const token = JwtService.default.sign({
       userId: user.id,
       username: user.username,
       role: user.role,

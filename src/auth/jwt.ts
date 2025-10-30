@@ -5,6 +5,8 @@ import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '
 import { $get, $set } from '@/common/native.js';
 import { sym } from '@/common/sym.js';
 
+// todo 是否要把所有函数都单独导出？
+
 /**
  * Simple JWT Service implementation
  * - Uses Node.js built-in crypto for signing and verification

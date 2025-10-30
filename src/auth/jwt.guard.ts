@@ -1,13 +1,18 @@
+import { Class } from '@/types/primitive.js';
+import { InjecoratorGuard } from '@/types/middleware.js';
+
 import { Guard } from '@/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@/common/execution-context.js';
-import { InjecoratorGuard } from '@/types/middleware.js';
 import { JwtService } from './jwt.js';
+
+const guards = new Map<JwtService, Class<InjecoratorGuard>>();
 
 /**
  * JWT Guard - protects routes by validating JWT tokens
- * - Extracts token from Authorization header (Bearer token)
- * - Validates token using JwtService
- * - Attaches decoded payload to request[sym.user]
+ * - extracts token from Authorization header (Bearer token)
+ * - validates token using JwtService
+ * - attaches decoded payload to request[sym.user]
+ * - this function uses cache and will not create a new instance everytime
  *
  * Usage:
  * ```typescript
@@ -22,6 +27,11 @@ import { JwtService } from './jwt.js';
  * ```
  */
 export function JwtGuard(jwt = JwtService.default) {
+  const guardClass = guards.get(jwt);
+  if (guardClass) {
+    return guardClass;
+  }
+
   @Guard()
   class JwtGuardClass implements InjecoratorGuard {
     canActivate(context: ExecutionContext): boolean {
@@ -64,5 +74,7 @@ export function JwtGuard(jwt = JwtService.default) {
       return type === 'Bearer' ? token : null;
     }
   }
+
+  guards.set(jwt, JwtGuardClass);
   return JwtGuardClass;
 }

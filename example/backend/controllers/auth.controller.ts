@@ -8,11 +8,11 @@ import { Inject } from '../../../src/decorators/inject.js';
 import type { FastifyRequest } from 'fastify';
 
 import { UserService } from '../services/user.service.js';
-import { JwtService } from '../../../src/auth/jwt.service.js';
 import { JwtGuard } from '../../../src/auth/jwt.guard.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
 import { UnauthorizedException } from '../../../src/exceptions/index.js';
+import { JwtService } from '../../../src/index.js';
 
 @Controller('api/auth')
 @UseInterceptors(TransformInterceptor)
@@ -21,12 +21,9 @@ export class AuthController {
   @Inject(UserService)
   private userService!: UserService;
 
-  @Inject('JwtService')
-  private jwtService!: JwtService;
-
   @Post('login')
   @Body()
-  async login(body: any) {
+  login(body: any) {
     const { username, password } = body;
 
     // Simple authentication - in production, verify password hash
@@ -41,7 +38,7 @@ export class AuthController {
       throw new UnauthorizedException('Password is required');
     }
 
-    const token = await this.jwtService.sign({
+    const token = jwt.sign({
       userId: user.id,
       username: user.username,
       role: user.role,
@@ -70,14 +67,14 @@ export class AuthController {
 
   @Post('verify')
   @Body()
-  async verify(body: any) {
+  verify(body: any) {
     const { token } = body;
     if (!token) {
       throw new UnauthorizedException('Token is required');
     }
 
     try {
-      const payload = await this.jwtService.verify(token);
+      const payload = JwtService.default.verify(token);
       return {
         valid: true,
         payload,

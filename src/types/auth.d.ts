@@ -93,32 +93,3 @@ export interface JwtModuleOptions {
    */
   verifyOptions?: JwtVerifyOptions;
 }
-
-/**
- * JWT Service interface
- */
-export interface InjecoratorJwtService {
-  /**
-   * Sign a payload and return JWT token
-   * @param payload data to encode in the token
-   * @param options optional signing options (will override defaults)
-   * @returns JWT token string
-   */
-  sign(payload: JwtPayload, options?: JwtSignOptions): OrPromise<string>;
-
-  /**
-   * Verify and decode a JWT token
-   * @param token JWT token string
-   * @param options optional verification options (will override defaults)
-   * @returns decoded payload
-   * @throws Error if token is invalid
-   */
-  verify<T = JwtPayload>(token: string, options?: JwtVerifyOptions): OrPromise<T>;
-
-  /**
-   * Decode a JWT token without verification
-   * @param token JWT token string
-   * @returns decoded payload or null if invalid format
-   */
-  decode<T = JwtPayload>(token: string): T | null;
-}

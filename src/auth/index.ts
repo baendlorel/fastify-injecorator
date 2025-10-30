@@ -4,5 +4,5 @@
  * - JwtGuard: for protecting routes with JWT authentication
  */
 
-export { JwtService } from './jwt.service.js';
+export { JwtService } from './jwt.js';
 export { JwtGuard } from './jwt.guard.js';

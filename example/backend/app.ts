@@ -7,6 +7,7 @@ import { apply } from '../../src/register/index.js';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
+  // Configure JWT secret
   const app = fastify({
     logger: {
       level: 'info',

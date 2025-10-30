@@ -26,7 +26,6 @@ import { PipeFile } from '../../src/multipart/pipes/file.pipe.js';
 import { HttpExceptionFilter } from './filters/http-exception.filter.js';
 
 // Auth
-import { JwtService } from '../../src/auth/jwt.service.js';
 import { JwtGuard } from '../../src/auth/jwt.guard.js';
 
 // Cron
@@ -41,7 +40,6 @@ import { ScheduledTasks } from './cron/scheduled-tasks.js';
 
     // Guards
     RolesGuard,
-    JwtGuard,
 
     // Interceptors
     LoggingInterceptor,
@@ -54,14 +52,6 @@ import { ScheduledTasks } from './cron/scheduled-tasks.js';
 
     // Filters
     HttpExceptionFilter,
-
-    // JWT Service with configuration
-    {
-      provide: 'JwtService',
-      useValue: new JwtService({
-        secret: process.env.JWT_SECRET || 'super-secret-key-change-in-production',
-      }),
-    },
 
     // Cron tasks
     ScheduledTasks,

@@ -2,6 +2,7 @@ import { Guard } from '../../../src/decorators/middlewares/guard.js';
 import { ExecutionContext } from '../../../src/common/execution-context.js';
 import { InjecoratorGuard } from '../../../src/types/middleware.js';
 import { getCustomMethodMetadata, getCustomClassMetadata } from '../../../src/decorators/custom.js';
+import { JwtService } from '../../../src/index.js';
 
 @Guard()
 export class RolesGuard implements InjecoratorGuard {
@@ -11,16 +12,16 @@ export class RolesGuard implements InjecoratorGuard {
     const classRoles = getCustomClassMetadata<string[]>(context, 'roles');
     const requiredRoles = methodRoles || classRoles;
 
-    if (!requiredRoles || requiredRoles.length === 0) {
+    if (!requiredRoles?.length) {
       // No roles required, allow access
       return true;
     }
 
     const http = context.switchToHttp();
     const request = http.getRequest();
-    const user = (request as any).user;
+    const user = JwtService.getUserFromRequest(request);
 
-    if (!user || !user.role) {
+    if (!user?.role) {
       return false;
     }
 

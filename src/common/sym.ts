@@ -1,6 +1,7 @@
 /**
  * Property keys used to store metadata.
  */
+// todo 有一些symbol是要导出的
 export namespace sym {
   /**
    * Polyfill for stage2 proposal: Symbol.metadata.
@@ -155,4 +156,10 @@ export namespace sym {
    * Stores file upload metadata for multipart/form-data
    */
   export const file = Symbol('file');
+
+  /**
+   * Stores authenticated user on FastifyRequest
+   * - Used by authentication guards to attach user info to request
+   */
+  export const user = Symbol('user');
 }

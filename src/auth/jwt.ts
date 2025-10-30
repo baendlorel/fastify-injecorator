@@ -1,13 +1,37 @@
-import { Injectable } from '@/decorators/injectable.js';
-import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions, InjecoratorJwtService } from '@/types/auth.js';
+import { createHmac } from 'node:crypto';
+import { FastifyRequest } from 'fastify';
+import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@/types/auth.js';
+
+import { $get, $set } from '@/common/native.js';
+import { sym } from '@/common/sym.js';
 
 /**
  * Simple JWT Service implementation
- * - Uses built-in crypto for signing and verification
+ * - Uses Node.js built-in crypto for signing and verification
  * - Supports HS256 algorithm by default
  */
-@Injectable()
-export class JwtService implements InjecoratorJwtService {
+export class JwtService {
+  // # static methods
+  static get default() {
+    return defaultJwtService;
+  }
+
+  /**
+   * Using your own jwt service with your options
+   */
+  static setDefault(service: JwtService) {
+    defaultJwtService = service;
+  }
+
+  static setUserToRequest(request: FastifyRequest, user: any): boolean {
+    return $set(request, sym.user, user);
+  }
+
+  static getUserFromRequest(request: FastifyRequest): any {
+    return $get(request, sym.user);
+  }
+
+  // # privates
   private secret: string;
   private defaultSignOptions?: JwtSignOptions;
   private defaultVerifyOptions?: JwtVerifyOptions;
@@ -16,6 +40,16 @@ export class JwtService implements InjecoratorJwtService {
     this.secret = options?.secret || '';
     this.defaultSignOptions = options?.signOptions;
     this.defaultVerifyOptions = options?.verifyOptions;
+  }
+
+  /**
+   * Configure JWT service after initialization
+   * - Allows setting/changing secret and default options
+   */
+  configure(options: JwtModuleOptions): void {
+    this.secret = options.secret;
+    this.defaultSignOptions = options.signOptions;
+    this.defaultVerifyOptions = options.verifyOptions;
   }
 
   /**
@@ -38,16 +72,12 @@ export class JwtService implements InjecoratorJwtService {
   }
 
   /**
-   * Create HMAC signature
+   * Create HMAC signature using Node.js crypto
    */
-  private async createSignature(data: string, secret: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, [
-      'sign',
-    ]);
-
-    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
-    return this.base64UrlEncode(String.fromCharCode(...new Uint8Array(signature)));
+  private createSignature(data: string, secret: string): string {
+    const hmac = createHmac('sha256', secret);
+    hmac.update(data);
+    return this.base64UrlEncode(hmac.digest().toString('binary'));
   }
 
   /**
@@ -74,9 +104,7 @@ export class JwtService implements InjecoratorJwtService {
       if (typeof mergedOptions.expiresIn === 'number') {
         jwtPayload.exp = now + mergedOptions.expiresIn;
       } else {
-        // Parse time string like '1h', '7d', etc.
-        const seconds = this.parseTimeToSeconds(mergedOptions.expiresIn);
-        jwtPayload.exp = now + seconds;
+        jwtPayload.exp = now + Number(mergedOptions.expiresIn);
       }
     }
 
@@ -100,8 +128,7 @@ export class JwtService implements InjecoratorJwtService {
       if (typeof mergedOptions.notBefore === 'number') {
         jwtPayload.nbf = now + mergedOptions.notBefore;
       } else {
-        const seconds = this.parseTimeToSeconds(mergedOptions.notBefore);
-        jwtPayload.nbf = now + seconds;
+        jwtPayload.nbf = now + Number(mergedOptions.notBefore);
       }
     }
 
@@ -110,7 +137,7 @@ export class JwtService implements InjecoratorJwtService {
     const encodedPayload = this.base64UrlEncode(JSON.stringify(jwtPayload));
 
     // Create signature
-    const signature = await this.createSignature(`${encodedHeader}.${encodedPayload}`, this.secret);
+    const signature = this.createSignature(`${encodedHeader}.${encodedPayload}`, this.secret);
 
     return `${encodedHeader}.${encodedPayload}.${signature}`;
   }
@@ -118,7 +145,7 @@ export class JwtService implements InjecoratorJwtService {
   /**
    * Verify and decode a JWT token
    */
-  async verify<T = JwtPayload>(token: string, options?: JwtVerifyOptions): Promise<T> {
+  verify<T = JwtPayload>(token: string, options?: JwtVerifyOptions): T {
     const mergedOptions = { ...this.defaultVerifyOptions, ...options };
 
     // Split token
@@ -130,7 +157,7 @@ export class JwtService implements InjecoratorJwtService {
     const [encodedHeader, encodedPayload, signature] = parts;
 
     // Verify signature
-    const expectedSignature = await this.createSignature(`${encodedHeader}.${encodedPayload}`, this.secret);
+    const expectedSignature = this.createSignature(`${encodedHeader}.${encodedPayload}`, this.secret);
 
     if (signature !== expectedSignature) {
       throw new Error('Invalid token signature');
@@ -196,31 +223,6 @@ export class JwtService implements InjecoratorJwtService {
       return null;
     }
   }
-
-  /**
-   * Parse time string to seconds
-   * - Supports: s, m, h, d (seconds, minutes, hours, days)
-   */
-  private parseTimeToSeconds(time: string): number {
-    const match = time.match(/^(\d+)([smhd])$/);
-    if (!match) {
-      throw new Error(`Invalid time format: ${time}`);
-    }
-
-    const value = parseInt(match[1], 10);
-    const unit = match[2];
-
-    switch (unit) {
-      case 's':
-        return value;
-      case 'm':
-        return value * 60;
-      case 'h':
-        return value * 60 * 60;
-      case 'd':
-        return value * 60 * 60 * 24;
-      default:
-        throw new Error(`Invalid time unit: ${unit}`);
-    }
-  }
 }
+
+let defaultJwtService = new JwtService();

@@ -65,10 +65,15 @@ export function UsePipes(...pipes: (PipeOptions | Class)[]) {
   };
 }
 
-function mergeSchema(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  const o = {} as { body?: unknown; response?: unknown };
+function mergeSchema(
+  field: 'body' | 'params' | 'querystring',
+  input?: PipeSchema,
+  ok?: PipeSchema,
+  other?: PipeFullSchema
+) {
+  const o = {} as { body?: unknown; params?: unknown; querystring?: unknown; response?: unknown };
   if (input !== undefined) {
-    o.body = input;
+    o[field] = input;
   }
   if (ok !== undefined) {
     o.response = { 200: ok };
@@ -85,7 +90,7 @@ function mergeSchema(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema
  * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
 export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeBody, schema: mergeSchema(input, ok, other) });
+  return UsePipes({ pipe: PipeBody, schema: mergeSchema('body', input, ok, other) });
 }
 
 /**
@@ -97,7 +102,7 @@ export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema
  * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
 export function Params(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeParams, schema: mergeSchema(input, ok, other) });
+  return UsePipes({ pipe: PipeParams, schema: mergeSchema('params', input, ok, other) });
 }
 
 /**
@@ -109,7 +114,7 @@ export function Params(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSche
  * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
 export function Query(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeQuery, schema: mergeSchema(input, ok, other) });
+  return UsePipes({ pipe: PipeQuery, schema: mergeSchema('querystring', input, ok, other) });
 }
 
 /**

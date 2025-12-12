@@ -77,7 +77,7 @@ const options = [
           ],
         ],
       }),
-      terser({
+      void terser({
         format: {
           comments: false, // remove comments
         },
@@ -93,7 +93,7 @@ const options = [
           },
         },
       }),
-    ],
+    ].filter(Boolean),
     external: [],
   },
 ];
@@ -104,11 +104,7 @@ const options = [
 const declaration = {
   input: 'src/index.ts',
   output: [{ file: 'dist/index.d.ts', format: 'es' }],
-  plugins: [
-    alias(aliasOpts),
-    replace(replaceOpts),
-    dts({ tsconfig }),
-  ],
+  plugins: [alias(aliasOpts), replace(replaceOpts), dts({ tsconfig })],
 };
 
 /**

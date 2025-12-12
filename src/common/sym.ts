@@ -1,7 +1,6 @@
 /**
  * Property keys used to store metadata.
  */
-// todo 有一些symbol是要导出的
 export namespace sym {
   /**
    * Polyfill for stage2 proposal: Symbol.metadata.

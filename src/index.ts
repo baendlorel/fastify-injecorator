@@ -26,6 +26,9 @@ export * from './exceptions/index.js';
 export { HttpStatus } from './common/status.js';
 export { ExecutionContext } from './common/execution-context.js';
 
+// creator
+export { apply as fastifyInjecorator } from './register/index.js';
+
 // multipart/file upload support (requires @fastify/multipart peer dependency)
 export { File, Files, PipeFile, UploadedFile } from './multipart/index.js';
 export type { MultipartFile, FileUploadOptions, FileUploadMeta } from './types/multipart.js';

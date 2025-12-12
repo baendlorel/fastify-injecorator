@@ -94,7 +94,12 @@ const options = [
         },
       }),
     ].filter(Boolean),
-    external: [],
+    // Mark all dependencies as external (don't bundle them)
+    external: [
+      'cron-parser',
+      // ...Object.keys(pkg.dependencies || {}),
+      // ...Object.keys(pkg.peerDependencies || {}),
+    ],
   },
 ];
 

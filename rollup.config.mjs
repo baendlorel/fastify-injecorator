@@ -56,7 +56,14 @@ const commonPlugins = [
   babel({
     babelHelpers: 'bundled',
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    presets: [['@babel/preset-env' /* { targets: { node: '14' } } */]],
+    presets: [
+      [
+        '@babel/preset-env',
+        {
+          targets: { esmodules: true }, // 只针对支持 ES modules 的现代环境
+        },
+      ],
+    ],
     plugins: [
       [
         '@babel/plugin-proposal-decorators',

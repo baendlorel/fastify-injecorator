@@ -1,6 +1,6 @@
 {
   "name": "fastify-injecorator",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A NestJS like fastify plugin for dependency injection",
   "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
   "purpose": "npm",
@@ -32,6 +32,7 @@
     "build": "tsx ./.scripts/rollup.ts",
     "check": "tsc --noEmit",
     "lint": "oxlint .",
+    "pub": "pnpm build && npm publish",
     "dev": "tsx watch src/main.ts"
   },
   "author": {

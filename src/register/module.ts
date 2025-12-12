@@ -99,6 +99,9 @@ class ModuleRegister {
       expectAccessible(controller, m.accessibleProviderTokens);
       registerController(this.app, controller, fullPrefix);
     }
+
+    // pop the module from stack after processing
+    this.moduleStack.pop();
   }
 
   createBasicPipes() {

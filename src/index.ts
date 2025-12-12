@@ -21,10 +21,20 @@ export { UseInterceptors } from './decorators/middlewares/interceptor.js';
 export { UsePipes } from './decorators/middlewares/pipe.js';
 export { UseFilters } from './decorators/middlewares/filter.js';
 
+export type {
+  InjecoratorGuard,
+  InjecoratorInterceptor,
+  InjecoratorPipe,
+  InjecoratorFilter,
+} from './types/middleware.js';
+
 // export common exceptions for use
 export * from './exceptions/index.js';
 export { HttpStatus } from './common/status.js';
 export { ExecutionContext } from './common/execution-context.js';
+
+// common keys
+export { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from './common/inject-keys.js';
 
 // creator
 export { apply as fastifyInjecorator } from './register/index.js';

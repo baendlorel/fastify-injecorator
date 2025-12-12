@@ -39,9 +39,65 @@ const aliasOpts = {
 // # main options
 
 /**
+ * Common plugins configuration
+ */
+const commonPlugins = [
+  alias(aliasOpts),
+  replace({
+    preventAssignment: false,
+    delimiters: ['', ''],
+    values: replaceLiteralOpts,
+  }),
+  replace(replaceOpts),
+  funcMacro(),
+  constEnum(),
+  resolve(),
+  typescript({ tsconfig }),
+  void babel({
+    babelHelpers: 'bundled',
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    presets: [['@babel/preset-env', { targets: { node: '14' } }]],
+    plugins: [
+      [
+        '@babel/plugin-proposal-decorators',
+        {
+          version: '2023-11',
+        },
+      ],
+    ],
+  }),
+  void terser({
+    format: {
+      comments: false, // remove comments
+    },
+    compress: {
+      reduce_vars: true,
+      drop_console: true,
+      dead_code: true, // ✅ Safe: remove dead code
+      evaluate: true, // ✅ Safe: evaluate constant expressions
+    },
+    mangle: {
+      properties: {
+        regex: /^_/, // only mangle properties starting with '_'
+      },
+    },
+  }),
+].filter(Boolean);
+
+/**
+ * Common external dependencies
+ */
+const externalDeps = [
+  'cron-parser',
+  // ...Object.keys(pkg.dependencies || {}),
+  // ...Object.keys(pkg.peerDependencies || {}),
+];
+
+/**
  * @type {import('rollup').RollupOptions[]}
  */
 const options = [
+  // Main entry point
   {
     input: 'src/index.ts',
     output: [
@@ -51,66 +107,44 @@ const options = [
         sourcemap: false,
       },
     ],
-
-    plugins: [
-      alias(aliasOpts),
-      replace({
-        preventAssignment: false,
-        delimiters: ['', ''],
-        values: replaceLiteralOpts,
-      }),
-      replace(replaceOpts),
-      funcMacro(),
-      constEnum(),
-      resolve(),
-      typescript({ tsconfig }),
-      void babel({
-        babelHelpers: 'bundled',
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
-        presets: [['@babel/preset-env', { targets: { node: '14' } }]],
-        plugins: [
-          [
-            '@babel/plugin-proposal-decorators',
-            {
-              version: '2023-11',
-            },
-          ],
-        ],
-      }),
-      void terser({
-        format: {
-          comments: false, // remove comments
-        },
-        compress: {
-          reduce_vars: true,
-          drop_console: true,
-          dead_code: true, // ✅ Safe: remove dead code
-          evaluate: true, // ✅ Safe: evaluate constant expressions
-        },
-        mangle: {
-          properties: {
-            regex: /^_/, // only mangle properties starting with '_'
-          },
-        },
-      }),
-    ].filter(Boolean),
-    // Mark all dependencies as external (don't bundle them)
-    external: [
-      'cron-parser',
-      // ...Object.keys(pkg.dependencies || {}),
-      // ...Object.keys(pkg.peerDependencies || {}),
+    plugins: commonPlugins,
+    external: externalDeps,
+  },
+  // Test utilities entry point
+  {
+    input: 'src/test.ts',
+    output: [
+      {
+        file: 'dist/test.mjs',
+        format: 'esm',
+        sourcemap: false,
+      },
     ],
+    plugins: commonPlugins,
+    external: externalDeps,
   },
 ];
 
 /**
- * @type {import('rollup').RollupOptions}
+ * TypeScript declaration plugins
  */
-const declaration = {
-  input: 'src/index.ts',
-  output: [{ file: 'dist/index.d.ts', format: 'es' }],
-  plugins: [alias(aliasOpts), replace(replaceOpts), dts({ tsconfig })],
-};
+const dtsPlugins = [alias(aliasOpts), replace(replaceOpts), dts({ tsconfig })];
+
+/**
+ * @type {import('rollup').RollupOptions[]}
+ */
+const declarations = [
+  {
+    input: 'src/index.ts',
+    output: [{ file: 'dist/index.d.ts', format: 'es' }],
+    plugins: dtsPlugins,
+  },
+  {
+    input: 'src/test.ts',
+    output: [{ file: 'dist/test.d.ts', format: 'es' }],
+    plugins: dtsPlugins,
+  },
+];
 
 /**
  * @type {'npm'|'rollup-plugin'|'vscode-extension'|'server'|'web'|'app'|'framework'}
@@ -118,7 +152,7 @@ const declaration = {
 switch (pkg.purpose) {
   case 'npm':
   case 'rollup-plugin':
-    options.push(declaration);
+    options.push(...declarations);
     break;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "fastify-injecorator",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A NestJS like fastify plugin for dependency injection",
   "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
   "purpose": "npm",
@@ -8,9 +8,16 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.mjs",
-    "default": "./dist/index.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
+    "./test": {
+      "types": "./dist/test.d.ts",
+      "import": "./dist/test.mjs",
+      "default": "./dist/test.mjs"
+    }
   },
   "files": [
     "dist"

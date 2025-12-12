@@ -64,7 +64,7 @@ const options = [
       constEnum(),
       resolve(),
       typescript({ tsconfig }),
-      babel({
+      void babel({
         babelHelpers: 'bundled',
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
         presets: [['@babel/preset-env', { targets: { node: '14' } }]],

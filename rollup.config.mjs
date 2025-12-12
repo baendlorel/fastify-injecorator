@@ -53,10 +53,10 @@ const commonPlugins = [
   constEnum(),
   resolve(),
   typescript({ tsconfig }),
-  void babel({
+  babel({
     babelHelpers: 'bundled',
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
-    presets: [['@babel/preset-env', { targets: { node: '14' } }]],
+    presets: [['@babel/preset-env' /* { targets: { node: '14' } } */]],
     plugins: [
       [
         '@babel/plugin-proposal-decorators',

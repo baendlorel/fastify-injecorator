@@ -96,7 +96,7 @@ export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema
  * @param ok will be set to `{ response: { 200: okSchema } }`
  * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
-export function Params(input: PipeSchema, ok: PipeSchema, other: PipeFullSchema) {
+export function Params(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
   return UsePipes({ pipe: PipeParams, schema: mergeSchema(input, ok, other) });
 }
 
@@ -108,7 +108,7 @@ export function Params(input: PipeSchema, ok: PipeSchema, other: PipeFullSchema)
  * @param ok will be set to `{ response: { 200: okSchema } }`
  * @param other The rest schemas like we set in `fastify.route({ schema })`
  */
-export function Query(input: PipeSchema, ok: PipeSchema, other: PipeFullSchema) {
+export function Query(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
   return UsePipes({ pipe: PipeQuery, schema: mergeSchema(input, ok, other) });
 }
 

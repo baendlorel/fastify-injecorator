@@ -39,7 +39,7 @@ const injectableCache = new Set<any>();
  * - injections?: a record of class dependencies
  */
 export function expectProvider(target: unknown): asserts target is Class {
-  expectClass(target, `Target is not a class: ${String(target)}`);
+  expectClass(target, `Target is not a class: ${String(target)} ${Object(target).name}`);
 
   // Should have args[]
   const providerMetadata = metaGetProvider(target);

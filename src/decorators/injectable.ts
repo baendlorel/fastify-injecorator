@@ -13,7 +13,7 @@ export function Injectable() {
 }
 
 export function toInjectable(target: Class, args: any[] = []) {
-  expectClass(target, `Target is not a class: ${String(target)}`);
+  expectClass(target, `Target is not a class: ${String(target)} ${Object(target).name}`);
   expectArray(args, 'args must be an array');
   metaSetProviderOnClass(target);
   return target;

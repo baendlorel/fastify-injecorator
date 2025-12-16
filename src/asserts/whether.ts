@@ -25,8 +25,13 @@ export function isClass(o: any): o is Class {
     return false;
   }
 
-  const str = $fnToString.call(o);
-  return str.startsWith('class ') || str.startsWith('[class ');
+  try {
+    const temp = new Proxy(o, { construct: () => ({}) });
+    new temp();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function isFunction(o: any): o is Func {

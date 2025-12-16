@@ -51,9 +51,11 @@ export const expectClass: (o: any, msg: string) => asserts o is Class = (o, msg)
   if (typeof o !== 'function') {
     throws(msg);
   }
-  const str = $fnToString.call(o);
-  // & This is better than using pseudo calling
-  if (!str.startsWith('class ') && !str.startsWith('[class ')) {
+
+  try {
+    const temp = new Proxy(o, { construct: () => ({}) });
+    new temp();
+  } catch {
     throws(msg);
   }
 };

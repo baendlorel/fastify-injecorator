@@ -65,7 +65,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     // Pass the original method (with correct name) and instance for 'this' binding
     const handler = createHandler(controller, origin, { interceptor, guard, filter, pipe });
 
-    app.log.info(`${url} (${method.toUpperCase()})`);
+    console.log(`Registered - ${url} (${method.toUpperCase()})`);
 
     app.route({
       ...opts,

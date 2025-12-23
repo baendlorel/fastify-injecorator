@@ -9,7 +9,7 @@ const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
   const http = context.switchToHttp();
   const reply = http.getReply();
   const message = isError(exception) ? exception.message : String(exception);
-  reply.log.error(`${http.getRequest().url} - ${message}`);
+  // reply.log.error(`${http.getRequest().url} - ${message}`);
 
   reply.status(400).send({
     error: 'Bad Request',

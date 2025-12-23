@@ -1,7 +1,7 @@
 import { Class, Func, Key } from '@/types/primitive.js';
 import { InjectToken } from '@/types/injecorator.js';
 
-import { $entries, $fnToString, $isArray } from '@/common/native.js';
+import { $entries, $isArray } from '@/common/native.js';
 import { InjecoratorError } from './error.js';
 import { isClass } from './whether.js';
 

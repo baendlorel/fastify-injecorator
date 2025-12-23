@@ -26,7 +26,7 @@ export async function apply(app: FastifyInstance, partialOpts: Partial<FastifyIn
 
   clear();
 
-  app.log.info(`Modules are all registered`);
+  console.log(`Modules are all registered`);
 
   // Start cron jobs after all modules are initialized
   startCronJobs();

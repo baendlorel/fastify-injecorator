@@ -6,9 +6,9 @@ import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@/types/middle
 import { expectArray, isFunction } from '@/asserts/index.js';
 import { ExecutionContext } from '@/common/execution-context.js';
 
-async function run(fns: Func[]) {
+async function run(fns: Func[], ...args: any[]) {
   for (let i = 0; i < fns.length; i++) {
-    await fns[i]();
+    await fns[i](...args);
   }
 }
 interface MiddlewareGroup {
@@ -45,13 +45,13 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
 
       // Interceptor leave
       const leaves = interceptResult.results.filter(isFunction).reverse();
-      await run(leaves);
+      await run(leaves, result);
 
       return result;
     } catch (error) {
       // Interceptor leave (cleanup on error)
       const leaves = interceptResult.results.filter(isFunction).reverse();
-      await run(leaves);
+      await run(leaves, error);
 
       // Filter
       await filter(context, error);

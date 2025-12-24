@@ -62,7 +62,7 @@ export interface InjecoratorInterceptor {
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @returns returned function will be called when leaving the controller method
    */
-  intercept: (context: ExecutionContext) => OrPromise | OrPromise<Func>;
+  intercept: (context: ExecutionContext) => OrPromise | OrPromise<(resultOrError: any | Error) => any>;
 }
 
 export type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];

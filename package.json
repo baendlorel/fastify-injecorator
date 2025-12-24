@@ -1,6 +1,6 @@
 {
   "name": "fastify-injecorator",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "A NestJS like fastify plugin for dependency injection",
   "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
   "purpose": "npm",

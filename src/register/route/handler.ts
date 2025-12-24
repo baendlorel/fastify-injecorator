@@ -22,10 +22,11 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
   const { guard, interceptor, pipe, filter } = middlewares;
   return async function (request: FastifyRequest, reply: FastifyReply) {
     const context = new ExecutionContext([request, reply], 'http', controller, method);
-    try {
-      // Interceptor enter
-      const interceptResult = await interceptor(context);
 
+    // Interceptor enter
+    const interceptResult = await interceptor(context);
+
+    try {
       // Guard
       await guard(context);
 
@@ -48,6 +49,10 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
 
       return result;
     } catch (error) {
+      // Interceptor leave (cleanup on error)
+      const leaves = interceptResult.results.filter(isFunction).reverse();
+      await run(leaves);
+
       // Filter
       await filter(context, error);
     }

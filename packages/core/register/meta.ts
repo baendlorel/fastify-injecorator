@@ -1,7 +1,7 @@
 import { ReflectDeep } from 'reflect-deep';
 import { concatArr } from 'concat-arr';
-import { Class, Key } from '@/types/primitive.js';
-import { RouteBasic, RouteConfig, RouteOptType } from '@/types/index.js';
+import { Class, Key } from '@core/types/primitive.js';
+import { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import {
   ProviderMeta,
   ControllerMeta,
@@ -11,7 +11,7 @@ import {
   DynamicModule,
   ProviderOptions,
   InjectToken,
-} from '@/types/injecorator.js';
+} from '@core/types/injecorator.js';
 import {
   RouteApiSchema,
   InterceptorGetter,
@@ -20,10 +20,10 @@ import {
   PipeOptions,
   PipeGetter,
   PipeFullSchema,
-} from '@/types/middleware.js';
+} from '@core/types/middleware.js';
 
-import { sym } from '@/common/index.js';
-import { splitPath, toModuleClass } from '@/common/utils.js';
+import { sym } from '@core/common/index.js';
+import { splitPath, toModuleClass } from '@core/common/utils.js';
 import { collection } from './collection.js';
 import ph from './provider.js';
 
@@ -203,7 +203,7 @@ export function metaIsPipe(cls: Class): boolean {
  */
 export function metaSetUseInterceptors(
   context: ClassDecoratorContext | ClassMethodDecoratorContext,
-  tokens: InjectToken[]
+  tokens: InjectToken[],
 ): boolean {
   if (context.kind === 'class') {
     return metaSet(context, [sym.interceptor.controller], tokens);
@@ -222,7 +222,7 @@ export function metaGetUseInterceptors(cls: Class): InterceptorGetter {
 
 export function metaSetUseGuards(
   context: ClassDecoratorContext | ClassMethodDecoratorContext,
-  tokens: InjectToken[]
+  tokens: InjectToken[],
 ): boolean {
   if (context.kind === 'class') {
     return metaSet(context, [sym.guard.controller], tokens);
@@ -240,7 +240,7 @@ export function metaGetUseGuards(cls: Class): GuardGetter {
 
 export function metaSetUseFilters(
   context: ClassDecoratorContext | ClassMethodDecoratorContext,
-  tokens: InjectToken[]
+  tokens: InjectToken[],
 ): boolean {
   if (context.kind === 'class') {
     return metaSet(context, [sym.filter.controller], tokens);
@@ -258,7 +258,7 @@ export function metaGetUseFilters(cls: Class): FilterGetter {
 
 export function metaSetUsePipes(
   context: ClassDecoratorContext | ClassMethodDecoratorContext,
-  pipes: PipeOptions[]
+  pipes: PipeOptions[],
 ): boolean {
   if (context.kind === 'class') {
     return metaSet(context, [sym.pipe.controller], pipes);

@@ -1,6 +1,6 @@
-import { Func } from '@/types/primitive.js';
-import { expectMethodDecorator, expectString, expectOrString } from '@/asserts/index.js';
-import { metaSetRoute } from '@/register/meta.js';
+import { Func } from '@core/types/primitive.js';
+import { expectMethodDecorator, expectString, expectOrString } from '@core/asserts/index.js';
+import { metaSetRoute } from '@core/register/meta.js';
 
 function registerRoute(method: string) {
   return function (route?: string) {

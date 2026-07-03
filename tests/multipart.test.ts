@@ -2,11 +2,11 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import Fastify, { FastifyInstance } from 'fastify';
 import multipart from '@fastify/multipart';
 
-import { Controller, Post, File, Files, Module } from '@/index.js';
-import { apply } from '@/register/index.js';
-import { injector } from '@/register/lazy-injector.js';
-import type { MultipartFile } from '@/types/multipart.js';
-import { PipeFile } from '@/multipart/pipes/file.pipe.js';
+import { Controller, Post, File, Files, Module } from '@core/index.js';
+import { apply } from '@core/register/index.js';
+import { injector } from '@core/register/lazy-injector.js';
+import type { MultipartFile } from '@core/types/multipart.js';
+import { PipeFile } from '@core/multipart/pipes/file.pipe.js';
 
 describe('Multipart File Upload', () => {
   let app: FastifyInstance;
@@ -90,7 +90,7 @@ describe('Multipart File Upload', () => {
             filename: file.filename,
             mimetype: file.mimetype,
             size: (await file.toBuffer()).length,
-          }))
+          })),
         );
         return {
           count: files.length,

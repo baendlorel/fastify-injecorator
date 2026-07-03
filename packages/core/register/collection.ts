@@ -1,10 +1,10 @@
 import { ReflectDeep } from 'reflect-deep';
-import { Class, Key } from '@/types/primitive.js';
-import { ModuleMeta } from '@/types/injecorator.js';
+import { Class, Key } from '@core/types/primitive.js';
+import { ModuleMeta } from '@core/types/injecorator.js';
 
-import { sym } from '@/common/index.js';
-import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@/common/inject-keys.js';
-import { expect } from '@/asserts/index.js';
+import { sym } from '@core/common/index.js';
+import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@core/common/inject-keys.js';
+import { expect } from '@core/asserts/index.js';
 
 /**
  * Collection of some global metadata

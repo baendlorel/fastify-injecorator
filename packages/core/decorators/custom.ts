@@ -1,9 +1,9 @@
-import { Class, Func, Key } from '@/types/primitive.js';
+import { Class, Func, Key } from '@core/types/primitive.js';
 
-import { expectDecoratorContext, throws } from '@/asserts/index.js';
-import { metaGet, metaSet } from '@/register/meta.js';
-import { ExecutionContext } from '@/common/execution-context.js';
-import { sym } from '@/common/sym.js';
+import { expectDecoratorContext, throws } from '@core/asserts/index.js';
+import { metaGet, metaSet } from '@core/register/meta.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
+import { sym } from '@core/common/sym.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path
@@ -50,7 +50,7 @@ export function createCustomDecorator<T = unknown>(key: Key) {
         metaSet<T>(context, [sym.custom.root, sym.custom.method, context.name, key], metadata);
       } else {
         throws(
-          `Invalid decorator context for custom decorator with key "${String(key)}", must be class or method, got: ${context.kind}`
+          `Invalid decorator context for custom decorator with key "${String(key)}", must be class or method, got: ${context.kind}`,
         );
       }
     };

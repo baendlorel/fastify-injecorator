@@ -1,6 +1,6 @@
-import { Class } from '@/types/primitive.js';
-import { expectArray, expectClass, expectInjectable } from '@/asserts/index.js';
-import { metaSetProvider, metaSetProviderOnClass } from '@/register/meta.js';
+import { Class } from '@core/types/primitive.js';
+import { expectArray, expectClass, expectInjectable } from '@core/asserts/index.js';
+import { metaSetProvider, metaSetProviderOnClass } from '@core/register/meta.js';
 
 /**
  * Use on services, configurations, etc.

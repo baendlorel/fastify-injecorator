@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifySchema } from 'fastify';
-import { ExecutionContext } from '@/common/execution-context.ts';
-import { OrPromise } from '@/types/utils.js';
+import { ExecutionContext } from '@core/common/execution-context.ts';
+import { OrPromise } from '@core/types/utils.js';
 
 /**
  * Get middlewares for a class method

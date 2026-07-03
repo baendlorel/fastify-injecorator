@@ -1,6 +1,6 @@
-import { Class } from '@/types/primitive.js';
-import { expectInjectable, expectOrString } from '@/asserts/index.js';
-import { metaSetController } from '@/register/meta.js';
+import { Class } from '@core/types/primitive.js';
+import { expectInjectable, expectOrString } from '@core/asserts/index.js';
+import { metaSetController } from '@core/register/meta.js';
 
 /**
  * Use to register a controller.

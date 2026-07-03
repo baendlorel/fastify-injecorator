@@ -1,10 +1,10 @@
-import { Class, Func } from '@/types/primitive.js';
-import { InjectToken } from '@/types/injecorator.js';
-import { InjecoratorFilter } from '@/types/middleware.js';
+import { Class, Func } from '@core/types/primitive.js';
+import { InjectToken } from '@core/types/injecorator.js';
+import { InjecoratorFilter } from '@core/types/middleware.js';
 
-import { expectHasOneHook, expect } from '@/asserts/index.js';
-import { metaSetFilters, metaSetUseFilters } from '@/register/meta.js';
-import { subclassOf } from '@/common/subclass-of.js';
+import { expectHasOneHook, expect } from '@core/asserts/index.js';
+import { metaSetFilters, metaSetUseFilters } from '@core/register/meta.js';
+import { subclassOf } from '@core/common/subclass-of.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';

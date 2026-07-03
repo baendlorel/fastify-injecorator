@@ -11,7 +11,7 @@ import {
   RouteGenericInterface,
   RouteShorthandOptions,
 } from 'fastify';
-import { sym } from '@/common/index.js';
+import { sym } from '@core/common/index.js';
 import { RouteApiSchema } from './middleware.js';
 import { Key } from './primitive.js';
 

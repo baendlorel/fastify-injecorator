@@ -1,11 +1,11 @@
-import { ExecutionContext } from '@/common/execution-context.js';
-import { sym } from '@/common/sym.js';
-import { throws } from '@/asserts/expect.js';
-import { metaGet } from '@/register/meta.js';
-import { InjecoratorPipe } from '@/types/middleware.js';
-import { FileUploadMeta, MultipartFile } from '@/types/multipart.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
+import { sym } from '@core/common/sym.js';
+import { throws } from '@core/asserts/expect.js';
+import { metaGet } from '@core/register/meta.js';
+import { InjecoratorPipe } from '@core/types/middleware.js';
+import { FileUploadMeta, MultipartFile } from '@core/types/multipart.js';
 import { UploadedFile } from '../uploaded-file.js';
-import { Pipe } from '@/decorators/middlewares/pipe.js';
+import { Pipe } from '@core/decorators/middlewares/pipe.js';
 
 /**
  * Pipe for handling file uploads

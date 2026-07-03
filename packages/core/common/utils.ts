@@ -1,6 +1,6 @@
-import { Class } from '@/types/primitive.js';
-import { DynamicModule } from '@/types/injecorator.js';
-import { throws, likeModule } from '@/asserts/index.js';
+import { Class } from '@core/types/primitive.js';
+import { DynamicModule } from '@core/types/injecorator.js';
+import { throws, likeModule } from '@core/asserts/index.js';
 
 const PATH_REGEX = /^\/?(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)(\/(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+))*$/;
 

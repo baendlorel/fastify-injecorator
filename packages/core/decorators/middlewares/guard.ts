@@ -1,9 +1,9 @@
-import { Class, Func } from '@/types/primitive.js';
-import { InjectToken } from '@/types/injecorator.js';
-import { InjecoratorGuard } from '@/types/middleware.js';
+import { Class, Func } from '@core/types/primitive.js';
+import { InjectToken } from '@core/types/injecorator.js';
+import { InjecoratorGuard } from '@core/types/middleware.js';
 
-import { expectHasOneHook, expect } from '@/asserts/index.js';
-import { metaSetGuard, metaSetUseGuards } from '@/register/meta.js';
+import { expectHasOneHook, expect } from '@core/asserts/index.js';
+import { metaSetGuard, metaSetUseGuards } from '@core/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
@@ -16,7 +16,7 @@ export function Guard() {
     expectHasOneHook<InjecoratorGuard>(
       target,
       hooks,
-      `Guard class must implement at least one hook: [${hooks.join(', ')}]`
+      `Guard class must implement at least one hook: [${hooks.join(', ')}]`,
     );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);

@@ -1,9 +1,9 @@
-import { Class, Func } from '@/types/primitive.js';
-import { InjecoratorInterceptor } from '@/types/middleware.js';
-import { InjectToken } from '@/types/injecorator.js';
+import { Class, Func } from '@core/types/primitive.js';
+import { InjecoratorInterceptor } from '@core/types/middleware.js';
+import { InjectToken } from '@core/types/injecorator.js';
 
-import { expectHasOneHook, expect } from '@/asserts/index.js';
-import { metaSetInterceptor, metaSetUseInterceptors } from '@/register/meta.js';
+import { expectHasOneHook, expect } from '@core/asserts/index.js';
+import { metaSetInterceptor, metaSetUseInterceptors } from '@core/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
@@ -16,7 +16,7 @@ export function Interceptor() {
     expectHasOneHook<InjecoratorInterceptor>(
       target,
       hooks,
-      `Interceptor class must implement at least one hook: [${hooks.join(', ')}]`
+      `Interceptor class must implement at least one hook: [${hooks.join(', ')}]`,
     );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);

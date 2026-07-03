@@ -1,8 +1,8 @@
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
-import { Class } from '@/types/primitive.js';
-import { InjectArg } from '@/types/injecorator.js';
-import { sym } from '@/common/index.js';
+import { Class } from '@core/types/primitive.js';
+import { InjectArg } from '@core/types/injecorator.js';
+import { sym } from '@core/common/index.js';
 
 import { expectClass, expectObject, throws } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';

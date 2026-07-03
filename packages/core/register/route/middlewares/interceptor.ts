@@ -1,7 +1,7 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
-import { InjectToken } from '@/types/injecorator.js';
-import { InterceptorTask, InjecoratorInterceptor } from '@/types/middleware.js';
-import { injector } from '@/register/lazy-injector.js';
+import { InjectToken } from '@core/types/injecorator.js';
+import { InterceptorTask, InjecoratorInterceptor } from '@core/types/middleware.js';
+import { injector } from '@core/register/lazy-injector.js';
 
 /**
  * Create a preValidation hook for the route

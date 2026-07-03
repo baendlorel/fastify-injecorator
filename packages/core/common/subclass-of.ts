@@ -1,4 +1,4 @@
-import { Class } from '@/types/primitive.js';
+import { Class } from '@core/types/primitive.js';
 import { $getPrototypeOf } from './native.js';
 
 /**

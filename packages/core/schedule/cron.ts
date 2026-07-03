@@ -1,13 +1,13 @@
 import { CronExpressionParser } from 'cron-parser';
-import { Class, Func, Instance } from '@/types/primitive.js';
-import { CronOptions } from '@/types/cron.js';
+import { Class, Func, Instance } from '@core/types/primitive.js';
+import { CronOptions } from '@core/types/cron.js';
 
-import { sym } from '@/common/sym.js';
-import { expectMethodDecorator } from '@/asserts/decorator-context.js';
-import { metaGet, metaSet } from '@/register/meta.js';
-import { $entries } from '@/common/native.js';
-import { isObject, orFunction } from '@/asserts/whether.js';
-import { throws } from '@/asserts/expect.js';
+import { sym } from '@core/common/sym.js';
+import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
+import { metaGet, metaSet } from '@core/register/meta.js';
+import { $entries } from '@core/common/native.js';
+import { isObject, orFunction } from '@core/asserts/whether.js';
+import { throws } from '@core/asserts/expect.js';
 
 const defaultArgsGetter = () => [];
 

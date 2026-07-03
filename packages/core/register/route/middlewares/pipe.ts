@@ -1,8 +1,8 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
-import { PipeOptions, PipeTask, PipeFullSchema, InjecoratorPipe } from '@/types/middleware.js';
-import { InjectToken } from '@/types/injecorator.js';
+import { PipeOptions, PipeTask, PipeFullSchema, InjecoratorPipe } from '@core/types/middleware.js';
+import { InjectToken } from '@core/types/injecorator.js';
 
-import { injector } from '@/register/lazy-injector.js';
+import { injector } from '@core/register/lazy-injector.js';
 
 export function createPipe(pipeOpts: PipeOptions[]): TaskifyAsync<PipeTask> {
   const tokens: InjectToken[] = [];

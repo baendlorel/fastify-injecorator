@@ -1,9 +1,9 @@
-import { Class, Func } from '@/types/primitive.js';
-import { InjectToken } from '@/types/injecorator.js';
+import { Class, Func } from '@core/types/primitive.js';
+import { InjectToken } from '@core/types/injecorator.js';
 
-import { expectInjectArg } from '@/asserts/application.js';
-import { expectClassDecoratorContext, expectClassMethodDecoratorContext } from '@/asserts/decorator-context.js';
-import { expectClass, expectFunction } from '@/asserts/expect.js';
+import { expectInjectArg } from '@core/asserts/application.js';
+import { expectClassDecoratorContext, expectClassMethodDecoratorContext } from '@core/asserts/decorator-context.js';
+import { expectClass, expectFunction } from '@core/asserts/expect.js';
 
 /**
  * @param tokens tokens from `@UseXXXs(...tokens)`
@@ -13,7 +13,7 @@ import { expectClass, expectFunction } from '@/asserts/expect.js';
 export function expectMiddleware(
   tokens: InjectToken[],
   target: Class | Func,
-  context: ClassDecoratorContext | ClassMethodDecoratorContext
+  context: ClassDecoratorContext | ClassMethodDecoratorContext,
 ) {
   if (context.kind === 'class') {
     expectClass(target as Class, 'target of class decorator must be a class');

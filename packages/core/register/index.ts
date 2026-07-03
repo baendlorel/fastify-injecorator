@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { FastifyInjecoratorOptions } from '@/types/injecorator.js';
-import { startCronJobs } from '@/schedule/cron.js';
+import { FastifyInjecoratorOptions } from '@core/types/injecorator.js';
+import { startCronJobs } from '@core/schedule/cron.js';
 
 import { clearExpectCache, expectModule } from './expect-module.js';
 import moduleRegister from './module.js';

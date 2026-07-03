@@ -52,21 +52,18 @@ const __PKG_INFO__ = `## About
  * @description ${pkg.description.replace(/\n/g, '\n * \n * ')}
  * @copyright Copyright (c) ${new Date().getFullYear()} ${pkg.author.name}. All rights reserved.`;
 
-// External dependencies
-const external = [
-  'cron-parser',
-  // ...Object.keys(pkg.dependencies || {}),
-  // ...Object.keys(pkg.peerDependencies || {}),
-];
-
 export default defineConfig({
   entry: [{ index: 'src/index.ts' }], // { cli: 'src/cli/index.ts' }
   format: ['esm', 'cjs'],
-  external,
+  external: ['cron-parser'],
   dts: true,
   sourcemap: false,
   alias: {
-    '@/': './src/',
+    '@shared/': './packages/_shared/',
+    '@core/': './src/',
+    '@schema/': './packages/schema/',
+    '@swagger/': './packages/swagger/',
+    '@tests/': './tests/',
   },
   define: {
     __IS_DEV__: 'false',

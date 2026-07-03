@@ -11,12 +11,12 @@ import {
   getCustomClassMetadata,
   getCustomMethodMetadata,
   ExecutionContext,
-} from '@/index.js';
-import { apply } from '@/register/index.js';
-import { InjecoratorGuard } from '@/types/middleware.js';
-import { injector } from '@/register/lazy-injector.js';
-import { metaGet } from '@/register/meta.js';
-import { sym } from '@/common/sym.js';
+} from '@core/index.js';
+import { apply } from '@core/register/index.js';
+import { InjecoratorGuard } from '@core/types/middleware.js';
+import { injector } from '@core/register/lazy-injector.js';
+import { metaGet } from '@core/register/meta.js';
+import { sym } from '@core/common/sym.js';
 
 describe('Custom Decorator Factory', () => {
   afterEach(() => {

@@ -1,7 +1,7 @@
-import { Class, Func, Key } from '@/types/primitive.js';
-import { InjectToken } from '@/types/injecorator.js';
+import { Class, Func, Key } from '@core/types/primitive.js';
+import { InjectToken } from '@core/types/injecorator.js';
 
-import { $entries, $isArray } from '@/common/native.js';
+import { $entries, $isArray } from '@core/common/native.js';
 import { InjecoratorError } from './error.js';
 import { isClass } from './whether.js';
 
@@ -82,7 +82,7 @@ export const expectFunction: (o: any, msg: string) => asserts o is Func = (o, ms
 export const expectArray: <T = any>(
   arr: any,
   msg: string,
-  predicate?: (value: T, index: number, array: T[]) => void
+  predicate?: (value: T, index: number, array: T[]) => void,
 ) => asserts arr is T[] = (arr, msg, predicate) => {
   if (!$isArray(arr)) {
     throw new InjecoratorError(msg);
@@ -98,7 +98,7 @@ export const expectArray: <T = any>(
 export const expectRecord: <V>(
   target: unknown,
   predicate: (value: V, key?: Key) => void,
-  msg: string
+  msg: string,
 ) => asserts target is Record<Key, V> = (target, predicate, msg) => {
   expectObject(target, msg);
   for (const [key, value] of $entries(target)) {

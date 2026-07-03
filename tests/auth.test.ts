@@ -1,12 +1,12 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import fastify, { FastifyRequest } from 'fastify';
-import { Module } from '@/decorators/module.js';
-import { Controller } from '@/decorators/router/controller.js';
-import { Get, Post } from '@/decorators/router/http-methods.js';
-import { UseGuards } from '@/decorators/middlewares/guard.js';
-import { apply } from '@/register/index.js';
-import { injector } from '@/register/lazy-injector.js';
-import { JwtService, JwtGuard } from '@/auth/index.js';
+import { Module } from '@core/decorators/module.js';
+import { Controller } from '@core/decorators/router/controller.js';
+import { Get, Post } from '@core/decorators/router/http-methods.js';
+import { UseGuards } from '@core/decorators/middlewares/guard.js';
+import { apply } from '@core/register/index.js';
+import { injector } from '@core/register/lazy-injector.js';
+import { JwtService, JwtGuard } from '@core/auth/index.js';
 
 describe('JWT Authentication', () => {
   afterEach(() => {

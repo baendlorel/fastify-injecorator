@@ -2,7 +2,7 @@
 export { File, Files } from './decorators.js';
 
 // Types
-export type { MultipartFile, FileUploadOptions, FileUploadMeta } from '@/types/multipart.js';
+export type { MultipartFile, FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
 
 // Pipe
 export { PipeFile } from './pipes/file.pipe.js';

@@ -1,8 +1,8 @@
-import { Func } from '@/types/primitive.js';
-import { RouteOptType } from '@/types/index.js';
+import { Func } from '@core/types/primitive.js';
+import { RouteOptType } from '@core/types/index.js';
 
-import { expectObject, expectMethodDecorator } from '@/asserts/index.js';
-import { metaSetOpt } from '@/register/meta.js';
+import { expectObject, expectMethodDecorator } from '@core/asserts/index.js';
+import { metaSetOpt } from '@core/register/meta.js';
 
 /**
  * Set route options

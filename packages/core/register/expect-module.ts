@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { inspect } from 'node:util';
-import { InjectMetadata, ProviderOptions } from '@/types/injecorator.js';
-import { Class, Key } from '@/types/primitive.js';
+import { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
+import { Class, Key } from '@core/types/primitive.js';
 
-import { sym } from '@/common/index.js';
-import { RouteConfig } from '@/types/index.js';
-import { toModuleClass } from '@/common/utils.js';
+import { sym } from '@core/common/index.js';
+import { RouteConfig } from '@core/types/index.js';
+import { toModuleClass } from '@core/common/utils.js';
 import {
   expectArray,
   expectBoolean,
@@ -22,10 +22,10 @@ import {
   isKey,
   isObject,
   isPathNode,
-} from '@/asserts/index.js';
-import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@/register/meta.js';
+} from '@core/asserts/index.js';
+import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@core/register/meta.js';
 import ph from './provider.js';
-import { $isArray, $values } from '@/common/native.js';
+import { $isArray, $values } from '@core/common/native.js';
 
 const moduleCache = new Set<any>();
 const controllerCache = new Set<any>();
@@ -113,7 +113,7 @@ export function expectController(target: unknown) {
       expectArray(basic.route, 'Route should be a string array', pred);
       expectOrObject(v[sym.route.opt], `${target.name}: opts should be an object`);
     },
-    `${target.name}: should have a record of route metadata`
+    `${target.name}: should have a record of route metadata`,
   );
 
   expectArray(controlled.prefix, 'controller prefix must be a string', (p, i) => {
@@ -154,7 +154,7 @@ export function expectModule(target: unknown): asserts target is Class {
   if (mm.exports) {
     // & exports must be a subarray of providers
     expectArray(mm.exports, 'exports must be an array', (exported) =>
-      mm.providers.includes(exported) ? undefined : 'Exported providers must be a subarray of providers'
+      mm.providers.includes(exported) ? undefined : 'Exported providers must be a subarray of providers',
     );
     mm.exports.forEach((t) => expectInjectable(t));
   }

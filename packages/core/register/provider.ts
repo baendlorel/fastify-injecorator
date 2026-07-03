@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
-import { Class, Instance, Key } from '@/types/primitive.js';
-import { expectClass, expectFunction, expectKey, throws, isClass, isFunction } from '@/asserts/index.js';
+import { Class, Instance, Key } from '@core/types/primitive.js';
+import { expectClass, expectFunction, expectKey, throws, isClass, isFunction } from '@core/asserts/index.js';
 import {
   InjectArg,
   ProviderOptions,
@@ -8,7 +8,7 @@ import {
   ProviderUseValue,
   ProviderUseFactory,
   ProviderUseExisting,
-} from '@/types/injecorator.js';
+} from '@core/types/injecorator.js';
 
 namespace ph {
   export function match(
@@ -18,7 +18,7 @@ namespace ph {
       useValue?: (token: Key, value: Instance) => unknown;
       useFactory?: (token: Key, factory: (...instances: Instance[]) => Instance, inject: (Class | Key)[]) => unknown;
       useExisting?: (token: Key, existingToken: Key) => unknown;
-    }
+    },
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 

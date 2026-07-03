@@ -1,10 +1,10 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
-import { GuardTask, InjecoratorGuard } from '@/types/middleware.js';
-import { InjectToken } from '@/types/injecorator.js';
+import { GuardTask, InjecoratorGuard } from '@core/types/middleware.js';
+import { InjectToken } from '@core/types/injecorator.js';
 
-import { ForbiddenException } from '@/exceptions/index.js';
-import { injector } from '@/register/lazy-injector.js';
-import { ExecutionContext } from '@/common/execution-context.js';
+import { ForbiddenException } from '@core/exceptions/index.js';
+import { injector } from '@core/register/lazy-injector.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
 
 /**
  * Create a preValidation hook for the route

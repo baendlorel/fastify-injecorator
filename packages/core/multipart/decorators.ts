@@ -1,8 +1,8 @@
-import { sym } from '@/common/sym.js';
-import { metaSet } from '@/register/meta.js';
-import { FileUploadOptions, FileUploadMeta } from '@/types/multipart.js';
-import { Func } from '@/types/primitive.js';
-import { UsePipes } from '@/decorators/middlewares/pipe.js';
+import { sym } from '@core/common/sym.js';
+import { metaSet } from '@core/register/meta.js';
+import { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
+import { Func } from '@core/types/primitive.js';
+import { UsePipes } from '@core/decorators/middlewares/pipe.js';
 import { PipeFile } from './pipes/file.pipe.js';
 
 /**

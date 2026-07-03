@@ -1,4 +1,4 @@
-import { Class, Func, Key } from '@/types/primitive.js';
+import { Class, Func, Key } from '@core/types/primitive.js';
 import {
   InjectToken,
   InjectArg,
@@ -7,10 +7,10 @@ import {
   ProviderUseClass,
   ProviderUseFactory,
   ProviderUseExisting,
-} from '@/types/injecorator.js';
+} from '@core/types/injecorator.js';
 
-import { $fnToString, $isArray } from '@/common/native.js';
-import { metaGetModule } from '@/register/meta.js';
+import { $fnToString, $isArray } from '@core/common/native.js';
+import { metaGetModule } from '@core/register/meta.js';
 
 export function isObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;

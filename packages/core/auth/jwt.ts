@@ -1,9 +1,9 @@
 import { createHmac } from 'node:crypto';
 import { FastifyRequest } from 'fastify';
-import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@/types/auth.js';
+import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 
-import { $get, $set } from '@/common/native.js';
-import { sym } from '@/common/sym.js';
+import { $get, $set } from '@core/common/native.js';
+import { sym } from '@core/common/sym.js';
 
 /**
  * Simple JWT Service implementation

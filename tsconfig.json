@@ -14,10 +14,20 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@/*": ["packages/core/*"],
+      "@shared/*": ["./packages/_shared/*"],
+      "@core/*": ["./packages/core/*"],
+      "@schema/*": ["./packages/schema/*"],
+      "@swagger/*": ["./packages/swagger/*"],
       "@tests/*": ["./tests/*"]
     }
   },
-  "include": ["packages/core/**/*.ts", "example/**/*.ts", "tests/**/*.ts"],
+  "include": [
+    "packages/_shared/**/*.ts",
+    "packages/core/**/*.ts",
+    "packages/schema/**/*.ts",
+    "packages/swagger/**/*.ts",
+    "example/**/*.ts",
+    "tests/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

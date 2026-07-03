@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import { toAssigned } from 'to-assigned';
-import { Class } from '@/types/primitive.js';
+import { Class } from '@core/types/primitive.js';
 
-import { sym, $values, $define } from '@/common/index.js';
+import { sym, $values, $define } from '@core/common/index.js';
 import { injector } from '../lazy-injector.js';
 import {
   metaGetController,

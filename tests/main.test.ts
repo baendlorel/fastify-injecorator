@@ -1,12 +1,12 @@
 import { describe, afterEach, it, expect } from 'vitest';
 import fastify from 'fastify';
 
-import { Injectable } from '@/decorators/injectable.js';
-import { Inject } from '@/decorators/inject.js';
-import { Module } from '@/decorators/module.js';
-import { apply } from '@/register/index.js';
-import { metaGetModule, metaGetProvider } from '@/register/meta.js';
-import { injector } from '@/register/lazy-injector.js';
+import { Injectable } from '@core/decorators/injectable.js';
+import { Inject } from '@core/decorators/inject.js';
+import { Module } from '@core/decorators/module.js';
+import { apply } from '@core/register/index.js';
+import { metaGetModule, metaGetProvider } from '@core/register/meta.js';
+import { injector } from '@core/register/lazy-injector.js';
 describe('Decorators Functionality', () => {
   afterEach(() => {
     injector.clear();

@@ -1,5 +1,5 @@
-import { BaseHttpException } from '@/types/injecorator.js';
-import { HttpStatus } from '@/common/status.js';
+import { BaseHttpException } from '@core/types/injecorator.js';
+import { HttpStatus } from '@core/common/status.js';
 
 /**
  * Base HTTP exception class
@@ -8,7 +8,7 @@ export class HttpException extends Error implements BaseHttpException {
   constructor(
     public readonly message: string,
     public readonly statusCode: HttpStatus,
-    public readonly error: string
+    public readonly error: string,
   ) {
     super(message);
     this.name = this.constructor.name;

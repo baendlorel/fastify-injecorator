@@ -1,8 +1,8 @@
-import { Func } from '@/types/primitive.js';
-import { RouteApiSchema } from '@/types/middleware.js';
+import { Func } from '@core/types/primitive.js';
+import { RouteApiSchema } from '@core/types/middleware.js';
 
-import { expectMethodDecorator, expectObject } from '@/asserts/index.js';
-import { metaSetSchema } from '@/register/meta.js';
+import { expectMethodDecorator, expectObject } from '@core/asserts/index.js';
+import { metaSetSchema } from '@core/register/meta.js';
 
 /**
  * Set api schema info, **not validation schema**

@@ -1,11 +1,11 @@
 import { ReflectDeep } from 'reflect-deep';
-import { ModuleMeta, DynamicModule } from '@/types/injecorator.js';
-import { Class } from '@/types/primitive.js';
+import { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
+import { Class } from '@core/types/primitive.js';
 
-import { sym } from '@/common/index.js';
-import { createNamedClass } from '@/common/utils.js';
-import { expectClassNotDecorated, expectModulable } from '@/asserts/index.js';
-import { metaSetModule } from '@/register/meta.js';
+import { sym } from '@core/common/index.js';
+import { createNamedClass } from '@core/common/utils.js';
+import { expectClassNotDecorated, expectModulable } from '@core/asserts/index.js';
+import { metaSetModule } from '@core/register/meta.js';
 import { toInjectable } from './injectable.js';
 
 /**

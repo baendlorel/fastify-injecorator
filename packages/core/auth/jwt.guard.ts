@@ -1,8 +1,8 @@
-import { Class } from '@/types/primitive.js';
-import { InjecoratorGuard } from '@/types/middleware.js';
+import { Class } from '@core/types/primitive.js';
+import { InjecoratorGuard } from '@core/types/middleware.js';
 
-import { Guard } from '@/decorators/middlewares/guard.js';
-import { ExecutionContext } from '@/common/execution-context.js';
+import { Guard } from '@core/decorators/middlewares/guard.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
 import { jwt as defaultJwt } from './jwt.js';
 
 const guards = new Map<typeof defaultJwt, Class<InjecoratorGuard>>();

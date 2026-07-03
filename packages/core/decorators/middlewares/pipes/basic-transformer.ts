@@ -1,11 +1,11 @@
 import { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
-import { PipeSchema, PipeFullSchema } from '@/types/middleware.js';
-import { isFunction, isObject } from '@/asserts/whether.js';
+import { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
+import { isFunction, isObject } from '@core/asserts/whether.js';
 
-import { ExecutionContext } from '@/common/execution-context.js';
-import { sym } from '@/common/sym.js';
-import { promiseTry } from '@/common/promise-try.js';
-import { BadRequestException } from '@/exceptions/index.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
+import { sym } from '@core/common/sym.js';
+import { promiseTry } from '@core/common/promise-try.js';
+import { BadRequestException } from '@core/exceptions/index.js';
 
 type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
 

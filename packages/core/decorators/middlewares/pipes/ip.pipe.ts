@@ -1,6 +1,6 @@
-import { ExecutionContext } from '@/common/execution-context.js';
-import { InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@/types/middleware.js';
-import { OrPromise } from '@/types/utils.js';
+import { ExecutionContext } from '@core/common/execution-context.js';
+import { InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@core/types/middleware.js';
+import { OrPromise } from '@core/types/utils.js';
 import { basicTransformer } from './basic-transformer.js';
 
 export class PipeIp implements InjecoratorPipe {

@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 import type { MultipartFile as FastifyMultipartFile } from '@fastify/multipart';
-import { MultipartFile } from '@/types/multipart.js';
+import { MultipartFile } from '@core/types/multipart.js';
 
 /**
  * Wrapper class for uploaded files

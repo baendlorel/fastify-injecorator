@@ -1,4 +1,4 @@
-import { ProviderStandardOptions, ProviderOptions } from '@/types/injecorator.js';
+import { ProviderStandardOptions, ProviderOptions } from '@core/types/injecorator.js';
 import { $get } from './native.js';
 
 export const APP_LOGGER = Symbol('APP_LOGGER');

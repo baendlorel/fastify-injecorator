@@ -1,4 +1,4 @@
-import { Class, Func } from '@/types/primitive.js';
+import { Class, Func } from '@core/types/primitive.js';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,
@@ -7,7 +7,7 @@ import {
   ArgsTypeRpc,
   WsArgumentsHost,
   ArgsTypeWebSocket,
-} from '@/types/middleware-context.js';
+} from '@core/types/middleware-context.js';
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 /**
@@ -19,7 +19,7 @@ export class ExecutionContext<CT extends keyof ArgsTypeMap = 'http'> {
     private readonly args: ArgsTypeMap[CT],
     private readonly contextType: CT,
     private readonly controller: Class,
-    private readonly contextHandler: Func
+    private readonly contextHandler: Func,
   ) {}
 
   /**

@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@/types/injecorator.js';
-import { Class } from '@/types/primitive.js';
+import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
+import { Class } from '@core/types/primitive.js';
 
-import { toDynamicModule, toModuleClass } from '@/common/index.js';
-import { throws } from '@/asserts/index.js';
-import { tryToGetGlobalToken } from '@/common/inject-keys.js';
+import { toDynamicModule, toModuleClass } from '@core/common/index.js';
+import { throws } from '@core/asserts/index.js';
+import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
 
 import { collection } from './collection.js';
 import { expectAccessible, expectModule } from './expect-module.js';

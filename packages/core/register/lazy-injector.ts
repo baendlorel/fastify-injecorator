@@ -1,12 +1,12 @@
 import { FastifyInstance } from 'fastify';
-import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@/types/injecorator.js';
-import { InjecoratorMiddleware } from '@/types/middleware.js';
-import { Class, Func, Instance, Key } from '@/types/primitive.js';
+import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
+import { InjecoratorMiddleware } from '@core/types/middleware.js';
+import { Class, Func, Instance, Key } from '@core/types/primitive.js';
 
-import { $construct, $getPrototypeOf, $ownKeys, toModuleClass } from '@/common/index.js';
-import { APP_LOGGER } from '@/common/inject-keys.js';
-import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@/asserts/index.js';
-import { bindCronJob } from '@/schedule/cron.js';
+import { $construct, $getPrototypeOf, $ownKeys, toModuleClass } from '@core/common/index.js';
+import { APP_LOGGER } from '@core/common/inject-keys.js';
+import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@core/asserts/index.js';
+import { bindCronJob } from '@core/schedule/cron.js';
 
 import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
@@ -42,7 +42,7 @@ export namespace injector {
    */
   export function getMiddlewareHooks<T extends InjecoratorMiddleware>(
     tokens: InjectToken[],
-    handlerName: keyof T & Key
+    handlerName: keyof T & Key,
   ): Func[] {
     return tokens.map((token) => {
       const instance = get(isKey(token) ? token : token.name);
@@ -141,7 +141,7 @@ export namespace injector {
       expect(map.has(provide), `Provider '${String(provide)}' not found`);
       expect(
         map.has(tokenOfDependency),
-        `Dependency '${String(tokenOfDependency)}' of a provider '${String(provide)}' not found. Maybe '${String(tokenOfDependency)}' is not decorated by @Injectable or something`
+        `Dependency '${String(tokenOfDependency)}' of a provider '${String(provide)}' not found. Maybe '${String(tokenOfDependency)}' is not decorated by @Injectable or something`,
       );
 
       const instance = map.get(provide);

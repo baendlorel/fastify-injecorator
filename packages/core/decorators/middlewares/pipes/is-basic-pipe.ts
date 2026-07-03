@@ -1,4 +1,4 @@
-import { Class } from '@/types/primitive.js';
+import { Class } from '@core/types/primitive.js';
 
 import { PipeBody } from './body.pipe.js';
 import { PipeIp } from './ip.pipe.js';

@@ -1,11 +1,11 @@
 import fastify from 'fastify';
 import { describe, it, expect } from 'vitest';
 
-import { Injectable, Inject } from '@/index.js';
-import { injector } from '@/register/lazy-injector.js';
-import { Module } from '@/decorators/module.js';
-import { apply } from '@/register/index.js';
-import { promiseTry } from '@/common/promise-try.js';
+import { Injectable, Inject } from '@core/index.js';
+import { injector } from '@core/register/lazy-injector.js';
+import { Module } from '@core/decorators/module.js';
+import { apply } from '@core/register/index.js';
+import { promiseTry } from '@core/common/promise-try.js';
 
 describe('Injectorator Full', () => {
   it('Inject should inject dependency into class field', () => {

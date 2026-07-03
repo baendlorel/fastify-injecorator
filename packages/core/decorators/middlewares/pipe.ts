@@ -1,5 +1,5 @@
-import { Class, Func } from '@/types/primitive.js';
-import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@/types/middleware.js';
+import { Class, Func } from '@core/types/primitive.js';
+import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import {
   expectHasOneHook,
   expectInjectToken,
@@ -8,9 +8,9 @@ import {
   expect,
   isClass,
   isKey,
-} from '@/asserts/index.js';
-import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@/register/meta.js';
-import { $assign } from '@/common/native.js';
+} from '@core/asserts/index.js';
+import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js';
+import { $assign } from '@core/common/native.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -29,7 +29,7 @@ export function Pipe() {
     expectHasOneHook<InjecoratorPipe>(
       target,
       hooks,
-      `Pipe class must implement at least one hook: [${hooks.join(', ')}]`
+      `Pipe class must implement at least one hook: [${hooks.join(', ')}]`,
     );
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
@@ -69,7 +69,7 @@ function mergeSchema(
   field: 'body' | 'params' | 'querystring',
   input?: PipeSchema,
   ok?: PipeSchema,
-  other?: PipeFullSchema
+  other?: PipeFullSchema,
 ) {
   const o = {} as { body?: unknown; params?: unknown; querystring?: unknown; response?: unknown };
   if (input !== undefined) {

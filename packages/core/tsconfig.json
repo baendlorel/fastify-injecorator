@@ -10,10 +10,11 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
+      "@injecorator/shared": ["../shared/src/index.ts"],
       "@core/*": ["./src/*"],
-      "@shared/*": ["../_shared/src/*"]
+      "@shared/*": ["../shared/src/*"]
     }
   },
-  "include": ["**/*.ts", "../_shared/src/**/*.ts"],
+  "include": ["**/*.ts", "../shared/src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

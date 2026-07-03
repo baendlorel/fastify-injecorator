@@ -12,13 +12,14 @@ export default defineConfig({
   entry: [{ index: lib.join('src', 'index.ts') }], // { cli: 'src/cli/index.ts' }
   format: ['esm', 'cjs'],
   deps: {
-    neverBundle: ['cron-parser', /^fastify/, /^@fastify/],
+    neverBundle: ['cron-parser', /^fastify/, /^@fastify/, '@injecorator/shared'],
   },
   tsconfig: root.join('tsconfig.build.json'),
   dts: true,
   sourcemap: false,
   alias: {
-    '@shared/': packDir.join('_shared'),
+    '@injecorator/shared': packDir.join('shared', 'src', 'index.ts'),
+    '@shared/': packDir.join('shared'),
     '@core/': packDir.join('src'),
     '@schema/': packDir.join('schema'),
     '@swagger/': packDir.join('swagger'),

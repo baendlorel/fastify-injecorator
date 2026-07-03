@@ -11,7 +11,7 @@
     "paths": {
       "@injecorator/core": ["../core"],
       "@core/*": ["../core/*"],
-      "@shared/*": ["../_shared/*"]
+      "@shared/*": ["../shared/*"]
     }
   },
   "include": ["**/*.ts"],

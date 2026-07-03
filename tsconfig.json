@@ -14,7 +14,8 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@shared/*": ["./packages/_shared/src/*"],
+      "@injecorator/shared": ["./packages/shared/src/index.ts"],
+      "@shared/*": ["./packages/shared/src/*"],
       "@core/*": ["./packages/core/src/*"],
       "@schema/*": ["./packages/schema/src/*"],
       "@swagger/*": ["./packages/swagger/src/*"],
@@ -24,7 +25,7 @@
   "include": [
     "scripts/**/*.ts",
     "*.config.ts",
-    "packages/_shared/**/*.ts",
+    "packages/shared/**/*.ts",
     "packages/core/**/*.ts",
     "packages/schema/**/*.ts",
     "packages/swagger/**/*.ts",

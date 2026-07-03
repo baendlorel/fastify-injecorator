@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { OrPromise } from '@core/types/utils.js';
-
 /**
  * JWT payload type - can be extended by user
  */

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { FastifyRequest } from 'fastify';
-import type { Class, Func, Instance, Key } from './primitive.js';
 import type { HttpStatus } from '@core/common/status.js';
+import type { Class, Func, Key } from './primitive.js';
 
 export interface BaseHttpException {
   readonly message: string;
@@ -36,7 +38,7 @@ export interface ProviderUseFactory {
    * - If `inject` is provided, it will be injected into the factory function.
    *   - When `inject` = `[MyClass1, 'token1']`, the factory will be called as `useFactory(myClass1, instanceOfToken1)`.
    */
-  useFactory: (...instances: Instance[]) => Instance;
+  useFactory: (...instances: any[]) => any;
 
   inject?: (Class | Key)[];
 }
@@ -51,7 +53,7 @@ export interface ProviderUseValue {
    * Directly provide a value. No dependency injection is performed.
    * If dependencies are needed, the factory must inject them manually.
    */
-  useValue: Instance;
+  useValue: any;
 }
 
 export interface ProviderUseClass {

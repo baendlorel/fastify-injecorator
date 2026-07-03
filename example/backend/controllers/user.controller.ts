@@ -8,13 +8,13 @@ import { Inject } from '../../../packages/core/decorators/inject.js';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { UserService } from '../services/user.service.js';
-import { JwtGuard } from '../../../packages/core/auth/jwt.guard.js';
+import { JwtGuard } from '../../../packages/core/src/auth/jwt.guard.js';
 import { RolesGuard } from '../guards/roles.guard.js';
 import { Roles } from '../decorators/roles.decorator.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
 import { ParseIntPipe } from '../pipes/parse-int.pipe.js';
-import { BadRequestException } from '../../../packages/core/exceptions/index.js';
+import { BadRequestException } from '../../../packages/core/src/exceptions/index.js';
 
 @Controller('api/users')
 @UseInterceptors(TransformInterceptor)

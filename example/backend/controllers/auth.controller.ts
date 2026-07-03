@@ -8,11 +8,11 @@ import { UseFilters } from '../../../packages/core/decorators/middlewares/filter
 import { Inject } from '../../../packages/core/decorators/inject.js';
 
 import { UserService } from '../services/user.service.js';
-import { JwtGuard } from '../../../packages/core/auth/jwt.guard.js';
+import { JwtGuard } from '../../../packages/core/src/auth/jwt.guard.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
-import { UnauthorizedException } from '../../../packages/core/exceptions/index.js';
-import { jwt, JwtService } from '../../../packages/core/index.js';
+import { UnauthorizedException } from '../../../packages/core/src/exceptions/index.js';
+import { jwt, JwtService } from '../../../packages/core/src/index.js';
 
 @Controller('api/auth')
 @UseInterceptors(TransformInterceptor)

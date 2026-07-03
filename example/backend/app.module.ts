@@ -20,13 +20,13 @@ import { TransformInterceptor } from './interceptors/transform.interceptor.js';
 // Pipes
 import { ValidationPipe } from './pipes/validation.pipe.js';
 import { ParseIntPipe } from './pipes/parse-int.pipe.js';
-import { PipeFile } from '../../packages/core/multipart/pipes/file.pipe.js';
+import { PipeFile } from '../../packages/core/src/multipart/pipes/file.pipe.js';
 
 // Filters
 import { HttpExceptionFilter } from './filters/http-exception.filter.js';
 
 // Auth
-import { JwtGuard } from '../../packages/core/auth/jwt.guard.js';
+import { JwtGuard } from '../../packages/core/src/auth/jwt.guard.js';
 
 // Cron
 import { ScheduledTasks } from './cron/scheduled-tasks.js';

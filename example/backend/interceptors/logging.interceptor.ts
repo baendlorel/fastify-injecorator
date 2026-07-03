@@ -1,7 +1,7 @@
 import { Interceptor } from '../../../packages/core/decorators/middlewares/interceptor.js';
 import { Inject } from '../../../packages/core/decorators/inject.js';
-import { ExecutionContext } from '../../../packages/core/common/execution-context.js';
-import { InjecoratorInterceptor } from '../../../packages/core/types/middleware.js';
+import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
+import { InjecoratorInterceptor } from '../../../packages/core/src/types/middleware.js';
 import { LoggerService } from '../services/logger.service.js';
 
 @Interceptor()

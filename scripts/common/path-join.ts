@@ -30,6 +30,6 @@ String.prototype.safe = function () {
 };
 
 String.prototype.existsOr = function <T = string>(defaultValue: T = null as any): string | T | null {
-  console.log(`Checking existence of path: ${this.toString()}`);
+  // console.log(`Checking existence of path: ${this.toString()}`);
   return existsSync(this.toString()) ? this.toString() : defaultValue;
 };

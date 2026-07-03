@@ -4,13 +4,14 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@core/*": ["./*"],
-      "@shared/*": ["../_shared/*"]
+      "@core/*": ["./src/*"],
+      "@shared/*": ["../_shared/src/*"]
     }
   },
   "include": ["**/*.ts"],

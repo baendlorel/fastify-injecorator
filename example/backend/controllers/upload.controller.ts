@@ -1,9 +1,9 @@
 import { Controller } from '../../../packages/core/decorators/router/controller.js';
 import { Post } from '../../../packages/core/decorators/router/http-methods.js';
-import { File, Files } from '../../../packages/core/multipart/decorators.js';
+import { File, Files } from '../../../packages/core/src/multipart/decorators.js';
 import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
 import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
-import type { MultipartFile } from '../../../packages/core/types/multipart.js';
+import type { MultipartFile } from '../../../packages/core/src/types/multipart.js';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
@@ -11,7 +11,7 @@ import { dirname } from 'path';
 
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
-import { BadRequestException } from '../../../packages/core/exceptions/index.js';
+import { BadRequestException } from '../../../packages/core/src/exceptions/index.js';
 
 // todo 这里要换一个可以配置的地址
 const __filename = fileURLToPath(import.meta.url);

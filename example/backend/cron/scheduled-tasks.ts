@@ -1,5 +1,5 @@
 import { Injectable } from '../../../packages/core/decorators/injectable.js';
-import { Cron } from '../../../packages/core/schedule/cron.js';
+import { Cron } from '../../../packages/core/src/schedule/cron.js';
 import { Inject } from '../../../packages/core/decorators/inject.js';
 import { LoggerService } from '../services/logger.service.js';
 

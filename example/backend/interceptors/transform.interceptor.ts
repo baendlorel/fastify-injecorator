@@ -1,6 +1,6 @@
 import { Interceptor } from '../../../packages/core/decorators/middlewares/interceptor.js';
-import { ExecutionContext } from '../../../packages/core/common/execution-context.js';
-import { InjecoratorInterceptor } from '../../../packages/core/types/middleware.js';
+import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
+import { InjecoratorInterceptor } from '../../../packages/core/src/types/middleware.js';
 
 @Interceptor()
 export class TransformInterceptor implements InjecoratorInterceptor {

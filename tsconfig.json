@@ -14,10 +14,10 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@shared/*": ["./packages/_shared/*"],
-      "@core/*": ["./packages/core/*"],
-      "@schema/*": ["./packages/schema/*"],
-      "@swagger/*": ["./packages/swagger/*"],
+      "@shared/*": ["./packages/_shared/src/*"],
+      "@core/*": ["./packages/core/src/*"],
+      "@schema/*": ["./packages/schema/src/*"],
+      "@swagger/*": ["./packages/swagger/src/*"],
       "@tests/*": ["./tests/*"]
     }
   },

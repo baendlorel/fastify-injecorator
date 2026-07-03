@@ -1,5 +1,5 @@
 import { FastifyRequest } from 'fastify';
-import { Class } from './primitive.d.ts';
+import { Class } from './primitive.js';
 
 export interface BaseHttpException {
   readonly message: string;

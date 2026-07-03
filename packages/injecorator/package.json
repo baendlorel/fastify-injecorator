@@ -19,11 +19,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdown",
-    "check": "tsc --noEmit",
-    "lint": "oxlint ."
-  },
   "author": {
     "name": "Kasukabe Tsumugi",
     "email": "futami16237@gmail.com"

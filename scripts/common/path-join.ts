@@ -1,4 +1,4 @@
-import fs, { existsSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 declare global {

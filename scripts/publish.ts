@@ -1,8 +1,8 @@
 import { execSync } from 'node:child_process';
 import { writeFileSync } from 'node:fs';
+import { Version } from './common/version.js';
 
-import { Version } from '../common/version.js';
-import { ask } from './ask.js';
+import { ask } from './common/ask.js';
 import { syncReadme } from './readme.js';
 import { getPackageInfo, syncRootVersion, PackageInfo } from './package-info.js';
 import { buildWithInfo } from './build.js';

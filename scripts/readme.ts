@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 
-import { dirs } from '../common/consts.js';
+import { dirs } from './common/consts.js';
 
 export function syncReadme(_who?: string) {
   const rootReadmePath = dirs.root.join('documents', 'README.SYNC.md');

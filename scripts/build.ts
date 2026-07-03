@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 import { execSync } from 'node:child_process';
 
-import { dirs } from '../common/consts.js';
 import { getPackageInfo, syncRootVersion, PackageInfo } from './package-info.js';
+import { dirs } from './common/consts.js';
 
 export function build(who: string | undefined) {
   const group = getPackageInfo(who);
@@ -11,7 +11,6 @@ export function build(who: string | undefined) {
 }
 
 const config = dirs.root.join('tsdown.config.ts');
-const specialLibs = ['@ktjs/ts-plugin', void '@ktjs/kt-tsc', '@ktjs/example'].filter((t) => t !== undefined);
 
 export function buildWithInfo(info: PackageInfo) {
   console.log(`Building package: ${info.name}`);
@@ -21,8 +20,8 @@ export function buildWithInfo(info: PackageInfo) {
     fs.rmSync(dist, { recursive: true, force: true });
   }
 
-  if (specialLibs.includes(info.name)) {
-    execSync(`pnpm --filter ${info.name} run build`, { stdio: 'inherit', env: info.env });
+  if (info.json.scripts?.build !== undefined) {
+    execSync(`pnpm --filter ${info.name} run build`, { cwd: info.path, stdio: 'inherit', env: info.env });
     return;
   }
 

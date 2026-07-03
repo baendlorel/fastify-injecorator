@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { dirs } from '../common/consts.js';
+import { dirs } from './common/consts.js';
 import { getPackageInfo } from './package-info.js';
 
 export async function test(who: string | undefined) {

@@ -9,7 +9,9 @@ const root = import.meta.dirname;
 const packDir = root.join('packages');
 
 export default defineConfig({
+  cwd: lib,
   entry: [{ index: lib.join('src', 'index.ts') }], // { cli: 'src/cli/index.ts' }
+  outDir: 'dist',
   format: ['esm', 'cjs'],
   deps: {
     neverBundle: ['cron-parser', /^fastify/, /^@fastify/, /^@injecorator\//],

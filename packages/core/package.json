@@ -37,7 +37,7 @@
   "dependencies": {
     "@injecorator/shared": "workspace:*",
     "cron-parser": "^5.6.1",
-    "reflect-deep": "^1.5.3",
+    "reflect-deep": "^2.0.1",
     "serial-task": "^1.2.2"
   },
   "peerDependencies": {

@@ -1,39 +1,21 @@
 {
-  "name": "fastify-injecorator",
+  "name": "injecorator-monorepo",
   "version": "0.0.18",
-  "description": "A NestJS like fastify plugin for dependency injection",
-  "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
-  "purpose": "npm",
+  "description": "A NestJS like fastify plugin for dependency injection - Monorepo",
+  "private": true,
   "type": "module",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.mjs"
-    },
-    "./test": {
-      "types": "./dist/test.d.ts",
-      "import": "./dist/test.mjs",
-      "default": "./dist/test.mjs"
-    }
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "lines": "clear && find ./src -type f \\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" -o -name \"*.mjs\" -o -name \"*.cjs\" -o -name \"*.cpp\" -o -name \"*.h\" -o -name \"*.py\"  -o -name \"*.css\" -o -name \"*.rs\" -o -name \"*.rc\" \\) | xargs wc -l",
+    "build": "pnpm -r --filter './packages/**' build",
+    "check": "tsc --noEmit",
+    "lint": "oxlint .",
+    "test": "vitest",
     "testall": "clear && vitest",
     "stress": "clear && vitest '.stress.e2e-spec.ts'",
     "e2e": "clear && vitest '.e2e-spec.ts'",
     "spec": "clear && vitest '.spec.ts'",
-    "test": "clear && vitest '.test.ts'",
-    "build": "tsdown",
-    "check": "tsc --noEmit",
-    "lint": "oxlint .",
-    "pub": "pnpm build && npm publish",
-    "dev": "tsx watch src/main.ts"
+    "clean": "pnpm -r clean",
+    "dev": "tsx watch example/main.ts",
+    "lines": "clear && find ./packages -type f \\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" -o -name \"*.mjs\" -o -name \"*.cjs\" \\) | xargs wc -l"
   },
   "author": {
     "name": "Kasukabe Tsumugi",
@@ -48,32 +30,11 @@
     "decorator",
     "fastify",
     "typescript",
-    "javascript"
+    "javascript",
+    "dependency-injection",
+    "monorepo"
   ],
   "license": "MIT",
-  "dependencies": {
-    "@fastify/autoload": "^6.3.1",
-    "@fastify/one-line-logger": "^2.1.0",
-    "@fastify/sensible": "^6.0.4",
-    "@fastify/static": "^9.1.3",
-    "@fastify/swagger": "^9.7.0",
-    "@fastify/swagger-ui": "^6.0.0",
-    "axios": "^1.18.1",
-    "cron-parser": "^5.6.1",
-    "fastify": "^5.9.0",
-    "fastify-type-provider-zod": "7.0.0",
-    "reflect-deep": "^1.5.3",
-    "serial-task": "^1.2.2",
-    "zod": "^4.4.3"
-  },
-  "peerDependencies": {
-    "@fastify/multipart": "^9.3.0"
-  },
-  "peerDependenciesMeta": {
-    "@fastify/multipart": {
-      "optional": true
-    }
-  },
   "devDependencies": {
     "@anatine/zod-mock": "^3.14.0",
     "@rollup/plugin-replace": "^6.0.3",
@@ -84,7 +45,13 @@
     "rollup-plugin-func-macro": "^1.2.3",
     "tsdown": "^0.22.3",
     "tslib": "^2.8.1",
+    "tsx": "^4.19.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
 }

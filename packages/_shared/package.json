@@ -1,0 +1,43 @@
+{
+  "name": "@injecorator/shared",
+  "version": "0.0.18",
+  "description": "Shared utilities and types for injecorator packages",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "check": "tsc --noEmit",
+    "lint": "oxlint ."
+  },
+  "keywords": [
+    "utilities",
+    "shared",
+    "typescript",
+    "types"
+  ],
+  "author": {
+    "name": "Kasukabe Tsumugi",
+    "email": "futami16237@gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-replace": "^6.0.3",
+    "@types/node": "^26.1.0",
+    "rollup-plugin-func-macro": "^1.2.3",
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3"
+  }
+}

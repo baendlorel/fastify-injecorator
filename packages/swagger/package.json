@@ -1,0 +1,48 @@
+{
+  "name": "@injecorator/swagger",
+  "version": "0.0.18",
+  "description": "Swagger/OpenAPI integration for injecorator",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "check": "tsc --noEmit",
+    "lint": "oxlint ."
+  },
+  "keywords": [
+    "swagger",
+    "openapi",
+    "documentation",
+    "fastify"
+  ],
+  "author": {
+    "name": "Kasukabe Tsumugi",
+    "email": "futami16237@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@injecorator/core": "workspace:*",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^6.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-replace": "^6.0.3",
+    "@types/node": "^26.1.0",
+    "rollup-plugin-func-macro": "^1.2.3",
+    "tsdown": "^0.22.3",
+    "typescript": "^6.0.3"
+  }
+}

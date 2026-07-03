@@ -6,16 +6,16 @@
     "noEmit": true,
     "noEmitOnError": true,
     "strict": true,
-    "strictPropertyInitialization": false, // 允许未初始化的属性，用在装饰器上
+    "strictPropertyInitialization": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "baseUrl": ".", // 相对路径的起点
+    "rootDir": ".",
     "paths": {
-      "@/*": ["src/*"], // 把 @ 映射到 src
-      "@tests/*": ["tests/*"]
+      "@/*": ["./src/*"],
+      "@tests/*": ["./tests/*"]
     }
   },
   "include": ["src/**/*.ts", "example/**/*.ts", "tests/**/*.ts"],

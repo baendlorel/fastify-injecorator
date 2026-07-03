@@ -1,18 +1,18 @@
 import { FastifyRequest } from 'fastify';
-import { Controller } from '../../../src/decorators/router/controller.js';
-import { Get, Post } from '../../../src/decorators/router/http-methods.js';
-import { Body } from '../../../src/decorators/middlewares/pipe.js';
-import { UseGuards } from '../../../src/decorators/middlewares/guard.js';
-import { UseInterceptors } from '../../../src/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../src/decorators/middlewares/filter.js';
-import { Inject } from '../../../src/decorators/inject.js';
+import { Controller } from '../../../packages/core/decorators/router/controller.js';
+import { Get, Post } from '../../../packages/core/decorators/router/http-methods.js';
+import { Body } from '../../../packages/core/decorators/middlewares/pipe.js';
+import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
+import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
+import { Inject } from '../../../packages/core/decorators/inject.js';
 
 import { UserService } from '../services/user.service.js';
-import { JwtGuard } from '../../../src/auth/jwt.guard.js';
+import { JwtGuard } from '../../../packages/core/auth/jwt.guard.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
-import { UnauthorizedException } from '../../../src/exceptions/index.js';
-import { jwt, JwtService } from '../../../src/index.js';
+import { UnauthorizedException } from '../../../packages/core/exceptions/index.js';
+import { jwt, JwtService } from '../../../packages/core/index.js';
 
 @Controller('api/auth')
 @UseInterceptors(TransformInterceptor)

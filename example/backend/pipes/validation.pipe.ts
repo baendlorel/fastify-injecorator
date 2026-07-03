@@ -1,7 +1,7 @@
-import { Pipe } from '../../../src/decorators/middlewares/pipe.js';
-import { ExecutionContext } from '../../../src/common/execution-context.js';
-import { InjecoratorPipe, PipeFullSchema } from '../../../src/types/middleware.js';
-import { BadRequestException } from '../../../src/exceptions/index.js';
+import { Pipe } from '../../../packages/core/decorators/middlewares/pipe.js';
+import { ExecutionContext } from '../../../packages/core/common/execution-context.js';
+import { InjecoratorPipe, PipeFullSchema } from '../../../packages/core/types/middleware.js';
+import { BadRequestException } from '../../../packages/core/exceptions/index.js';
 
 @Pipe()
 export class ValidationPipe implements InjecoratorPipe {

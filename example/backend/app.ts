@@ -3,7 +3,7 @@ import multipart from '@fastify/multipart';
 import staticFiles from '@fastify/static';
 import { join } from 'path';
 
-import { apply } from '../../src/register/index.js';
+import { apply } from '../../packages/core/register/index.js';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {

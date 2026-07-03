@@ -1,20 +1,20 @@
-import { Controller } from '../../../src/decorators/router/controller.js';
-import { Get, Post, Patch, Delete } from '../../../src/decorators/router/http-methods.js';
-import { Body, Params, Query } from '../../../src/decorators/middlewares/pipe.js';
-import { UseGuards } from '../../../src/decorators/middlewares/guard.js';
-import { UseInterceptors } from '../../../src/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../src/decorators/middlewares/filter.js';
-import { Inject } from '../../../src/decorators/inject.js';
+import { Controller } from '../../../packages/core/decorators/router/controller.js';
+import { Get, Post, Patch, Delete } from '../../../packages/core/decorators/router/http-methods.js';
+import { Body, Params, Query } from '../../../packages/core/decorators/middlewares/pipe.js';
+import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
+import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
+import { Inject } from '../../../packages/core/decorators/inject.js';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { UserService } from '../services/user.service.js';
-import { JwtGuard } from '../../../src/auth/jwt.guard.js';
+import { JwtGuard } from '../../../packages/core/auth/jwt.guard.js';
 import { RolesGuard } from '../guards/roles.guard.js';
 import { Roles } from '../decorators/roles.decorator.js';
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
 import { ParseIntPipe } from '../pipes/parse-int.pipe.js';
-import { BadRequestException } from '../../../src/exceptions/index.js';
+import { BadRequestException } from '../../../packages/core/exceptions/index.js';
 
 @Controller('api/users')
 @UseInterceptors(TransformInterceptor)

@@ -1,9 +1,9 @@
-import { Controller } from '../../../src/decorators/router/controller.js';
-import { Post } from '../../../src/decorators/router/http-methods.js';
-import { File, Files } from '../../../src/multipart/decorators.js';
-import { UseInterceptors } from '../../../src/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../src/decorators/middlewares/filter.js';
-import type { MultipartFile } from '../../../src/types/multipart.js';
+import { Controller } from '../../../packages/core/decorators/router/controller.js';
+import { Post } from '../../../packages/core/decorators/router/http-methods.js';
+import { File, Files } from '../../../packages/core/multipart/decorators.js';
+import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
+import type { MultipartFile } from '../../../packages/core/types/multipart.js';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
@@ -11,7 +11,7 @@ import { dirname } from 'path';
 
 import { TransformInterceptor } from '../interceptors/transform.interceptor.js';
 import { HttpExceptionFilter } from '../filters/http-exception.filter.js';
-import { BadRequestException } from '../../../src/exceptions/index.js';
+import { BadRequestException } from '../../../packages/core/exceptions/index.js';
 
 // todo 这里要换一个可以配置的地址
 const __filename = fileURLToPath(import.meta.url);
@@ -73,7 +73,7 @@ export class UploadController {
           size: buffer.length,
           path: filepath,
         };
-      })
+      }),
     );
 
     return {

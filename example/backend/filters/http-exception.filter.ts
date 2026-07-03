@@ -1,7 +1,7 @@
-import { Filter } from '../../../src/decorators/middlewares/filter.js';
-import { ExecutionContext } from '../../../src/common/execution-context.js';
-import { InjecoratorFilter } from '../../../src/types/middleware.js';
-import { HttpException } from '../../../src/exceptions/index.js';
+import { Filter } from '../../../packages/core/decorators/middlewares/filter.js';
+import { ExecutionContext } from '../../../packages/core/common/execution-context.js';
+import { InjecoratorFilter } from '../../../packages/core/types/middleware.js';
+import { HttpException } from '../../../packages/core/exceptions/index.js';
 
 @Filter(HttpException)
 export class HttpExceptionFilter implements InjecoratorFilter {

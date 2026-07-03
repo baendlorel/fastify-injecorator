@@ -1,8 +1,8 @@
-import { Guard } from '../../../src/decorators/middlewares/guard.js';
-import { ExecutionContext } from '../../../src/common/execution-context.js';
-import { InjecoratorGuard } from '../../../src/types/middleware.js';
-import { getCustomMethodMetadata, getCustomClassMetadata } from '../../../src/decorators/custom.js';
-import { jwt } from '../../../src/index.js';
+import { Guard } from '../../../packages/core/decorators/middlewares/guard.js';
+import { ExecutionContext } from '../../../packages/core/common/execution-context.js';
+import { InjecoratorGuard } from '../../../packages/core/types/middleware.js';
+import { getCustomMethodMetadata, getCustomClassMetadata } from '../../../packages/core/decorators/custom.js';
+import { jwt } from '../../../packages/core/index.js';
 
 @Guard()
 export class RolesGuard implements InjecoratorGuard {

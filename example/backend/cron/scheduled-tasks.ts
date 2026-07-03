@@ -1,6 +1,6 @@
-import { Injectable } from '../../../src/decorators/injectable.js';
-import { Cron } from '../../../src/schedule/cron.js';
-import { Inject } from '../../../src/decorators/inject.js';
+import { Injectable } from '../../../packages/core/decorators/injectable.js';
+import { Cron } from '../../../packages/core/schedule/cron.js';
+import { Inject } from '../../../packages/core/decorators/inject.js';
 import { LoggerService } from '../services/logger.service.js';
 
 @Injectable()

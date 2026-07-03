@@ -14,10 +14,10 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["packages/core/*"],
       "@tests/*": ["./tests/*"]
     }
   },
-  "include": ["src/**/*.ts", "example/**/*.ts", "tests/**/*.ts"],
+  "include": ["packages/core/**/*.ts", "example/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -22,6 +22,8 @@
     }
   },
   "include": [
+    "scripts/**/*.ts",
+    "*.config.ts",
     "packages/_shared/**/*.ts",
     "packages/core/**/*.ts",
     "packages/schema/**/*.ts",

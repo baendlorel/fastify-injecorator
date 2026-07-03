@@ -1,0 +1,73 @@
+import { execSync } from 'node:child_process';
+import { writeFileSync } from 'node:fs';
+
+import { Version } from '../common/version.js';
+import { ask } from './ask.js';
+import { syncReadme } from './readme.js';
+import { getPackageInfo, syncRootVersion, PackageInfo } from './package-info.js';
+import { buildWithInfo } from './build.js';
+
+export async function publish(who: string | undefined) {
+  const group = getPackageInfo(who);
+
+  if (group.length === 0) {
+    console.error(`No package selected for publish by '${who}'`);
+    process.exit(1);
+  }
+
+  let maxVer: Version = new Version('0.0.0');
+  let maxVerLen = 0;
+  group.forEach((info) => {
+    maxVer = Version.max(maxVer, info.version);
+    maxVerLen = Math.max(maxVerLen, info.nameVer.length);
+  });
+
+  const newVer = maxVer.duplicate().bumpPatch().toString();
+  console.log('Publish plan:');
+  group.forEach((info) => console.log(`- ${info.nameVer.padEnd(maxVerLen, ' ')} -> ${newVer}`));
+
+  const goon = await ask(`Build + publish ${group.length} package(s), then bump all versions together?`);
+  if (!goon) {
+    console.log('Aborted.');
+    return;
+  }
+
+  const readmePaths = syncReadme();
+
+  // * Here we modify group's json data, bump the versions
+  group.forEach((info) => {
+    info.json.version = newVer;
+    writeFileSync(info.path.join('package.json'), JSON.stringify(info.json, null, 2), 'utf-8');
+  });
+  const syncedRootPath = syncRootVersion(group);
+
+  // ! Ensure all versions are bumped. Otherwise inter-dependencies may cause build failures
+  group.forEach(buildWithInfo);
+  group.forEach(gitTag);
+
+  const releaseInfo = group.map((info, i) => `${i}.${info.name}@${info.json.version}`).join('\n');
+  const changedPaths = [
+    ...new Set([
+      ...group.map((info) => info.path.join('package.json')),
+      ...readmePaths,
+      ...(syncedRootPath ? [syncedRootPath] : []),
+    ]),
+  ];
+  execSync(`git add ${changedPaths.map((item) => item.safe()).join(' ')}`, { stdio: 'inherit' });
+  execSync(`git commit -m "release: \n${releaseInfo}"`, { stdio: 'inherit' });
+  console.log('Committed :', releaseInfo);
+}
+
+function gitTag(item: PackageInfo) {
+  const publishedVer = `${item.name}@${item.json.version}`;
+  execSync('pnpm publish --access public --no-git-checks', { stdio: 'inherit', cwd: item.path });
+
+  console.log(`Published ${publishedVer}`);
+
+  const tagExists = execSync(`git tag -l "${publishedVer}"`, { encoding: 'utf-8' }).trim().length > 0;
+  if (tagExists) {
+    console.warn(`Tag ${publishedVer} already exists, skip tagging.`);
+  } else {
+    execSync(`git tag "${publishedVer}"`, { stdio: 'inherit' });
+  }
+}

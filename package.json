@@ -5,17 +5,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "pnpm -r --filter './packages/**' build",
-    "check": "tsc --noEmit",
+    "dev": "tsx ./src/index.ts --watch",
+    "build": "tsx ./scripts/index.ts --build",
+    "pub": "tsx ./scripts/index.ts --publish",
+    "test": "tsx ./scripts/index.ts --test",
+    "check": "tsx ./scripts/index.ts --check",
     "lint": "oxlint .",
-    "test": "vitest",
     "testall": "clear && vitest",
     "stress": "clear && vitest '.stress.e2e-spec.ts'",
     "e2e": "clear && vitest '.e2e-spec.ts'",
     "spec": "clear && vitest '.spec.ts'",
-    "clean": "pnpm -r clean",
-    "dev": "tsx watch example/main.ts",
-    "lines": "clear && find ./packages -type f \\( -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.js\" -o -name \"*.mjs\" -o -name \"*.cjs\" \\) | xargs wc -l"
+    "clean": "pnpm -r clean"
   },
   "author": {
     "name": "Kasukabe Tsumugi",

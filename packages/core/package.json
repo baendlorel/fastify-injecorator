@@ -39,11 +39,13 @@
     "reflect-deep": "^1.5.3",
     "serial-task": "^1.2.2"
   },
+  "peerDependencies": {
+    "fastify": "^5.9.0"
+  },
   "devDependencies": {
     "@fastify/multipart": "^10.0.0",
     "@rollup/plugin-replace": "^6.0.3",
     "@types/node": "^26.1.0",
-    "fastify": "^5.9.0",
     "rollup-plugin-func-macro": "^1.2.3",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3"

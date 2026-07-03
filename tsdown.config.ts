@@ -12,7 +12,7 @@ export default defineConfig({
   entry: [{ index: lib.join('src', 'index.ts') }], // { cli: 'src/cli/index.ts' }
   format: ['esm', 'cjs'],
   deps: {
-    neverBundle: ['cron-parser'],
+    neverBundle: ['cron-parser', /^fastify/, /^@fastify/],
   },
   tsconfig: root.join('tsconfig.build.json'),
   dts: true,

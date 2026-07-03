@@ -7,7 +7,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "..",
     "paths": {
       "@injecorator/core": ["../core"],
       "@core/*": ["../core/*"],

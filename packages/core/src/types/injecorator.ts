@@ -1,5 +1,6 @@
-import { FastifyRequest } from 'fastify';
-import { Class } from './primitive.js';
+import type { FastifyRequest } from 'fastify';
+import type { Class, Func, Instance, Key } from './primitive.js';
+import type { HttpStatus } from '@core/common/status.js';
 
 export interface BaseHttpException {
   readonly message: string;

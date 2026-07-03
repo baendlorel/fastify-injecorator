@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import type { FastifyReply, FastifyRequest } from 'fastify';
+
 /**
  * Abstraction over the original handler arguments, allowing retrieval
  * of arguments in a protocol-agnostic way (HTTP, WebSocket, RPC, etc.).
@@ -7,7 +10,7 @@ export interface ArgumentsHost {
   /**
    * Returns an array of original handler arguments.
    */
-  getArgs();
+  getArgs(): unknown;
 
   /**
    * Returns the handler argument at the specified index.

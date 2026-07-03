@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FastifySchema } from 'fastify';
-import { ExecutionContext } from '@core/common/execution-context.ts';
-import { OrPromise } from '@core/types/utils.js';
+import type { FastifySchema } from 'fastify';
+import type { ExecutionContext } from '@core/common/execution-context.js';
+import type { OrPromise } from '@core/types/utils.js';
+import type { InjectToken } from './injecorator.js';
+import type { Class, Key } from './primitive.js';
 
 /**
  * Get middlewares for a class method

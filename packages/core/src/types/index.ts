@@ -1,4 +1,4 @@
-import {
+import type {
   ContextConfigDefault,
   FastifyBaseLogger,
   FastifySchema,
@@ -11,9 +11,9 @@ import {
   RouteGenericInterface,
   RouteShorthandOptions,
 } from 'fastify';
-import { sym } from '@core/common/index.js';
-import { RouteApiSchema } from './middleware.js';
-import { Key } from './primitive.js';
+import type { sym } from '@core/common/index.js';
+import type { RouteApiSchema } from './middleware.js';
+import type { Key } from './primitive.js';
 
 export * from './auth.js';
 

@@ -40,6 +40,7 @@
     "serial-task": "^1.2.2"
   },
   "devDependencies": {
+    "@fastify/multipart": "^10.0.0",
     "@rollup/plugin-replace": "^6.0.3",
     "@types/node": "^26.1.0",
     "fastify": "^5.9.0",

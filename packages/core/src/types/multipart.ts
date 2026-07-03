@@ -1,5 +1,4 @@
 import type { Readable } from 'stream';
-import type { MultipartFile as FastifyMultipartFile } from '@fastify/multipart';
 
 /**
  * Represents a file uploaded through multipart/form-data

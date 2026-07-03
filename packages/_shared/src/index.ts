@@ -9,3 +9,6 @@ export const concatArr = (...args: unknown[][]) => {
   }
   return args.filter(Array.isArray).flat();
 };
+
+export const toAssigned = (...args: (object | symbol | undefined)[]) =>
+  Object.assign({}, ...args.filter((v) => v && typeof v === 'object'));

@@ -1,17 +1,18 @@
 {
   "extends": "../../tsconfig.json",
+  "references": [{ "path": "../core" }],
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "noEmit": false,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "..",
     "paths": {
-      "@injecorator/core": ["../core"],
-      "@core/*": ["../core/*"],
-      "@shared/*": ["../shared/*"]
+      "@injecorator/core": ["../core/src/index.ts"],
+      "@core/*": ["../core/*"]
     }
   },
   "include": ["**/*.ts"],

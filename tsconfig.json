@@ -1,4 +1,11 @@
 {
+  "references": [
+    { "path": "./packages/shared" },
+    { "path": "./packages/core" },
+    { "path": "./packages/schema" },
+    { "path": "./packages/swagger" },
+    { "path": "./packages/injecorator" }
+  ],
   "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
@@ -15,7 +22,7 @@
     "rootDir": ".",
     "paths": {
       "@injecorator/shared": ["./packages/shared/src/index.ts"],
-      "@shared/*": ["./packages/shared/src/*"],
+      "@injecorator/core": ["./packages/core/src/index.ts"],
       "@core/*": ["./packages/core/src/*"],
       "@schema/*": ["./packages/schema/src/*"],
       "@swagger/*": ["./packages/swagger/src/*"],

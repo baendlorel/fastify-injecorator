@@ -1,6 +1,7 @@
 import { ReflectDeep } from 'reflect-deep';
 import { Class, Key } from '@core/types/primitive.js';
 import { ModuleMeta } from '@core/types/injecorator.js';
+import { PipeOptions } from '@core/types/middleware.js';
 
 import { sym } from '@core/common/index.js';
 import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@core/common/inject-keys.js';
@@ -15,7 +16,7 @@ export namespace collection {
   export const globalInterceptors: symbol[] = [];
   export const globalGuards: symbol[] = [];
   export const globalFilters: symbol[] = [];
-  export const globalPipes: symbol[] = [];
+  export const globalPipes: PipeOptions[] = [];
 
   /**
    * Add global middleware with specific token.
@@ -37,7 +38,7 @@ export namespace collection {
         return globalInterceptors.push(APP_INTERCEPTOR);
       case APP_PIPE:
         expect(globalPipes.length === 0, `${name} can only be registered once`);
-        return globalPipes.push(APP_PIPE);
+        return globalPipes.push({ pipe: APP_PIPE });
       case APP_LOGGER:
         expect(!globalProviders.has(APP_LOGGER), `${name} can only be registered once`);
         return globalProviders.add(APP_LOGGER);

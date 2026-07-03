@@ -1,20 +1,21 @@
 {
   "extends": "../../tsconfig.json",
+  "references": [{ "path": "../shared" }],
   "compilerOptions": {
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "noEmit": false,
     "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "..",
     "paths": {
-      "@injecorator/shared": ["../shared/src/index.ts"],
       "@core/*": ["./src/*"],
-      "@shared/*": ["../shared/src/*"]
+      "@injecorator/shared": ["../shared/src/index.ts"]
     }
   },
-  "include": ["**/*.ts", "../shared/src/**/*.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

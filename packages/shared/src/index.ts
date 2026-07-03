@@ -3,11 +3,13 @@
 
 export type {};
 
-export const concatArr = (...args: unknown[][]) => {
+type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
+
+export const concatArr = <T extends readonly unknown[]>(...args: (T | undefined)[]) => {
   if (0 === args.length) {
-    return [];
+    return [] as ArrValue<T>[];
   }
-  return args.filter(Array.isArray).flat();
+  return args.filter(Array.isArray).flat() as ArrValue<T>[];
 };
 
 export const toAssigned = (...args: (object | symbol | undefined)[]) =>

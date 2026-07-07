@@ -88,7 +88,7 @@ namespace ph {
       return arg().name;
     }
 
-    throw _throw('Cannot get inject token from argument: ' + String(arg));
+    _throw('Cannot get inject token from argument: ' + String(arg));
   }
 
   export function getInjectTokenName(arg: InjectArg) {

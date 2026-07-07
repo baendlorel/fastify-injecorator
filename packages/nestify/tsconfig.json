@@ -12,7 +12,7 @@
     "rootDir": "..",
     "paths": {
       "@nestify/core": ["../core/src/index.ts"],
-      "@core/*": ["../core/*"]
+      "@nestify/shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["**/*.ts"],

@@ -1,7 +1,7 @@
 {
-  "name": "@injecorator/schema",
+  "name": "@nestifyjs/schema",
   "version": "0.0.18",
-  "description": "Schema validation and utilities for injecorator",
+  "description": "Schema validation and utilities for nestify-js",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@injecorator/core": "workspace:*",
+    "@nestifyjs/core": "workspace:*",
     "zod": "^4.4.3"
   },
   "devDependencies": {

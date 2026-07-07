@@ -1,5 +1,5 @@
 import { ReflectDeep } from 'reflect-deep';
-import { concatArr } from '@injecorator/shared';
+import { concatArr } from '@nestify/shared';
 import { Class, Key } from '@core/types/primitive.js';
 import { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import {

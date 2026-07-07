@@ -13,7 +13,7 @@
     "rootDir": "..",
     "paths": {
       "@core/*": ["./src/*"],
-      "@injecorator/shared": ["../shared/src/index.ts"]
+      "@nestifyjs/shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["**/*.ts"],

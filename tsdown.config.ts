@@ -14,7 +14,7 @@ export default defineConfig({
   outDir: 'dist',
   format: ['esm', 'cjs'],
   deps: {
-    neverBundle: ['cron-parser', /^fastify/, /^@fastify/, /^@injecorator\//],
+    neverBundle: ['cron-parser', /^fastify/, /^@fastify/, /^@nestifyjs\//],
   },
   tsconfig: root.join('tsconfig.build.json'),
   dts: true,

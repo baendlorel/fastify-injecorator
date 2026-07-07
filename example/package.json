@@ -1,7 +1,7 @@
 {
-  "name": "fastify-injecorator-example",
+  "name": "nestify-js-example",
   "version": "1.0.0",
-  "description": "Comprehensive example showcasing all Fastify Injecorator features",
+  "description": "Comprehensive example showcasing all nestify-js features",
   "type": "module",
   "scripts": {
     "start": "node backend/app.js",
@@ -11,7 +11,7 @@
   },
   "keywords": [
     "fastify",
-    "injecorator",
+    "nestify-js",
     "example",
     "decorator"
   ],

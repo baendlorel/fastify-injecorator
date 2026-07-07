@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, 'src'),
-      '@injecorator': path.resolve(import.meta.dirname, 'src/core/injecorator'),
+      '@nestifyjs': path.resolve(import.meta.dirname, 'src/core/injecorator'),
       '@tests': path.resolve(import.meta.dirname, 'tests'),
     },
   },

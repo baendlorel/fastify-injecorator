@@ -8,9 +8,9 @@ export const replacePlugin = () =>
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 
     // global $throw
-    "$throw('": `throw new Error('[fastify-injecorator error] `,
-    '$throw(`': 'throw new Error(`[fastify-injecorator error] ',
-    '$throw("': `throw new Error("[fastify-injecorator error] `,
+    "$throw('": `throw new Error('[nestify-js error] `,
+    '$throw(`': 'throw new Error(`[nestify-js error] ',
+    '$throw("': `throw new Error("[nestify-js error] `,
     'declare const __IS_PROD__: boolean;\n': '',
     'const __IS_PROD__: boolean;\n': '',
     'logger.info(': "console.log(`%cinfo - __func__:`, 'color:#007ACC',",

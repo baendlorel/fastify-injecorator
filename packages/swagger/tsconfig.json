@@ -11,7 +11,7 @@
     "outDir": "./dist",
     "rootDir": "..",
     "paths": {
-      "@injecorator/core": ["../core/src/index.ts"],
+      "@nestifyjs/core": ["../core/src/index.ts"],
       "@core/*": ["../core/*"]
     }
   },

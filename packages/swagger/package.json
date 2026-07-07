@@ -1,7 +1,7 @@
 {
-  "name": "@injecorator/swagger",
+  "name": "@nestifyjs/swagger",
   "version": "0.0.18",
-  "description": "Swagger/OpenAPI integration for injecorator",
+  "description": "Swagger/OpenAPI integration for nestify-js",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@injecorator/core": "workspace:*",
+    "@nestifyjs/core": "workspace:*",
     "@fastify/swagger": "^9.7.0",
     "@fastify/swagger-ui": "^6.0.0"
   },

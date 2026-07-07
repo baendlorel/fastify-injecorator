@@ -1,7 +1,7 @@
 {
-  "name": "@injecorator/shared",
+  "name": "@nestifyjs/shared",
   "version": "0.0.18",
-  "description": "Shared utilities and types for injecorator packages",
+  "description": "Shared utilities and types for nestify-js packages",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",

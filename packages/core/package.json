@@ -1,7 +1,7 @@
 {
-  "name": "@injecorator/core",
+  "name": "@nestifyjs/core",
   "version": "0.0.18",
-  "description": "Core dependency injection system for injecorator",
+  "description": "Core dependency injection system for nestify-js",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -35,7 +35,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@injecorator/shared": "workspace:*",
+    "@nestifyjs/shared": "workspace:*",
     "cron-parser": "^5.6.1",
     "reflect-deep": "^2.0.1",
     "serial-task": "^1.2.2"

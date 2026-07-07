@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { toAssigned } from '@injecorator/shared';
+import { toAssigned } from '@nestify/shared';
 import { Class } from '@core/types/primitive.js';
 
 import { sym, $values, $define } from '@core/common/index.js';

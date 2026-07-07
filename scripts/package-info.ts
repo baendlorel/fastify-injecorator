@@ -5,7 +5,7 @@ import { Version } from './common/version.js';
 
 export interface PackageInfo {
   /**
-   * Absolute path to the package directory, e.g. ...path-to-kt.js/packages/core
+   * Absolute path to the package directory, e.g. ...path-to-nestify-js/packages/core
    */
   path: string;
   version: Version;
@@ -22,10 +22,8 @@ export interface PackageInfo {
 }
 
 const publishGroupMap = new Map<string, string[]>([
-  ['main', ['core', 'kt.js', 'mui']],
-  ['router', ['core', 'kt.js', 'router']],
-  ['plugin', ['vite', 'babel', 'transformer', 'create']],
-  ['all', ['shared', 'core', 'kt.js', 'mui', 'mui-icon', 'router']],
+  ['main', ['shared', 'core', 'injecorator']],
+  ['all', ['shared', 'core', 'schema', 'swagger', 'injecorator']],
 ]);
 
 const getAbsolutePath = (who: string) => dirs.packages.join(who);
@@ -55,7 +53,7 @@ export function getPackageInfo(who: string = 'main'): PackageInfo[] {
 }
 
 export function syncRootVersion(group: PackageInfo[]): string | null {
-  const coreInfo = group.find((info) => info.name === '@ktjs/core');
+  const coreInfo = group.find((info) => info.name === '@nestify/core');
   if (!coreInfo) {
     return null;
   }
@@ -67,6 +65,6 @@ export function syncRootVersion(group: PackageInfo[]): string | null {
 
   data.version = coreInfo.json.version;
   writeFileSync(dirs.rootPackageJson, JSON.stringify(data, null, 2) + '\n', 'utf-8');
-  console.log(`Synced root package version to ${coreInfo.json.version} from @ktjs/core`);
+  console.log(`Synced root package version to ${coreInfo.json.version} from @nestify/core`);
   return dirs.rootPackageJson;
 }

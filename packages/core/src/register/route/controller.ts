@@ -1,8 +1,7 @@
 import { FastifyInstance } from 'fastify';
-import { toAssigned } from '@nestify/shared';
+import { _define, _values, sym, toAssigned } from '@nestify/shared';
 import { Class } from '@core/types/primitive.js';
 
-import { sym, $values, $define } from '@core/common/index.js';
 import { injector } from '../lazy-injector.js';
 import {
   metaGetController,
@@ -44,7 +43,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
   const getFilters = metaGetUseFilters(controller);
   const getPipes = metaGetUsePipes(controller);
 
-  $values(routes).forEach((routeConfig) => {
+  _values(routes).forEach((routeConfig) => {
     const { field, method, route } = routeConfig[sym.route.base];
     const url = concatRoute(modulePrefix, controllerPrefix, route);
     const opts = routeConfig[sym.route.opt] ?? {};
@@ -53,7 +52,7 @@ export function registerController(app: FastifyInstance, controller: Class, modu
     // Get the original method from the instance
     const origin = (...args: any[]) => instance[field](...args);
     // & Must have same name as before, then metadata can be accessed correctly
-    $define(origin, 'name', { value: field, configurable: true });
+    _define(origin, 'name', { value: field, configurable: true });
 
     const interceptor = createInterceptor(getInterceptors(field));
     const guard = createGuard(getGuards(field));

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
+import type { Class, Key } from '@core/types/primitive.js';
 import { inspect } from 'node:util';
-import { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
-import { Class, Key } from '@core/types/primitive.js';
+import { sym, _values, _isArray } from '@nestify/shared';
 
-import { sym } from '@core/common/index.js';
 import { RouteConfig } from '@core/types/index.js';
 import { toModuleClass } from '@core/common/utils.js';
 import {
@@ -25,7 +25,6 @@ import {
 } from '@core/asserts/index.js';
 import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@core/register/meta.js';
 import ph from './provider.js';
-import { $isArray, $values } from '@core/common/native.js';
 
 const moduleCache = new Set<any>();
 const controllerCache = new Set<any>();
@@ -196,7 +195,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
     if (!isObject(injections)) {
       return null;
     }
-    return $values(injections).map((injection) => ph.getInjectToken(injection.dependency));
+    return _values(injections).map((injection) => ph.getInjectToken(injection.dependency));
   }
 
   if ('useClass' in options) {
@@ -204,11 +203,11 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
     if (!isObject(injections)) {
       return null;
     }
-    return $values(injections).map((injection) => ph.getInjectToken(injection.dependency));
+    return _values(injections).map((injection) => ph.getInjectToken(injection.dependency));
   }
 
   if ('inject' in options) {
-    if ($isArray(options.inject)) {
+    if (_isArray(options.inject)) {
       options.inject.map((arg) => (isKey(arg) ? arg : arg.name));
     } else {
       return null;

@@ -1,5 +1,5 @@
 import { ReflectDeep } from 'reflect-deep';
-import { concatArr } from '@nestify/shared';
+import { concatArr, sym } from '@nestify/shared';
 import { Class, Key } from '@core/types/primitive.js';
 import { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import {
@@ -22,7 +22,6 @@ import {
   PipeFullSchema,
 } from '@core/types/middleware.js';
 
-import { sym } from '@core/common/index.js';
 import { splitPath, toModuleClass } from '@core/common/utils.js';
 import { collection } from './collection.js';
 import ph from './provider.js';

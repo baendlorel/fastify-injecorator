@@ -1,13 +1,11 @@
 import { CronExpressionParser } from 'cron-parser';
-import { Class, Func, Instance } from '@core/types/primitive.js';
+import { Class, Func } from '@core/types/primitive.js';
 import { CronOptions } from '@core/types/cron.js';
 
-import { sym } from '../../../shared/src/sym.js';
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
-import { $entries } from '@core/common/native.js';
 import { isObject, orFunction } from '@core/asserts/whether.js';
-import { throws } from '@core/asserts/expect.js';
+import { _entries, sym } from '@nestify/shared';
 
 const defaultArgsGetter = () => [];
 
@@ -20,7 +18,7 @@ export function Cron(arg: CronOptions | string): Func {
   } else if (typeof arg === 'string') {
     arg = { expression: arg, argsGetter: defaultArgsGetter };
   } else {
-    throws(`Invalid argument for @Cron(): ${typeof arg}`);
+    _throw(`Invalid argument for @Cron(): ${typeof arg}`);
   }
 
   return function (target: Func, context: ClassMethodDecoratorContext) {
@@ -35,13 +33,13 @@ const cronJobs: Func[] = [];
  * Bind cron jobs for a given instance
  * This function is called in lazy injector after all instances are created
  */
-export function bindCronJob(instance: Instance, sourceClass: Class) {
+export function bindCronJob(instance: InstanceType<Class>, sourceClass: Class) {
   const cronMeta = metaGet<Record<string, CronOptions>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
     return;
   }
 
-  const entries = $entries(cronMeta);
+  const entries = _entries(cronMeta);
   for (let i = 0; i < entries.length; i++) {
     const methodName = entries[i][0];
     const { argsGetter, expression } = entries[i][1];

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { FastifyRequest } from 'fastify';
-import type { Class, Func, Key } from './primitive.js';
 import type { HttpStatus } from '@nestify/shared';
+import type { Class, Func, Key } from './primitive.js';
 
 export interface BaseHttpException {
   readonly message: string;

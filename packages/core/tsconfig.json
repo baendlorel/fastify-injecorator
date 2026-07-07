@@ -1,14 +1,13 @@
 {
-  "extends": "../../tsconfig.json",
-  "references": [{ "path": "../shared" }],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "composite": true,
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
     "types": ["node"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "outDir": "./dist",
     "rootDir": "..",
     "paths": {
@@ -16,6 +15,6 @@
       "@nestify/shared": ["../shared/src/index.ts"]
     }
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../shared/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

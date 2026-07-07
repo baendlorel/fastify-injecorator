@@ -1,6 +1,6 @@
-import { sym } from '../../../shared/src/sym.js';
+import type { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
+import { sym } from '@nestify/shared';
 import { metaSet } from '@core/register/meta.js';
-import { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
 import { Func } from '@core/types/primitive.js';
 import { UsePipes } from '@core/decorators/middlewares/pipe.js';
 import { PipeFile } from './pipes/file.pipe.js';

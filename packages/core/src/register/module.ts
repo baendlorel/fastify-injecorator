@@ -1,9 +1,8 @@
-import { FastifyInstance } from 'fastify';
-import { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import { Class } from '@core/types/primitive.js';
+import type { FastifyInstance } from 'fastify';
+import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
+import type { Class } from '@core/types/primitive.js';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
-import { throws } from '@core/asserts/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
 
 import { collection } from './collection.js';
@@ -21,8 +20,8 @@ import { PipeRaw } from '../decorators/middlewares/pipes/raw.pipe.js';
 
 class ModuleRegister {
   private readonly moduleStack: Class[] = [];
-  private app: FastifyInstance;
-  private opts: FastifyInjecoratorOptions;
+  private app!: FastifyInstance;
+  private opts!: FastifyInjecoratorOptions;
 
   /**
    * Collect every global things into `collection`
@@ -65,7 +64,7 @@ class ModuleRegister {
         // if allowed, return directly since it is definitely registered before
         return;
       }
-      throws(`Circular dependency detected: ${chain}`);
+      _throw(`Circular dependency detected: ${chain}`);
     } else {
       this.moduleStack.push(moduleClass);
     }

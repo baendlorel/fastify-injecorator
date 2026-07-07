@@ -1,74 +1,70 @@
 import { Class, Func, Key } from '@core/types/primitive.js';
 import { InjectToken } from '@core/types/injecorator.js';
 
-import { $entries, $isArray } from '@core/common/native.js';
 import { InjecoratorError } from './error.js';
 import { isClass } from './whether.js';
-
-export const throws = (msg: string): never => {
-  throw new InjecoratorError(msg);
-};
+import { _entries, _isArray } from '@nestify/shared';
 
 // # Basic
 
 export const expect: (target: any, msg: string) => asserts target = (target, msg) => {
   if (!target) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectOrString: (o: any, msg: string) => asserts o is string | undefined = (o, msg) => {
   if (o !== undefined && typeof o !== 'string') {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectString: (o: any, msg: string) => asserts o is string = (o, msg) => {
   if (typeof o !== 'string') {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectOrObject: (o: any, msg: string) => asserts o is object | undefined = (o, msg) => {
   if (o !== undefined && (typeof o !== 'object' || o === null)) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectObject: <T = object>(o: any, msg: string) => asserts o is T = (o, msg) => {
   if (typeof o !== 'object' || o === null) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
   if (typeof o !== 'string' && typeof o !== 'symbol' && !isClass(o)) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectClass: (o: any, msg: string) => asserts o is Class = (o, msg) => {
   if (typeof o !== 'function') {
-    throws(msg);
+    _throw(msg);
   }
 
   try {
     const temp = new Proxy(o, { construct: () => ({}) });
     new temp();
   } catch {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectBoolean: (o: any, msg: string) => asserts o is boolean = (o, msg) => {
   if (o !== true && o !== false) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
 export const expectFunction: (o: any, msg: string) => asserts o is Func = (o, msg) => {
   if (typeof o !== 'function') {
-    throws(msg);
+    _throw(msg);
   }
 };
 
@@ -84,7 +80,7 @@ export const expectArray: <T = any>(
   msg: string,
   predicate?: (value: T, index: number, array: T[]) => void,
 ) => asserts arr is T[] = (arr, msg, predicate) => {
-  if (!$isArray(arr)) {
+  if (!_isArray(arr)) {
     throw new InjecoratorError(msg);
   }
 
@@ -101,7 +97,7 @@ export const expectRecord: <V>(
   msg: string,
 ) => asserts target is Record<Key, V> = (target, predicate, msg) => {
   expectObject(target, msg);
-  for (const [key, value] of $entries(target)) {
+  for (const [key, value] of _entries(target)) {
     predicate(value, key);
   }
 };

@@ -1,16 +1,17 @@
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
-import { Class } from '@core/types/primitive.js';
-import { InjectArg } from '@core/types/injecorator.js';
-import { sym } from '@core/common/index.js';
+import { sym } from '@nestify/shared';
 
-import { expectClass, expectObject, throws } from './expect.js';
+import type { Class } from '@core/types/primitive.js';
+import type { InjectArg } from '@core/types/injecorator.js';
+
+import { expectClass, expectObject } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';
 import { isInjectToken, isInjectArg, isProviderOptions, isFunction } from './whether.js';
 
 export const expectInjectToken = (o: any, msg: string) => {
   if (!isInjectToken(o)) {
-    throws(msg);
+    _throw(msg);
   }
 };
 
@@ -33,25 +34,25 @@ export const expectModulable = (target: Class, context: ClassDecoratorContext) =
 
 export const expectNotDecorated = (context: DecoratorContext, flag: symbol) => {
   if (ReflectDeep.has(context.metadata, [sym.root, flag])) {
-    throws(`'${String(context.name)}' is already decorated`);
+    _throw(`'${String(context.name)}' is already decorated`);
   }
 };
 
 export const expectClassNotDecorated = (cls: Class, flag: symbol) => {
   if (ReflectDeep.has(cls, [sym.metadata, sym.root, flag])) {
-    throws(`'${String(cls.name)}' is already decorated`);
+    _throw(`'${String(cls.name)}' is already decorated`);
   }
 };
 
 export const expectInjectArg = (target: InjectArg, msg?: string) => {
   if (!isInjectArg(target)) {
-    throws(`${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(target)}`);
+    _throw(`${msg} Should be an InjectArg(string | symbol | Class | (() => Class)), got: ${inspect(target)}`);
   }
 };
 
 export const expectProviderOptions = (target: unknown) => {
   if (!isProviderOptions(target)) {
-    throws(`Should be a provider options object, got: ${inspect(target)}`);
+    _throw(`Should be a provider options object, got: ${inspect(target)}`);
   }
 };
 
@@ -67,5 +68,5 @@ export const expectHasOneHook = <T>(target: Class<T>, hooks: (keyof T)[], msg: s
       return;
     }
   }
-  throws(msg);
+  _throw(msg);
 };

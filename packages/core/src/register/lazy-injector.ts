@@ -1,16 +1,17 @@
 import { FastifyInstance } from 'fastify';
 import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
 import { InjecoratorMiddleware } from '@core/types/middleware.js';
-import { Class, Func, Instance, Key } from '@core/types/primitive.js';
+import { Class, Func, Key } from '@core/types/primitive.js';
 
-import { $construct, $getPrototypeOf, $ownKeys, toModuleClass } from '@core/common/index.js';
-import { APP_LOGGER } from '@core/common/inject-keys.js';
-import { expectFunction, expectObject, expect, throws, isClass, isKey, isObject } from '@core/asserts/index.js';
+import { toModuleClass } from '@core/common/index.js';
+import { expectFunction, expectObject, expect, isClass, isKey, isObject } from '@core/asserts/index.js';
 import { bindCronJob } from '@core/schedule/cron.js';
 
 import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
 import { collection } from './collection.js';
+import { _construct, _getPrototypeOf, _ownKeys, APP_LOGGER } from '@nestify/shared';
+import { throws } from 'assert';
 
 export namespace injector {
   /**
@@ -21,7 +22,7 @@ export namespace injector {
   /**
    * A map from token to the instance of Class
    */
-  const instanceMap = new Map<Key, Instance | null>();
+  const instanceMap = new Map<Key, InstanceType<Class> | null>();
 
   function getProvide(opts: ProviderOptions) {
     return isClass(opts) ? opts.name : opts.provide;
@@ -55,7 +56,7 @@ export namespace injector {
 
   export function getDetail<T extends object>(token: InjectToken): { instance: T; cls: Class | null } {
     const instance = instanceMap.get(isKey(token) ? token : token.name) as T;
-    const cls = ($getPrototypeOf(instance)?.constructor ?? null) as Class | null;
+    const cls = (_getPrototypeOf(instance)?.constructor ?? null) as Class | null;
     return { instance, cls };
   }
 
@@ -67,12 +68,12 @@ export namespace injector {
    */
   export function createInstanceByClass(token: Key, cls: Class) {
     const { args } = metaGetProvider(cls);
-    const instance = $construct(cls, args);
+    const instance = _construct(cls, args);
     instanceMap.set(token, instance);
 
     const injects = metaGetInject(cls);
     if (injects) {
-      const propertyKeys = $ownKeys(injects);
+      const propertyKeys = _ownKeys(injects);
       for (let i = 0; i < propertyKeys.length; i++) {
         const propertyKey = propertyKeys[i];
         injectList.push({
@@ -88,10 +89,10 @@ export namespace injector {
     return instance;
   }
 
-  export function createInstance(opts: ProviderOptions): Instance {
+  export function createInstance(opts: ProviderOptions): InstanceType<Class> {
     const token = getProvide(opts);
     const exist = instanceMap.get(token);
-    if (isObject<Instance>(exist)) {
+    if (isObject<InstanceType<Class>>(exist)) {
       return exist;
     }
     return ph.match(opts, {
@@ -112,7 +113,7 @@ export namespace injector {
       useExisting: (token, existingToken) => {
         const instance = instanceMap.get(existingToken);
         if (!isObject(instance)) {
-          throws(`Cannot find existing provider: ${String(existingToken)}`);
+          _throw(`Cannot find existing provider: ${String(existingToken)}`);
         }
         instanceMap.set(token, instance);
         return instance;
@@ -152,7 +153,7 @@ export namespace injector {
     // & Bind cron jobs for all instances
     for (const instance of map.values()) {
       if (isObject(instance)) {
-        const cls = $getPrototypeOf(instance)?.constructor as Class | undefined;
+        const cls = _getPrototypeOf(instance)?.constructor as Class | undefined;
         if (cls) {
           bindCronJob(instance, cls);
         }
@@ -176,7 +177,7 @@ export namespace injector {
       const moduleClass = toModuleClass(m);
       if (stack.includes(moduleClass)) {
         const chain = stack.map((s) => s.name).join(' -> ');
-        throws(`Circular dependency detected: ${chain} -> ${String(moduleClass.name)}`);
+        _throw(`Circular dependency detected: ${chain} -> ${String(moduleClass.name)}`);
       }
       stack.push(moduleClass);
       const moduleMetadata = metaGetModule(moduleClass);

@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
-import { Class, Instance, Key } from '@core/types/primitive.js';
-import { expectClass, expectFunction, expectKey, throws, isClass, isFunction } from '@core/asserts/index.js';
+import { Class, Key } from '@core/types/primitive.js';
+import { expectClass, expectFunction, expectKey, isClass, isFunction } from '@core/asserts/index.js';
 import {
   InjectArg,
   ProviderOptions,
@@ -15,8 +15,13 @@ namespace ph {
     opts: ProviderOptions,
     callbacks: {
       useClass?: (token: Key, cls: Class) => unknown;
-      useValue?: (token: Key, value: Instance) => unknown;
-      useFactory?: (token: Key, factory: (...instances: Instance[]) => Instance, inject: (Class | Key)[]) => unknown;
+      useValue?: (token: Key, value: InstanceType<Class>) => unknown;
+      useFactory?: (
+        token: Key,
+        // TODO 实际上InstanceType<Class>就是any啊！
+        factory: (...instances: InstanceType<Class>[]) => InstanceType<Class>,
+        inject: (Class | Key)[],
+      ) => unknown;
       useExisting?: (token: Key, existingToken: Key) => unknown;
     },
   ) {
@@ -53,7 +58,7 @@ namespace ph {
       return useExisting(opts.provide, opts.useExisting);
     }
 
-    throws(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);
+    _throw(`ProviderOptions must have one of useClass/useValue/useFactory/useExisting, got: ${optsStr}`);
   }
 
   export function getToken(providerOptions: ProviderOptions) {
@@ -83,7 +88,7 @@ namespace ph {
       return arg().name;
     }
 
-    throw throws('Cannot get inject token from argument: ' + String(arg));
+    throw _throw('Cannot get inject token from argument: ' + String(arg));
   }
 
   export function getInjectTokenName(arg: InjectArg) {

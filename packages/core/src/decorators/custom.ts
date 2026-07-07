@@ -1,9 +1,9 @@
-import { Class, Func, Key } from '@core/types/primitive.js';
+import type { Class, Func, Key } from '@core/types/primitive.js';
+import { sym } from '@nestify/shared';
 
-import { expectDecoratorContext, throws } from '@core/asserts/index.js';
+import { expectDecoratorContext } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { sym } from '../../../shared/src/sym.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path
@@ -49,7 +49,7 @@ export function createCustomDecorator<T = unknown>(key: Key) {
       } else if (context.kind === 'method') {
         metaSet<T>(context, [sym.custom.root, sym.custom.method, context.name, key], metadata);
       } else {
-        throws(
+        _throw(
           `Invalid decorator context for custom decorator with key "${String(key)}", must be class or method, got: ${context.kind}`,
         );
       }

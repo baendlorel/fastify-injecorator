@@ -9,8 +9,8 @@ import {
   ProviderUseExisting,
 } from '@core/types/injecorator.js';
 
-import { $fnToString, $isArray } from '@core/common/native.js';
 import { metaGetModule } from '@core/register/meta.js';
+import { _fnToString, _isArray } from '@nestify/shared';
 
 export function isObject<T extends object>(o: any): o is T {
   return typeof o === 'object' && o !== null;
@@ -56,7 +56,7 @@ export function isPathNode(p: string): boolean {
  * @param predicate function to validate each element
  */
 export function isArray<T = any>(arr: any, predicate?: (value: T, index: number, array: T[]) => boolean): arr is T[] {
-  if (!$isArray(arr)) {
+  if (!_isArray(arr)) {
     return false;
   }
 
@@ -88,7 +88,7 @@ export function isInjectedClassGetter(o: unknown): o is Func {
   if (typeof o !== 'function') {
     return false;
   }
-  const str = $fnToString.call(o).replace(/\s/g, '');
+  const str = _fnToString.call(o).replace(/\s/g, '');
   // Match '=>' not preceded by any quote character
   return str.startsWith('()=>');
 }

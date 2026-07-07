@@ -4,7 +4,7 @@
     { "path": "./packages/core" },
     { "path": "./packages/schema" },
     { "path": "./packages/swagger" },
-    { "path": "./packages/injecorator" }
+    { "path": "./packages/nestify" }
   ],
   "compilerOptions": {
     "target": "ESNext",

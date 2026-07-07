@@ -1,9 +1,8 @@
 import { createHmac } from 'node:crypto';
 import { FastifyRequest } from 'fastify';
-import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
+import { _set, sym, _get } from '@nestify/shared';
 
-import { $get, $set } from '@core/common/native.js';
-import { sym } from '../../../shared/src/sym.js';
+import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 
 /**
  * Simple JWT Service implementation
@@ -21,11 +20,11 @@ export class JwtService {
   }
 
   setUserToRequest(request: FastifyRequest, user: any): boolean {
-    return $set(request, sym.user, user);
+    return _set(request, sym.user, user);
   }
 
   getUserFromRequest(request: FastifyRequest): any {
-    return $get(request, sym.user);
+    return _get(request, sym.user);
   }
 
   // # privates

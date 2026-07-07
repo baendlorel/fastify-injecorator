@@ -11,9 +11,9 @@ import type {
   RouteGenericInterface,
   RouteShorthandOptions,
 } from 'fastify';
-import type { sym } from '@core/common/index.js';
 import type { RouteApiSchema } from './middleware.js';
 import type { Key } from './primitive.js';
+import { sym } from '@nestify/shared';
 
 export * from './auth.js';
 

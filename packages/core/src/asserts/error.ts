@@ -4,3 +4,7 @@ export class InjecoratorError extends Error {
     this.name = '__NAME__';
   }
 }
+
+declare global {
+  function _throw(message: string): never;
+}

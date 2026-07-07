@@ -1,10 +1,10 @@
-import { ReflectDeep } from 'reflect-deep';
-import { Class, Key } from '@core/types/primitive.js';
-import { ModuleMeta } from '@core/types/injecorator.js';
-import { PipeOptions } from '@core/types/middleware.js';
+import type { Class, Key } from '@core/types/primitive.js';
+import type { ModuleMeta } from '@core/types/injecorator.js';
+import type { PipeOptions } from '@core/types/middleware.js';
 
-import { sym } from '@core/common/index.js';
-import { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@core/common/inject-keys.js';
+import { ReflectDeep } from 'reflect-deep';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, APP_LOGGER, sym } from '@nestify/shared';
+
 import { expect } from '@core/asserts/index.js';
 
 /**

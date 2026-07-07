@@ -20,6 +20,9 @@ export function isKey(o: unknown): o is Key {
   return typeof o === 'string' || typeof o === 'symbol';
 }
 
+/**
+ * Only criterion: newable
+ */
 export function isClass(o: any): o is Class {
   if (typeof o !== 'function') {
     return false;
@@ -44,37 +47,6 @@ export function orFunction(o: any): o is Func | undefined {
 
 export function isPathNode(p: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(p);
-}
-
-/**
- * Asserts that `arr` is an array.
- * - If `predicate` is provided, it will be called for each element in the array.
- *   - If it returns a string, it will throw an error with that message.
- *   - If it returns `null` or `undefined`, the element is considered valid.
- *   - If it returns `boolean` and value is `true`, the element is considered valid.
- * @param arr target array
- * @param predicate function to validate each element
- */
-export function isArray<T = any>(arr: any, predicate?: (value: T, index: number, array: T[]) => boolean): arr is T[] {
-  if (!_isArray(arr)) {
-    return false;
-  }
-
-  if (!predicate) {
-    return true;
-  }
-
-  for (let i = 0; i < arr.length; i++) {
-    const result = predicate(arr[i], i, arr);
-    if (result === false) {
-      return false;
-    }
-  }
-  return true;
-}
-
-export function isError<T extends Error>(o: any): o is T {
-  return o instanceof Error;
 }
 
 /**
@@ -108,7 +80,7 @@ export function likeModule(target: unknown): target is Class {
   }
 
   const arr = [o.controllers, o.exports, o.providers, o.imports];
-  if (arr.some((a) => a && !isArray(a))) {
+  if (arr.some((a) => !_isArray(a))) {
     return false;
   }
   return true;

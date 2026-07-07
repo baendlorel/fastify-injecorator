@@ -1,14 +1,15 @@
+import type { InjectToken } from '@core/types/injecorator.js';
+import type { FilterTask, InjecoratorFilter } from '@core/types/middleware.js';
+
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
-import { FilterTask, InjecoratorFilter } from '@core/types/middleware.js';
-import { expectArray, expectClass, isError } from '@core/asserts/index.js';
+import { expectArray, expectClass } from '@core/asserts/index.js';
 import { injector } from '@core/register/lazy-injector.js';
 import { metaGetFilters } from '@core/register/meta.js';
-import { InjectToken } from '@core/types/injecorator.js';
 
 const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
   const http = context.switchToHttp();
   const reply = http.getReply();
-  const message = isError(exception) ? exception.message : String(exception);
+  const message = (exception as Error)?.message ?? String(exception);
   // reply.log.error(`${http.getRequest().url} - ${message}`);
 
   reply.status(400).send({

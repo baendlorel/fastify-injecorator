@@ -21,8 +21,6 @@ export default defineConfig({
   sourcemap: false,
   alias: {
     '@core/': packDir.join('src'),
-    '@schema/': packDir.join('schema'),
-    '@swagger/': packDir.join('swagger'),
     '@tests/': packDir.join('tests'),
   },
   minify: true,

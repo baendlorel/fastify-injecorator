@@ -1,7 +1,7 @@
 // Shared utilities and types
 // This package contains common utilities used across all nestify-js packages
 
-export type {};
+export * from './consts.js';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
 

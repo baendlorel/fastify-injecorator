@@ -2,7 +2,7 @@ import { CronExpressionParser } from 'cron-parser';
 import { Class, Func, Instance } from '@core/types/primitive.js';
 import { CronOptions } from '@core/types/cron.js';
 
-import { sym } from '@core/common/sym.js';
+import { sym } from '../../../shared/src/sym.js';
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
 import { $entries } from '@core/common/native.js';

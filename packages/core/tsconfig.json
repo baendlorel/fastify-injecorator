@@ -16,6 +16,6 @@
       "@nestify/shared": ["../shared/src/index.ts"]
     }
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../shared/src/sym.ts"],
   "exclude": ["node_modules", "dist"]
 }

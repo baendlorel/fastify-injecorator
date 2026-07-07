@@ -3,7 +3,7 @@ import { Class, Func, Key } from '@core/types/primitive.js';
 import { expectDecoratorContext, throws } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { sym } from '@core/common/sym.js';
+import { sym } from '../../../shared/src/sym.js';
 
 /**
  * Creates a custom decorator factory that stores metadata in the [sym.root, sym.custom] path

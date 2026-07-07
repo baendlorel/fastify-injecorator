@@ -1,9 +1,9 @@
-import { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
+import type { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
+import { sym } from '@nestify/shared';
 import { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import { isFunction, isObject } from '@core/asserts/whether.js';
 
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { sym } from '@core/common/sym.js';
 import { promiseTry } from '@core/common/promise-try.js';
 import { BadRequestException } from '@core/exceptions/index.js';
 

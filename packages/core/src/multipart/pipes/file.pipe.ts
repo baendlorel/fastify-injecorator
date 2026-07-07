@@ -1,5 +1,5 @@
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { sym } from '@core/common/sym.js';
+import { sym } from '../../../../shared/src/sym.js';
 import { throws } from '@core/asserts/expect.js';
 import { metaGet } from '@core/register/meta.js';
 import { InjecoratorPipe } from '@core/types/middleware.js';

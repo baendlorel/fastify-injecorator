@@ -16,7 +16,7 @@ import { apply } from '@core/register/index.js';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 import { injector } from '@core/register/lazy-injector.js';
 import { metaGet } from '@core/register/meta.js';
-import { sym } from '@core/common/sym.js';
+import { sym } from '../packages/shared/src/sym.js';
 
 describe('Custom Decorator Factory', () => {
   afterEach(() => {

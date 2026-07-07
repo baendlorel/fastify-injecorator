@@ -1,4 +1,4 @@
-import { sym } from '@core/common/sym.js';
+import { sym } from '../../../shared/src/sym.js';
 import { metaSet } from '@core/register/meta.js';
 import { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
 import { Func } from '@core/types/primitive.js';

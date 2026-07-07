@@ -2,6 +2,8 @@
 // This package contains common utilities used across all nestify-js packages
 
 export * from './consts.js';
+export * from './native.js';
+export * from './sym.js';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
 

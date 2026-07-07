@@ -3,7 +3,7 @@ import { FastifyRequest } from 'fastify';
 import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 
 import { $get, $set } from '@core/common/native.js';
-import { sym } from '@core/common/sym.js';
+import { sym } from '../../../shared/src/sym.js';
 
 /**
  * Simple JWT Service implementation

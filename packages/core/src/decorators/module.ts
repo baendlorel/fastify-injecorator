@@ -1,8 +1,9 @@
-import { ReflectDeep } from 'reflect-deep';
-import { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
-import { Class } from '@core/types/primitive.js';
+import type { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
+import type { Class } from '@core/types/primitive.js';
 
-import { sym } from '@core/common/index.js';
+import { ReflectDeep } from 'reflect-deep';
+import { sym } from '@nestify/shared';
+
 import { createNamedClass } from '@core/common/utils.js';
 import { expectClassNotDecorated, expectModulable } from '@core/asserts/index.js';
 import { metaSetModule } from '@core/register/meta.js';

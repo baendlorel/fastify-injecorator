@@ -1,5 +1,5 @@
-import { Class } from '@core/types/primitive.js';
-import { $getPrototypeOf } from './native.js';
+import type { Class } from '@core/types/primitive.js';
+import { _getPrototypeOf } from '@nestify/shared';
 
 /**
  * Like `instanceof`, but works with classes that are not instantiated.
@@ -12,7 +12,7 @@ export function subclassOf(subClass: Class, superClass: Class): boolean {
     return true;
   }
 
-  for (let proto = $getPrototypeOf(subClass); proto && proto !== Function.prototype; proto = $getPrototypeOf(proto)) {
+  for (let proto = _getPrototypeOf(subClass); proto && proto !== Function.prototype; proto = _getPrototypeOf(proto)) {
     if (proto === superClass) {
       return true;
     }

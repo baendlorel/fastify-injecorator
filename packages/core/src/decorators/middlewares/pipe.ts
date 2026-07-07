@@ -1,5 +1,7 @@
-import { Class, Func } from '@core/types/primitive.js';
-import { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
+import type { Class, Func } from '@core/types/primitive.js';
+import type { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
+import { _assign } from '@nestify/shared';
+
 import {
   expectHasOneHook,
   expectInjectToken,
@@ -10,7 +12,6 @@ import {
   isKey,
 } from '@core/asserts/index.js';
 import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js';
-import { $assign } from '@core/common/native.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -78,7 +79,7 @@ function mergeSchema(
   if (ok !== undefined) {
     o.response = { 200: ok };
   }
-  return $assign(o, other);
+  return _assign(o, other);
 }
 
 /**

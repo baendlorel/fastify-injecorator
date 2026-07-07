@@ -1,6 +1,6 @@
 import { Class } from '@core/types/primitive.js';
 import { DynamicModule } from '@core/types/injecorator.js';
-import { throws, likeModule } from '@core/asserts/index.js';
+import { likeModule } from '@core/asserts/index.js';
 
 const PATH_REGEX = /^\/?(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)(\/(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+))*$/;
 
@@ -19,7 +19,7 @@ export function splitPath(p: string | undefined): string[] {
   }
 
   if (!PATH_REGEX.test(p)) {
-    throws(`Path must match ${PATH_REGEX.toString()}. But got: [${p}]`);
+    _throw(`Path must match ${PATH_REGEX.toString()}. But got: [${p}]`);
   }
   return p.split('/').filter((s) => s !== '');
 }

@@ -2,7 +2,7 @@
 
 import type { FastifyRequest } from 'fastify';
 import type { HttpStatus } from '@nestify/shared';
-import type { Class, Func, Key } from './primitive.js';
+import type { Class, Func, Key } from '@nestify/shared';
 
 export interface BaseHttpException {
   readonly message: string;

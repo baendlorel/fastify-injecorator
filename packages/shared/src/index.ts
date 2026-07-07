@@ -5,15 +5,5 @@ export * from './consts.js';
 export * from './native.js';
 export * from './sym.js';
 export * from './status.js';
-
-type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
-
-export const concatArr = <T extends readonly unknown[]>(...args: (T | undefined)[]) => {
-  if (0 === args.length) {
-    return [] as ArrValue<T>[];
-  }
-  return args.filter(Array.isArray).flat() as ArrValue<T>[];
-};
-
-export const toAssigned = (...args: (object | symbol | undefined)[]) =>
-  Object.assign({}, ...args.filter((v) => v && typeof v === 'object'));
+export * from './utils.js';
+export type * from './types/primitive.js';

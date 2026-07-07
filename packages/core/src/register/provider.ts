@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { Class, Key } from '@core/types/primitive.js';
+import { Class, Key } from '@nestify/shared';
 import { expectClass, expectFunction, expectKey, isClass, isFunction } from '@core/asserts/index.js';
 import {
   InjectArg,

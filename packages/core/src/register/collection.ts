@@ -1,4 +1,4 @@
-import type { Class, Key } from '@core/types/primitive.js';
+import type { Class, Key } from '@nestify/shared';
 import type { ModuleMeta } from '@core/types/injecorator.js';
 import type { PipeOptions } from '@core/types/middleware.js';
 

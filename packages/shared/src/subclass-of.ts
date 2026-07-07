@@ -1,4 +1,4 @@
-import type { Class } from '@core/types/primitive.js';
+import type { Class } from './types/primitive.js';
 import { _getPrototypeOf } from '@nestify/shared';
 
 /**

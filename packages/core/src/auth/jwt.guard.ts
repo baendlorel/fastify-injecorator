@@ -1,4 +1,4 @@
-import { Class } from '@core/types/primitive.js';
+import { Class } from '@nestify/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 
 import { Guard } from '@core/decorators/middlewares/guard.js';

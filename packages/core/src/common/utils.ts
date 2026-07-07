@@ -1,4 +1,4 @@
-import { Class } from '@core/types/primitive.js';
+import type { Class } from '@nestify/shared';
 import { DynamicModule } from '@core/types/injecorator.js';
 import { likeModule } from '@core/asserts/index.js';
 

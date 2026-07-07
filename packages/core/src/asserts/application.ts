@@ -2,7 +2,7 @@ import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
 import { sym } from '@nestify/shared';
 
-import type { Class } from '@core/types/primitive.js';
+import type { Class } from '@nestify/shared';
 import type { InjectArg } from '@core/types/injecorator.js';
 
 import { expectClass, expectObject } from './expect.js';

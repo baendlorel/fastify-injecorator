@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { _define, _values, sym, toAssigned } from '@nestify/shared';
-import { Class } from '@core/types/primitive.js';
+import { Class } from '../@nestify/shared';
 
 import { injector } from '../lazy-injector.js';
 import {

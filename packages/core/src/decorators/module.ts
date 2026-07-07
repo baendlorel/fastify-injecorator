@@ -1,5 +1,5 @@
 import type { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
-import type { Class } from '@core/types/primitive.js';
+import type { Class } from '@nestify/shared';
 
 import { ReflectDeep } from 'reflect-deep';
 import { sym } from '@nestify/shared';

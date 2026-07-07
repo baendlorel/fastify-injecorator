@@ -3,7 +3,7 @@ import type { FastifySchema } from 'fastify';
 import type { ExecutionContext } from '@core/common/execution-context.js';
 import type { OrPromise } from '@core/types/utils.js';
 import type { InjectToken } from './injecorator.js';
-import type { Class, Key } from './primitive.js';
+import type { Class, Key } from '@nestify/shared';
 
 /**
  * Get middlewares for a class method

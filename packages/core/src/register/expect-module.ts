@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
-import type { Class, Key } from '@core/types/primitive.js';
+import type { Class, Key } from '@nestify/shared';
 import { inspect } from 'node:util';
 import { sym, _values, _isArray } from '@nestify/shared';
 

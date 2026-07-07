@@ -1,4 +1,4 @@
-import { Func } from '@core/types/primitive.js';
+import { Func } from '@nestify/shared';
 import { expectBoolean, expectFunction, expectKey, expectObject, expectString, expect } from './expect.js';
 
 export const expectClassDecoratorContext = (o: any, msg: string) => {

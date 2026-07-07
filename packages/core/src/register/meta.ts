@@ -1,6 +1,6 @@
 import { ReflectDeep } from 'reflect-deep';
 import { concatArr, sym } from '@nestify/shared';
-import { Class, Key } from '@core/types/primitive.js';
+import { Class, Key } from '@nestify/shared';
 import { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import {
   ProviderMeta,

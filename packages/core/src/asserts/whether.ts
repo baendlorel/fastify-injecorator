@@ -1,4 +1,4 @@
-import { Class, Func, Key } from '@core/types/primitive.js';
+import { Class, Func, Key } from '@nestify/shared';
 import {
   InjectToken,
   InjectArg,

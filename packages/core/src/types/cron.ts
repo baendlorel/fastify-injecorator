@@ -1,4 +1,4 @@
-import { Func } from './primitive.js';
+import { Func } from '@nestify/shared';
 
 export interface CronOptions {
   expression: string;

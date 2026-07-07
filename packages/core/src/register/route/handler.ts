@@ -1,6 +1,6 @@
 import { TaskifyAsync } from 'serial-task';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Func, Class } from '@core/types/primitive.js';
+import { Func, Class } from '../@nestify/shared';
 import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
 
 import { expectArray, isFunction } from '@core/asserts/index.js';

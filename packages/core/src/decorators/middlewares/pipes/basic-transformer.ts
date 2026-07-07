@@ -4,7 +4,7 @@ import { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import { isFunction, isObject } from '@core/asserts/whether.js';
 
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { promiseTry } from '@core/common/promise-try.js';
+import { promiseTry } from '../../../../../shared/src/promise-try.js';
 import { BadRequestException } from '@core/exceptions/index.js';
 
 type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';

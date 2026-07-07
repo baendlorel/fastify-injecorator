@@ -1,5 +1,5 @@
 import { CronExpressionParser } from 'cron-parser';
-import { Class, Func } from '@core/types/primitive.js';
+import { Class, Func } from '@nestify/shared';
 import { CronOptions } from '@core/types/cron.js';
 
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';

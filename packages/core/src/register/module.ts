@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import type { Class } from '@core/types/primitive.js';
+import type { Class } from '@nestify/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';

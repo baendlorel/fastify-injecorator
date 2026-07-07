@@ -1,4 +1,4 @@
-import { Func } from '@core/types/primitive.js';
+import { Func } from '../@nestify/shared';
 import { expectMethodDecorator, expectString, expectOrString } from '@core/asserts/index.js';
 import { metaSetRoute } from '@core/register/meta.js';
 

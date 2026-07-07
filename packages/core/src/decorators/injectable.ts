@@ -1,4 +1,4 @@
-import { Class } from '@core/types/primitive.js';
+import { Class } from '@nestify/shared';
 import { expectArray, expectClass, expectInjectable } from '@core/asserts/index.js';
 import { metaSetProvider, metaSetProviderOnClass } from '@core/register/meta.js';
 

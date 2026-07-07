@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
 import { InjecoratorMiddleware } from '@core/types/middleware.js';
-import { Class, Func, Key } from '@core/types/primitive.js';
+import { Class, Func, Key } from '@nestify/shared';
 
 import { toModuleClass } from '@core/common/index.js';
 import { expectFunction, expectObject, expect, isClass, isKey, isObject } from '@core/asserts/index.js';

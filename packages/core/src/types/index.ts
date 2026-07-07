@@ -12,7 +12,7 @@ import type {
   RouteShorthandOptions,
 } from 'fastify';
 import type { RouteApiSchema } from './middleware.js';
-import type { Key } from './primitive.js';
+import type { Key } from '@nestify/shared';
 import { sym } from '@nestify/shared';
 
 export * from './auth.js';

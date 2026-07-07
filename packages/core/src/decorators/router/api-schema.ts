@@ -1,4 +1,4 @@
-import { Func } from '@core/types/primitive.js';
+import { Func } from '../@nestify/shared';
 import { RouteApiSchema } from '@core/types/middleware.js';
 
 import { expectMethodDecorator, expectObject } from '@core/asserts/index.js';

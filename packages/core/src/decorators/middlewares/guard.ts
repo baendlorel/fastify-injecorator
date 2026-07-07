@@ -1,4 +1,4 @@
-import { Class, Func } from '@core/types/primitive.js';
+import { Class, Func } from '../@nestify/shared';
 import { InjectToken } from '@core/types/injecorator.js';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 

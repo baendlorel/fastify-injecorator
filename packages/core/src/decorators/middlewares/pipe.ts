@@ -1,4 +1,4 @@
-import type { Class, Func } from '@core/types/primitive.js';
+import type { Class, Func } from '@nestify/shared';
 import type { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import { _assign } from '@nestify/shared';
 

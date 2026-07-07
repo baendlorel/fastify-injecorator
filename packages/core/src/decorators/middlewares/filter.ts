@@ -1,10 +1,10 @@
-import { Class, Func } from '@core/types/primitive.js';
+import { Class, Func } from '../@nestify/shared';
 import { InjectToken } from '@core/types/injecorator.js';
 import { InjecoratorFilter } from '@core/types/middleware.js';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
 import { metaSetFilters, metaSetUseFilters } from '@core/register/meta.js';
-import { subclassOf } from '@core/common/subclass-of.js';
+import { subclassOf } from '../../../../shared/src/subclass-of.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';

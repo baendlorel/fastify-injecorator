@@ -1,5 +1,5 @@
-import { Class, Func } from '@core/types/primitive.js';
-import { InjectToken } from '@core/types/injecorator.js';
+import type { Class, Func } from '@nestify/shared';
+import type { InjectToken } from '@core/types/injecorator.js';
 
 import { expectInjectArg } from '@core/asserts/application.js';
 import { expectClassDecoratorContext, expectClassMethodDecoratorContext } from '@core/asserts/decorator-context.js';

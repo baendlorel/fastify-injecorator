@@ -1,4 +1,4 @@
-import { Class, Func } from '@core/types/primitive.js';
+import { Class, Func } from '@nestify/shared';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,

@@ -4,6 +4,7 @@
 export * from './consts.js';
 export * from './native.js';
 export * from './sym.js';
+export * from './status.js';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
 

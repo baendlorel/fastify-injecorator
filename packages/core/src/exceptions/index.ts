@@ -1,5 +1,5 @@
+import { HttpStatus } from '@nestify/shared';
 import { BaseHttpException } from '@core/types/injecorator.js';
-import { HttpStatus } from '@core/common/status.js';
 
 /**
  * Base HTTP exception class

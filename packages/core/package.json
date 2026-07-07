@@ -1,5 +1,5 @@
 {
-  "name": "@nestifyjs/core",
+  "name": "@nestify/core",
   "version": "0.0.18",
   "description": "Core dependency injection system for nestify-js",
   "type": "module",
@@ -35,7 +35,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@nestifyjs/shared": "workspace:*",
+    "@nestify/shared": "workspace:*",
     "cron-parser": "^5.6.1",
     "reflect-deep": "^2.0.1",
     "serial-task": "^1.2.2"

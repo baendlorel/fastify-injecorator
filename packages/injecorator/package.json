@@ -1,5 +1,5 @@
 {
-  "name": "@nestifyjs/injecorator",
+  "name": "@nestify/injecorator",
   "version": "0.0.18",
   "description": "A NestJS like fastify plugin for dependency injection",
   "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
@@ -36,7 +36,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@nestifyjs/core": "workspace:*",
+    "@nestify/core": "workspace:*",
     "@fastify/autoload": "^6.3.1",
     "@fastify/one-line-logger": "^2.1.0",
     "@fastify/sensible": "^6.0.4",

@@ -1,5 +1,5 @@
 {
-  "name": "@nestifyjs/schema",
+  "name": "@nestify/schema",
   "version": "0.0.18",
   "description": "Schema validation and utilities for nestify-js",
   "type": "module",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@nestifyjs/core": "workspace:*",
+    "@nestify/core": "workspace:*",
     "zod": "^4.4.3"
   },
   "devDependencies": {

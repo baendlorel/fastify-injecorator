@@ -21,8 +21,8 @@
     "outDir": "./dist",
     "rootDir": ".",
     "paths": {
-      "@nestifyjs/shared": ["./packages/shared/src/index.ts"],
-      "@nestifyjs/core": ["./packages/core/src/index.ts"],
+      "@nestify/shared": ["./packages/shared/src/index.ts"],
+      "@nestify/core": ["./packages/core/src/index.ts"],
       "@core/*": ["./packages/core/src/*"],
       "@schema/*": ["./packages/schema/src/*"],
       "@swagger/*": ["./packages/swagger/src/*"],

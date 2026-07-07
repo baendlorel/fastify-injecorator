@@ -1,7 +1,7 @@
+import type { Func, Class } from '@nestify/shared';
+import type { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 import { TaskifyAsync } from 'serial-task';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { Func, Class } from '../@nestify/shared';
-import { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
 
 import { expectArray, isFunction } from '@core/asserts/index.js';
 import { ExecutionContext } from '@core/common/execution-context.js';

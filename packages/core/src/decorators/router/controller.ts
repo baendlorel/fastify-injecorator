@@ -1,4 +1,4 @@
-import { Class } from '../@nestify/shared';
+import type { Class } from '@nestify/shared';
 import { expectInjectable, expectOrString } from '@core/asserts/index.js';
 import { metaSetController } from '@core/register/meta.js';
 

@@ -1,5 +1,5 @@
-import { Func } from '../@nestify/shared';
-import { RouteApiSchema } from '@core/types/middleware.js';
+import type { Func } from '@nestify/shared';
+import type { RouteApiSchema } from '@core/types/middleware.js';
 
 import { expectMethodDecorator, expectObject } from '@core/asserts/index.js';
 import { metaSetSchema } from '@core/register/meta.js';

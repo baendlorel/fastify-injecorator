@@ -1,5 +1,5 @@
-import { Func } from '../@nestify/shared';
-import { RouteOptType } from '@core/types/index.js';
+import type { Func } from '@nestify/shared';
+import type { RouteOptType } from '@core/types/index.js';
 
 import { expectObject, expectMethodDecorator } from '@core/asserts/index.js';
 import { metaSetOpt } from '@core/register/meta.js';

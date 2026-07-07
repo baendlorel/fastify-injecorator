@@ -1,6 +1,6 @@
-import { Class, Func } from '../@nestify/shared';
-import { InjectToken } from '@core/types/injecorator.js';
-import { InjecoratorGuard } from '@core/types/middleware.js';
+import type { Class, Func } from '@nestify/shared';
+import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjecoratorGuard } from '@core/types/middleware.js';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
 import { metaSetGuard, metaSetUseGuards } from '@core/register/meta.js';

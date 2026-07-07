@@ -1,4 +1,4 @@
-import { Class } from '../../@nestify/shared';
+import type { Class } from '@nestify/shared';
 
 import { PipeBody } from './body.pipe.js';
 import { PipeIp } from './ip.pipe.js';

@@ -1,29 +1,14 @@
+import type { Class, Func } from '@nestify/shared';
 import { CronExpressionParser } from 'cron-parser';
-import { Class, Func } from '@nestify/shared';
-import { CronOptions } from '@core/types/cron.js';
+import { _entries, sym } from '@nestify/shared';
 
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
-import { isObject, orFunction } from '@core/asserts/whether.js';
-import { _entries, sym } from '@nestify/shared';
 
-const defaultArgsGetter = () => [];
-
-export function Cron(options: CronOptions): Func;
-export function Cron(expression: string): Func;
-export function Cron(arg: CronOptions | string): Func {
-  if (isObject(arg) && typeof arg.expression === 'string' && orFunction(arg.argsGetter)) {
-    // keep
-    arg.argsGetter ??= defaultArgsGetter;
-  } else if (typeof arg === 'string') {
-    arg = { expression: arg, argsGetter: defaultArgsGetter };
-  } else {
-    _throw(`Invalid argument for @Cron(): ${typeof arg}`);
-  }
-
+export function Cron(expression: string): Func {
   return function (target: Func, context: ClassMethodDecoratorContext) {
     expectMethodDecorator(target, context);
-    metaSet<CronOptions>(context, [sym.cron, context.name], arg);
+    metaSet<string>(context, [sym.cron, context.name], expression);
   };
 }
 
@@ -34,7 +19,7 @@ const cronJobs: Func[] = [];
  * This function is called in lazy injector after all instances are created
  */
 export function bindCronJob(instance: InstanceType<Class>, sourceClass: Class) {
-  const cronMeta = metaGet<Record<string, CronOptions>>(sourceClass, [sym.cron]);
+  const cronMeta = metaGet<Record<string, string>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
     return;
   }
@@ -42,13 +27,12 @@ export function bindCronJob(instance: InstanceType<Class>, sourceClass: Class) {
   const entries = _entries(cronMeta);
   for (let i = 0; i < entries.length; i++) {
     const methodName = entries[i][0];
-    const { argsGetter, expression } = entries[i][1];
+    const expression = entries[i][1];
     const job = () => {
-      const args = argsGetter();
       const next = CronExpressionParser.parse(expression).next();
       const delta = next.getTime() - Date.now();
       setTimeout(() => {
-        instance[methodName](...args);
+        instance[methodName]();
         job(); // to the next call
       }, delta);
     };

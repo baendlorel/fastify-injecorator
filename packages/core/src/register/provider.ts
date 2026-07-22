@@ -1,6 +1,6 @@
 import { inspect } from 'node:util';
-import { Class, Key } from '@nestify/shared';
-import { expectClass, expectFunction, expectKey, isClass, isFunction } from '@core/asserts/index.js';
+import { Constructable, Key } from '@nestify/shared';
+import { expectClass, expectFunction, expectKey, _isConstructable, _isFunction } from '@core/asserts/index.js';
 import {
   InjectArg,
   ProviderOptions,
@@ -14,13 +14,13 @@ namespace ph {
   export function match(
     opts: ProviderOptions,
     callbacks: {
-      useClass?: (token: Key, cls: Class) => unknown;
-      useValue?: (token: Key, value: InstanceType<Class>) => unknown;
+      useClass?: (token: Key, cls: Constructable) => unknown;
+      useValue?: (token: Key, value: InstanceType<Constructable>) => unknown;
       useFactory?: (
         token: Key,
         // TODO 实际上InstanceType<Class>就是any啊！
-        factory: (...instances: InstanceType<Class>[]) => InstanceType<Class>,
-        inject: (Class | Key)[],
+        factory: (...instances: InstanceType<Constructable>[]) => InstanceType<Constructable>,
+        inject: (Constructable | Key)[],
       ) => unknown;
       useExisting?: (token: Key, existingToken: Key) => unknown;
     },
@@ -28,7 +28,7 @@ namespace ph {
     const { useClass, useExisting, useFactory, useValue } = callbacks;
 
     // Handle direct class provider
-    if (isClass(opts) && useClass) {
+    if (_isConstructable(opts) && useClass) {
       return useClass(opts.name, opts);
     }
 
@@ -80,11 +80,11 @@ namespace ph {
       return arg;
     }
 
-    if (isClass(arg)) {
+    if (_isConstructable(arg)) {
       return arg.name;
     }
 
-    if (isFunction(arg)) {
+    if (_isFunction(arg)) {
       return arg().name;
     }
 
@@ -99,11 +99,11 @@ namespace ph {
       return String(arg);
     }
 
-    if (isClass(arg)) {
+    if (_isConstructable(arg)) {
       return arg.name;
     }
 
-    if (isFunction(arg)) {
+    if (_isFunction(arg)) {
       return arg().name;
     }
   }

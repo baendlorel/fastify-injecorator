@@ -1,11 +1,11 @@
-import { Class } from '@nestify/shared';
+import { Constructable } from '@nestify/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 
 import { Guard } from '@core/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { jwt as defaultJwt } from './jwt.js';
 
-const guards = new Map<typeof defaultJwt, Class<InjecoratorGuard>>();
+const guards = new Map<typeof defaultJwt, Constructable<InjecoratorGuard>>();
 
 /**
  * JWT Guard - protects routes by validating JWT tokens

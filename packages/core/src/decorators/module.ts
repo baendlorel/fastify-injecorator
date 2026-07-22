@@ -1,5 +1,5 @@
 import type { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
-import type { Class } from '@nestify/shared';
+import type { Constructable } from '@nestify/shared';
 
 import { ReflectDeep } from 'reflect-deep';
 import { sym } from '@nestify/shared';
@@ -19,7 +19,7 @@ import { toInjectable } from './injectable.js';
  * - Modules can export providers, which can be injected into other modules.
  */
 export function Module(options: Partial<ModuleMeta>) {
-  return function (target: Class, context: ClassDecoratorContext) {
+  return function (target: Constructable, context: ClassDecoratorContext) {
     expectModulable(target, context);
     metaSetModule(context, options);
   };
@@ -35,7 +35,7 @@ interface ToModuleOptions {
  * Make outer provider an importable Injecorator module
  * @param outerProvider
  */
-export function toModule(outerProvider: Class, opt?: Partial<ToModuleOptions>): DynamicModule {
+export function toModule(outerProvider: Constructable, opt?: Partial<ToModuleOptions>): DynamicModule {
   const { isGlobal = false, args = [] } = Object(opt) as ToModuleOptions;
   expectClassNotDecorated(outerProvider, sym.provider);
 

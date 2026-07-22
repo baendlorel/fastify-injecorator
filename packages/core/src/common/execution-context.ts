@@ -1,4 +1,4 @@
-import { Class, Func } from '@nestify/shared';
+import { Constructable, Func } from '@nestify/shared';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,
@@ -18,7 +18,7 @@ export class ExecutionContext<CT extends keyof ArgsTypeMap = 'http'> {
   constructor(
     private readonly args: ArgsTypeMap[CT],
     private readonly contextType: CT,
-    private readonly controller: Class,
+    private readonly controller: Constructable,
     private readonly contextHandler: Func,
   ) {}
 
@@ -95,8 +95,8 @@ export class ExecutionContext<CT extends keyof ArgsTypeMap = 'http'> {
   /**
    * Returns the controller or provider class handling the request.
    */
-  getClass<T = unknown>(): Class<T> {
-    return this.controller as Class<T>;
+  getClass<T = unknown>(): Constructable<T> {
+    return this.controller as Constructable<T>;
   }
 
   /**

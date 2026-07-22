@@ -1,4 +1,4 @@
-import type { Class } from './types/primitive.js';
+import type { Constructable } from './types/primitive.js';
 import { _getPrototypeOf } from '@nestify/shared';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
@@ -18,7 +18,7 @@ export const toAssigned = (...args: (object | symbol | undefined)[]) =>
  * @param subClass The class to check
  * @param superClass The potential parent class
  */
-export function subclassOf(subClass: Class, superClass: Class): boolean {
+export function subclassOf(subClass: Constructable, superClass: Constructable): boolean {
   if (subClass === superClass) {
     return true;
   }

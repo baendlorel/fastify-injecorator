@@ -1,4 +1,4 @@
-import type { Class, Key } from '@nestify/shared';
+import type { Constructable, Key } from '@nestify/shared';
 import type { ModuleMeta } from '@core/types/injecorator.js';
 import type { PipeOptions } from '@core/types/middleware.js';
 
@@ -11,7 +11,7 @@ import { expect } from '@core/asserts/index.js';
  * Collection of some global metadata
  */
 export namespace collection {
-  export const globalModules = new Set<Class>();
+  export const globalModules = new Set<Constructable>();
   export const globalProviders = new Set<Key>();
   export const globalInterceptors: symbol[] = [];
   export const globalGuards: symbol[] = [];
@@ -50,7 +50,7 @@ export namespace collection {
   /**
    * @returns whether this module is already added
    */
-  export function addGlobalModule(moduleClass: Class): boolean {
+  export function addGlobalModule(moduleClass: Constructable): boolean {
     if (globalModules.has(moduleClass)) {
       return false;
     }

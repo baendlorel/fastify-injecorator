@@ -1,4 +1,4 @@
-import type { Class, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify/shared';
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { InjecoratorFilter } from '@core/types/middleware.js';
 import { subclassOf } from '@nestify/shared';
@@ -16,8 +16,8 @@ const hooks: (keyof InjecoratorFilter)[] = ['catch'];
  * - if no exception classes are provided, it will catch all exceptions
  * @param exceptionClasses Classes of exceptions to be caught by this filter
  */
-export function Filter(...exceptionClasses: Class[]) {
-  return function (target: Class, context: ClassDecoratorContext) {
+export function Filter(...exceptionClasses: Constructable[]) {
+  return function (target: Constructable, context: ClassDecoratorContext) {
     expectHasOneHook<InjecoratorFilter>(target, hooks, `Filters must implement one of [${hooks.join(', ')}]`);
 
     exceptionClasses.forEach((exceptionClass) => {
@@ -38,7 +38,7 @@ export function Filter(...exceptionClasses: Class[]) {
  */
 export function UseFilters(...filters: InjectToken[]) {
   expect(filters.length > 0, '@UseFilters requires at least one filter');
-  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
+  return function (target: Constructable | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(filters, target, context);
 
     metaSetUseFilters(context, filters);

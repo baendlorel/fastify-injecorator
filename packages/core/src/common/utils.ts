@@ -1,4 +1,4 @@
-import type { Class } from '@nestify/shared';
+import type { Constructable } from '@nestify/shared';
 import { DynamicModule } from '@core/types/injecorator.js';
 import { likeModule } from '@core/asserts/index.js';
 
@@ -25,16 +25,16 @@ export function splitPath(p: string | undefined): string[] {
 }
 
 // # parameter normalization
-export function toDynamicModule(mod: Class | DynamicModule): DynamicModule {
+export function toDynamicModule(mod: Constructable | DynamicModule): DynamicModule {
   return likeModule(mod)
     ? { moduleClass: mod, isGlobal: false }
     : { moduleClass: mod.moduleClass, isGlobal: mod.isGlobal ?? false };
 }
 
-export function toModuleClass(mod: Class | DynamicModule): Class {
+export function toModuleClass(mod: Constructable | DynamicModule): Constructable {
   return likeModule(mod) ? mod : mod.moduleClass;
 }
 
-export function createNamedClass(name: string): Class {
+export function createNamedClass(name: string): Constructable {
   return new Function(`return class ${name} {}`)();
 }

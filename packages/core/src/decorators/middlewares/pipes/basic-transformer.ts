@@ -1,7 +1,7 @@
 import type { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
 import { sym } from '@nestify/shared';
 import { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
-import { isFunction, isObject } from '@core/asserts/whether.js';
+import { _isFunction, _isObject } from '@core/asserts/whether.js';
 
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { promiseTry } from '../../../../../shared/src/promise-try.js';
@@ -19,7 +19,7 @@ class BasicTransformer {
 
   private getValidator(compiler: Compiler | undefined, schema?: PipeSchema): Validator | null {
     if (this.validatorCompiler === null) {
-      this.validatorCompiler = isFunction(compiler) ? compiler : null;
+      this.validatorCompiler = _isFunction(compiler) ? compiler : null;
     }
 
     if (this.validatorCompiler === null) {
@@ -68,7 +68,7 @@ class BasicTransformer {
     if (schema === undefined) {
       return undefined;
     }
-    if (isObject<PipeFullSchema>(schema)) {
+    if (_isObject<PipeFullSchema>(schema)) {
       switch (httpPart) {
         case 'body':
           return 'body' in schema ? schema.body : undefined;

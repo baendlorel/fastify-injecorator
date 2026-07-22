@@ -1,4 +1,4 @@
-import { Class, Func, Key } from '@nestify/shared';
+import { Constructable, Func, Key } from '@nestify/shared';
 import {
   InjectToken,
   InjectArg,
@@ -12,18 +12,18 @@ import {
 import { metaGetModule } from '@core/register/meta.js';
 import { _fnToString, _isArray } from '@nestify/shared';
 
-export function isObject<T extends object>(o: any): o is T {
+export function _isObject<T extends object>(o: unknown): o is T {
   return typeof o === 'object' && o !== null;
 }
 
-export function isKey(o: unknown): o is Key {
+export function _isKey(o: unknown): o is Key {
   return typeof o === 'string' || typeof o === 'symbol';
 }
 
 /**
  * Only criterion: newable
  */
-export function isClass(o: any): o is Class {
+export function _isConstructable(o: any): o is Constructable {
   if (typeof o !== 'function') {
     return false;
   }
@@ -37,15 +37,15 @@ export function isClass(o: any): o is Class {
   }
 }
 
-export function isFunction(o: any): o is Func {
+export function _isFunction(o: any): o is Func {
   return typeof o === 'function';
 }
 
-export function orFunction(o: any): o is Func | undefined {
+export function _orFunction(o: any): o is Func | undefined {
   return typeof o === 'function' || o === undefined;
 }
 
-export function isPathNode(p: string): boolean {
+export function _isPathNode(p: string): boolean {
   return /^[a-zA-Z0-9_-]+$/.test(p);
 }
 
@@ -70,12 +70,12 @@ export function isInjectedClassGetter(o: unknown): o is Func {
  * @param target
  * @returns
  */
-export function likeModule(target: unknown): target is Class {
-  if (!isClass(target)) {
+export function likeModule(target: unknown): target is Constructable {
+  if (!_isConstructable(target)) {
     return false;
   }
   const o = metaGetModule(target);
-  if (!isObject(o)) {
+  if (!_isObject(o)) {
     return false;
   }
 
@@ -87,11 +87,11 @@ export function likeModule(target: unknown): target is Class {
 }
 
 export function isInjectToken(target: any): target is InjectToken {
-  if (isKey(target)) {
+  if (_isKey(target)) {
     return true;
   }
 
-  if (isClass(target)) {
+  if (_isConstructable(target)) {
     return true;
   }
 
@@ -99,15 +99,15 @@ export function isInjectToken(target: any): target is InjectToken {
 }
 
 export function isInjectArg(target: any): target is InjectArg {
-  if (isKey(target)) {
+  if (_isKey(target)) {
     return true;
   }
 
-  if (isClass(target)) {
+  if (_isConstructable(target)) {
     return true;
   }
 
-  if (isFunction(target) && isClass(target())) {
+  if (_isFunction(target) && _isConstructable(target())) {
     return true;
   }
 
@@ -116,18 +116,18 @@ export function isInjectArg(target: any): target is InjectArg {
 
 export function isProviderOptions(target: unknown): target is ProviderOptions {
   // Class provider: direct class
-  if (isClass(target)) {
+  if (_isConstructable(target)) {
     return true;
   }
   // Object provider: must have provide key
-  if (!isObject<ProviderStandardOptions>(target)) {
+  if (!_isObject<ProviderStandardOptions>(target)) {
     return false;
   }
-  if (!isKey(target.provide)) {
+  if (!_isKey(target.provide)) {
     return false;
   }
 
-  if (isClass((target as ProviderUseClass).useClass)) {
+  if (_isConstructable((target as ProviderUseClass).useClass)) {
     return true;
   }
 
@@ -135,11 +135,11 @@ export function isProviderOptions(target: unknown): target is ProviderOptions {
     return true;
   }
 
-  if (isFunction((target as ProviderUseFactory).useFactory)) {
+  if (_isFunction((target as ProviderUseFactory).useFactory)) {
     return true;
   }
 
-  if (isKey((target as ProviderUseExisting).useExisting)) {
+  if (_isKey((target as ProviderUseExisting).useExisting)) {
     return true;
   }
 

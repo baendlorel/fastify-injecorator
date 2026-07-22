@@ -1,8 +1,8 @@
-import { Class, Func, Key } from '@nestify/shared';
+import { Constructable, Func, Key } from '@nestify/shared';
 import { InjectToken } from '@core/types/injecorator.js';
 
 import { InjecoratorError } from './error.js';
-import { isClass } from './whether.js';
+import { _isConstructable } from './whether.js';
 import { _entries, _isArray } from '@nestify/shared';
 
 // # Basic
@@ -38,12 +38,12 @@ export const expectObject: <T = object>(o: any, msg: string) => asserts o is T =
 };
 
 export const expectKey: (o: any, msg: string) => asserts o is InjectToken = (o, msg) => {
-  if (typeof o !== 'string' && typeof o !== 'symbol' && !isClass(o)) {
+  if (typeof o !== 'string' && typeof o !== 'symbol' && !_isConstructable(o)) {
     _throw(msg);
   }
 };
 
-export const expectClass: (o: any, msg: string) => asserts o is Class = (o, msg) => {
+export const expectClass: (o: any, msg: string) => asserts o is Constructable = (o, msg) => {
   if (typeof o !== 'function') {
     _throw(msg);
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
-import type { Class, Key } from '@nestify/shared';
+import type { Constructable, Key } from '@nestify/shared';
 import { inspect } from 'node:util';
 import { sym, _values, _isArray } from '@nestify/shared';
 
@@ -18,10 +18,10 @@ import {
   expectString,
   expectOrObject,
   expect,
-  isClass,
-  isKey,
-  isObject,
-  isPathNode,
+  _isConstructable,
+  _isKey,
+  _isObject,
+  _isPathNode,
 } from '@core/asserts/index.js';
 import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@core/register/meta.js';
 import ph from './provider.js';
@@ -37,7 +37,7 @@ const injectableCache = new Set<any>();
  *   - args: an array of constructor arguments
  * - injections?: a record of class dependencies
  */
-export function expectProvider(target: unknown): asserts target is Class {
+export function expectProvider(target: unknown): asserts target is Constructable {
   expectClass(target, `Target is not a class: ${String(target)} ${Object(target).name}`);
 
   // Should have args[]
@@ -92,7 +92,7 @@ export function expectController(target: unknown) {
 
   // controller metadata check
   const pred = (pathNode: string) => {
-    if (!isPathNode(pathNode)) {
+    if (!_isPathNode(pathNode)) {
       return `Path node must match /^[a-zA-Z0-9_-]+$/. But got: [${pathNode}]`;
     }
     return true;
@@ -130,7 +130,7 @@ export function expectController(target: unknown) {
  * @param target
  * @returns
  */
-export function expectModule(target: unknown): asserts target is Class {
+export function expectModule(target: unknown): asserts target is Constructable {
   if (moduleCache.has(target)) {
     return;
   }
@@ -190,9 +190,9 @@ export function clearExpectCache() {
 }
 
 function getDependencyTokens(options: ProviderOptions): Key[] | null {
-  if (isClass(options)) {
+  if (_isConstructable(options)) {
     const injections = metaGetInject(options);
-    if (!isObject(injections)) {
+    if (!_isObject(injections)) {
       return null;
     }
     return _values(injections).map((injection) => ph.getInjectToken(injection.dependency));
@@ -200,7 +200,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
 
   if ('useClass' in options) {
     const injections = metaGetInject(options.useClass);
-    if (!isObject(injections)) {
+    if (!_isObject(injections)) {
       return null;
     }
     return _values(injections).map((injection) => ph.getInjectToken(injection.dependency));
@@ -208,7 +208,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
 
   if ('inject' in options) {
     if (_isArray(options.inject)) {
-      options.inject.map((arg) => (isKey(arg) ? arg : arg.name));
+      options.inject.map((arg) => (_isKey(arg) ? arg : arg.name));
     } else {
       return null;
     }

@@ -1,4 +1,4 @@
-import type { Class, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify/shared';
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { InjecoratorGuard } from '@core/types/middleware.js';
 
@@ -12,7 +12,7 @@ const hooks: (keyof InjecoratorGuard)[] = ['canActivate'];
  * Use to define a Guard class
  */
 export function Guard() {
-  return function (target: Class, context: ClassDecoratorContext) {
+  return function (target: Constructable, context: ClassDecoratorContext) {
     expectHasOneHook<InjecoratorGuard>(
       target,
       hooks,
@@ -31,7 +31,7 @@ export function Guard() {
  */
 export function UseGuards(...guards: InjectToken[]) {
   expect(guards.length > 0, '@UseGuards requires at least one guard');
-  return function (target: Class | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
+  return function (target: Constructable | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware(guards, target, context);
 
     metaSetUseGuards(context, guards);

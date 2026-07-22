@@ -1,4 +1,4 @@
-import type { Class, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify/shared';
 import { CronExpressionParser } from 'cron-parser';
 import { _entries, sym } from '@nestify/shared';
 
@@ -18,7 +18,7 @@ const cronJobs: Func[] = [];
  * Bind cron jobs for a given instance
  * This function is called in lazy injector after all instances are created
  */
-export function bindCronJob(instance: InstanceType<Class>, sourceClass: Class) {
+export function bindCronJob(instance: InstanceType<Constructable>, sourceClass: Constructable) {
   const cronMeta = metaGet<Record<string, string>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
     return;

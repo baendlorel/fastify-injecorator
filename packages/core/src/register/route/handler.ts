@@ -1,9 +1,9 @@
-import type { Func, Class } from '@nestify/shared';
+import type { Func, Constructable } from '@nestify/shared';
 import type { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { TaskifyAsync } from 'serial-task';
 
-import { expectArray, isFunction } from '@core/asserts/index.js';
+import { expectArray, _isFunction } from '@core/asserts/index.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
 
 async function run(fns: Func[], ...args: any[]) {
@@ -18,7 +18,7 @@ interface MiddlewareGroup {
   filter: TaskifyAsync<FilterTask>;
 }
 
-export function createHandler(controller: Class, method: Func, middlewares: MiddlewareGroup) {
+export function createHandler(controller: Constructable, method: Func, middlewares: MiddlewareGroup) {
   const { guard, interceptor, pipe, filter } = middlewares;
   return async function (request: FastifyRequest, reply: FastifyReply) {
     const context = new ExecutionContext([request, reply], 'http', controller, method);
@@ -44,13 +44,13 @@ export function createHandler(controller: Class, method: Func, middlewares: Midd
       // todo pipe也要第二次运行，用来返回值校验
 
       // Interceptor leave
-      const leaves = interceptResult.results.filter(isFunction).reverse();
+      const leaves = interceptResult.results.filter(_isFunction).reverse();
       await run(leaves, result);
 
       return result;
     } catch (error) {
       // Interceptor leave (cleanup on error)
-      const leaves = interceptResult.results.filter(isFunction).reverse();
+      const leaves = interceptResult.results.filter(_isFunction).reverse();
       await run(leaves, error);
 
       // Filter

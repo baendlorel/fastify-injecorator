@@ -1,4 +1,4 @@
-import type { Class, Func, Key } from '@nestify/shared';
+import type { Constructable, Func, Key } from '@nestify/shared';
 import { sym } from '@nestify/shared';
 import { expectDecoratorContext } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
@@ -40,7 +40,7 @@ import { ExecutionContext } from '@core/common/execution-context.js';
  */
 export function createCustomDecorator<T = unknown>(key: Key) {
   return function (metadata: T) {
-    return function (target: Class | Func, context: DecoratorContext) {
+    return function (target: Constructable | Func, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
 
       if (context.kind === 'class') {

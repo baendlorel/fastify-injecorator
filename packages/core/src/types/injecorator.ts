@@ -2,7 +2,7 @@
 
 import type { FastifyRequest } from 'fastify';
 import type { HttpStatus } from '@nestify/shared';
-import type { Class, Func, Key } from '@nestify/shared';
+import type { Constructable, Func, Key } from '@nestify/shared';
 
 export interface BaseHttpException {
   readonly message: string;
@@ -23,9 +23,9 @@ export type FastifyRequestDataKeys = Exclude<DataKeys<FastifyRequest>, undefined
 
 export type ArgExtractionPath = FastifyRequestDataKeys | `${FastifyRequestDataKeys}.${string}`;
 
-export type InjectToken = Key | Class;
+export type InjectToken = Key | Constructable;
 
-export type InjectArg = InjectToken | (() => Class);
+export type InjectArg = InjectToken | (() => Constructable);
 
 export interface ProviderUseFactory {
   /**
@@ -40,7 +40,7 @@ export interface ProviderUseFactory {
    */
   useFactory: (...instances: any[]) => any;
 
-  inject?: (Class | Key)[];
+  inject?: (Constructable | Key)[];
 }
 
 export interface ProviderUseValue {
@@ -65,7 +65,7 @@ export interface ProviderUseClass {
   /**
    * Provide via class. Managed by Injecorator, dependencies are automatically injected.
    */
-  useClass: Class;
+  useClass: Constructable;
 }
 
 export interface ProviderUseExisting {
@@ -82,10 +82,10 @@ export interface ProviderUseExisting {
 
 export type ProviderStandardOptions = ProviderUseFactory | ProviderUseValue | ProviderUseClass | ProviderUseExisting;
 
-export type ProviderOptions = ProviderStandardOptions | Class;
+export type ProviderOptions = ProviderStandardOptions | Constructable;
 
 export interface DynamicModule {
-  moduleClass: Class;
+  moduleClass: Constructable;
 
   /**
    * When "true", makes a module global-scoped.
@@ -100,7 +100,7 @@ export interface DynamicModule {
 }
 
 export interface FastifyInjecoratorOptions {
-  rootModule: Class;
+  rootModule: Constructable;
 
   /**
    * Injecorator naturally allows circular references, but:
@@ -147,7 +147,7 @@ export interface ModuleMeta {
   /**
    * Controllers declared in this module
    */
-  readonly controllers: Class[];
+  readonly controllers: Constructable[];
 
   /**
    * ! Only modules can be imported. After importing, providers in this module can import services from other modules.
@@ -155,7 +155,7 @@ export interface ModuleMeta {
    * Import other modules
    * - Must be classes decorated with `@Module`
    */
-  readonly imports: (Class | DynamicModule)[];
+  readonly imports: (Constructable | DynamicModule)[];
 
   /**
    * ! Controllers cannot be exported
@@ -163,7 +163,7 @@ export interface ModuleMeta {
    * Export services to other modules
    * - These are classes decorated with `@Injectable`
    */
-  readonly exports: Class[];
+  readonly exports: Constructable[];
 
   /**
    * Prefix applied to each controller

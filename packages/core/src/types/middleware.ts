@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifySchema } from 'fastify';
-import type { Class, Key, OrPromise } from '@nestify/shared';
+import type { Constructable, Key, OrPromise } from '@nestify/shared';
 import type { ExecutionContext } from '@core/common/execution-context.js';
 import type { InjectToken } from './injecorator.js';
 
@@ -43,7 +43,7 @@ export interface PipeOptions {
    * Pipe class
    * - if `inputPath` is not given, pipe transformer will take the whole `request`
    */
-  pipe: Key | Class<InjecoratorPipe>;
+  pipe: Key | Constructable<InjecoratorPipe>;
 }
 
 export interface InjecoratorGuard {

@@ -2,7 +2,7 @@
 
 export type Func = (...args: any[]) => any;
 
-export type Class<T = any> = new (...args: any) => T;
+export type Constructable<T = any> = new (...args: any[]) => T;
 
 export type Key = string | symbol;
 

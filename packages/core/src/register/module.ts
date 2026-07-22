@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import type { Class } from '@nestify/shared';
+import type { Constructable } from '@nestify/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
@@ -19,7 +19,7 @@ import { PipeQuery } from '../decorators/middlewares/pipes/query.pipe.js';
 import { PipeRaw } from '../decorators/middlewares/pipes/raw.pipe.js';
 
 class ModuleRegister {
-  private readonly moduleStack: Class[] = [];
+  private readonly moduleStack: Constructable[] = [];
   private app!: FastifyInstance;
   private opts!: FastifyInjecoratorOptions;
 
@@ -29,7 +29,7 @@ class ModuleRegister {
    * - global provider tokens from 'inject-keys.ts'
    * @param mod
    */
-  collectGlobal(mod: Class | DynamicModule) {
+  collectGlobal(mod: Constructable | DynamicModule) {
     const { moduleClass, isGlobal } = toDynamicModule(mod);
     if (isGlobal) {
       const alreadAdded = collection.addGlobalModule(moduleClass);
@@ -55,7 +55,7 @@ class ModuleRegister {
     }
   }
 
-  visit(mod: Class | DynamicModule, inherited: InheritedModuleMeta = { prefix: [] }): void {
+  visit(mod: Constructable | DynamicModule, inherited: InheritedModuleMeta = { prefix: [] }): void {
     const moduleClass = toModuleClass(mod);
 
     if (this.moduleStack.includes(moduleClass)) {

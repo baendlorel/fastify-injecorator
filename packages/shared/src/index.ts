@@ -3,6 +3,7 @@
 
 export * from './consts.js';
 export * from './native.js';
+export * from './promise-try.js';
 export * from './sym.js';
 export * from './status.js';
 export * from './utils.js';

@@ -104,4 +104,5 @@ class BasicTransformer {
   }
 }
 
+export { BasicTransformer };
 export const basicTransformer = new BasicTransformer().transformer;

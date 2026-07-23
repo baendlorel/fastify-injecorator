@@ -152,6 +152,9 @@ importers:
       '@types/node':
         specifier: ^26.1.0
         version: 26.1.0
+      fastify:
+        specifier: ^5.9.0
+        version: 5.9.0
       rollup-plugin-func-macro:
         specifier: ^1.2.3
         version: 1.2.3(rollup@4.62.2)

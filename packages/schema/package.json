@@ -31,12 +31,13 @@
   "dependencies": {
     "@nestify/core": "workspace:*",
     "@nestify/shared": "workspace:*",
-    "zod": "^4.4.3",
-    "fastify-type-provider-zod": "7.0.0"
+    "fastify-type-provider-zod": "7.0.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^6.0.3",
     "@types/node": "^26.1.0",
+    "fastify": "^5.9.0",
     "rollup-plugin-func-macro": "^1.2.3",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3"

@@ -13,7 +13,7 @@ export { PipeRaw } from './pipes/raw.pipe.js';
 export { isBasicPipe } from './pipes/is-basic-pipe.js';
 
 // Validation engine
-export { basicTransformer } from './pipes/basic-transformer.js';
+export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js';
 
 // Setup helper
 export { setupBasicPipes } from './setup.js';

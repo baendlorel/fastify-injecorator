@@ -1,4 +1,5 @@
-import { Constructable, Func, Key } from '@nestify/shared';
+import type { Constructable, Func, Key } from '@nestify/shared';
+import { _fnToString, _isArray } from '@nestify/shared';
 import {
   InjectToken,
   InjectArg,
@@ -10,7 +11,6 @@ import {
 } from '@core/types/injecorator.js';
 
 import { metaGetModule } from '@core/register/meta.js';
-import { _fnToString, _isArray } from '@nestify/shared';
 
 export function _isObject<T extends object>(o: unknown): o is T {
   return typeof o === 'object' && o !== null;

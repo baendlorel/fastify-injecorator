@@ -1,6 +1,5 @@
 import type { Constructable, Func } from '@nestify/shared';
-import type { InjecoratorPipe, PipeOptions, PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
-import { _assign } from '@nestify/shared';
+import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
 
 import {
   expectHasOneHook,
@@ -15,14 +14,6 @@ import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
-
-// preset pipes
-import { PipeBody } from './pipes/body.pipe.js';
-import { PipeParams } from './pipes/params.pipe.js';
-import { PipeQuery } from './pipes/query.pipe.js';
-import { PipeIp } from './pipes/ip.pipe.js';
-import { PipeRaw } from './pipes/raw.pipe.js';
-import { isBasicPipe } from './pipes/is-basic-pipe.js';
 
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
@@ -43,7 +34,7 @@ function predicate(opts: PipeOptions) {
   const { schema, pipe } = opts;
   expectOrObject(schema, 'Pipe options.schema must be an object or omitted');
   expectInjectToken(pipe, 'Pipe options.pipe must be a string/symbol/class or omitted');
-  const validPipe = isBasicPipe(pipe) || (_isConstructable(pipe) && metaIsPipe(pipe)) || _isKey(pipe);
+  const validPipe = (_isConstructable(pipe) && metaIsPipe(pipe)) || _isKey(pipe);
   expect(validPipe, 'Pipe options.pipe must be a string/symbol/PipeClass');
 }
 
@@ -64,70 +55,4 @@ export function UsePipes(...pipes: (PipeOptions | Constructable)[]) {
 
     metaSetUsePipes(context, normalized);
   };
-}
-
-function mergeSchema(
-  field: 'body' | 'params' | 'querystring',
-  input?: PipeSchema,
-  ok?: PipeSchema,
-  other?: PipeFullSchema,
-) {
-  const o = {} as { body?: unknown; params?: unknown; querystring?: unknown; response?: unknown };
-  if (input !== undefined) {
-    o[field] = input;
-  }
-  if (ok !== undefined) {
-    o.response = { 200: ok };
-  }
-  return _assign(o, other);
-}
-
-/**
- * Decorated method will be called with `handler(request.body, reply)
- * - `fastify.setValidatorCompiler` will be used for validation
- * @param input The pipe will validate `body` against this schema, using `validatorCompiler`(if it is provided too)
- * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.body` to provide swagger info
- * @param ok will be set to `{ response: { 200: okSchema } }`
- * @param other The rest schemas like we set in `fastify.route({ schema })`
- */
-export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeBody, schema: mergeSchema('body', input, ok, other) });
-}
-
-/**
- * Decorated method will be called with `handler(request.params, reply)
- * - `fastify.setValidatorCompiler` will be used for validation
- * @param input The pipe will validate `params` against this schema, using `validatorCompiler`(if it is provided too)
- * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.params` to provide swagger info
- * @param ok will be set to `{ response: { 200: okSchema } }`
- * @param other The rest schemas like we set in `fastify.route({ schema })`
- */
-export function Params(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeParams, schema: mergeSchema('params', input, ok, other) });
-}
-
-/**
- * Decorated method will be called with `handler(request.query, reply)
- * - `fastify.setValidatorCompiler` will be used for validation
- * @param input The pipe will validate `query` against this schema, using `validatorCompiler`(if it is provided too)
- * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.querystring` to provide swagger info
- * @param ok will be set to `{ response: { 200: okSchema } }`
- * @param other The rest schemas like we set in `fastify.route({ schema })`
- */
-export function Query(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema) {
-  return UsePipes({ pipe: PipeQuery, schema: mergeSchema('querystring', input, ok, other) });
-}
-
-/**
- * Decorated method will be called with `handler(request.raw, reply)
- */
-export function Raw() {
-  return UsePipes({ pipe: PipeRaw });
-}
-
-/**
- * Decorated method will be called with `handler(request.ip, reply)
- */
-export function Ip() {
-  return UsePipes({ pipe: PipeIp });
 }

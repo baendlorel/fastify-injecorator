@@ -20,8 +20,10 @@ export default defineConfig({
   dts: true,
   sourcemap: false,
   alias: {
-    '@core/': packDir.join('src'),
-    '@tests/': packDir.join('tests'),
+    '@core/': packDir.join('core', 'src'),
+    '@schema/': packDir.join('schema', 'src'),
+    '@swagger/': packDir.join('swagger', 'src'),
+    '@tests/': root.join('tests'),
   },
   minify: true,
   plugins: [replacePlugin(), funcMacro()],

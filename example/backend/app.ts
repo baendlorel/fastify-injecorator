@@ -4,6 +4,7 @@ import staticFiles from '@fastify/static';
 import { join } from 'path';
 
 import { apply } from '../../packages/core/src/register/index.js';
+import { setupBasicPipes } from '../../packages/schema/src/setup.js';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
@@ -37,7 +38,7 @@ async function bootstrap() {
   });
 
   // Apply Injecorator modules
-  await apply(app as any, { rootModule: AppModule });
+  await apply(app as any, { rootModule: AppModule, setup: setupBasicPipes });
 
   // Start the server
   const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;

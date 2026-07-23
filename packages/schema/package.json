@@ -30,7 +30,9 @@
   "license": "MIT",
   "dependencies": {
     "@nestify/core": "workspace:*",
-    "zod": "^4.4.3"
+    "@nestify/shared": "workspace:*",
+    "zod": "^4.4.3",
+    "fastify-type-provider-zod": "7.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^6.0.3",

@@ -109,6 +109,18 @@ export interface FastifyInjecoratorOptions {
    * @default false
    */
   allowCrossModuleCircularReference: boolean;
+
+  /**
+   * Setup callback for sub-packages to register auto-created instances.
+   * - e.g. `setupBasicPipes` from `@nestify/schema` creates preset pipe instances
+   * @example
+   * ```typescript
+   * import { apply } from '@nestify/core';
+   * import { setupBasicPipes } from '@nestify/schema';
+   * apply(app, { rootModule: AppModule, setup: setupBasicPipes });
+   * ```
+   */
+  setup?: (register: (cls: Constructable) => void) => void;
 }
 
 export interface LazyInjectEntry {

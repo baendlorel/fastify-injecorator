@@ -1,9 +1,7 @@
 // router decorators
 export { Delete, Get, Patch, Post, Put, HttpMethod } from './decorators/router/http-methods.js';
 export { Opt } from './decorators/router/opt.js';
-export { ApiSchema } from './decorators/router/api-schema.js';
 export { Controller } from './decorators/router/controller.js';
-export { Body, Params, Query, Raw, Ip } from './decorators/middlewares/pipe.js';
 
 export { Inject } from './decorators/inject.js';
 export { Injectable } from './decorators/injectable.js';
@@ -26,6 +24,11 @@ export type {
   InjecoratorInterceptor,
   InjecoratorPipe,
   InjecoratorFilter,
+  PipeSchema,
+  PipeFullSchema,
+  PipeOptions,
+  PipeTransformerArgs,
+  RouteApiSchema,
 } from './types/middleware.js';
 
 // export common exceptions for use
@@ -42,3 +45,10 @@ export type { MultipartFile, FileUploadOptions, FileUploadMeta } from './types/m
 // JWT authentication support
 export { jwt, JwtService, JwtGuard } from './auth/index.js';
 export type { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from './types/auth.js';
+
+// & Exports for sub-packages (@nestify/schema, @nestify/swagger)
+// Metadata functions
+export { metaSetSchema } from './register/meta.js';
+// Assert utilities
+export { _isFunction, _isObject } from './asserts/whether.js';
+export { expectMethodDecorator, expectObject } from './asserts/index.js';

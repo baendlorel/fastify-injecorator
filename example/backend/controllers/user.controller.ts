@@ -1,6 +1,6 @@
 import { Controller } from '../../../packages/core/decorators/router/controller.js';
 import { Get, Post, Patch, Delete } from '../../../packages/core/decorators/router/http-methods.js';
-import { Body, Params, Query } from '../../../packages/core/decorators/middlewares/pipe.js';
+import { Body, Params, Query } from '../../../packages/schema/src/decorators/pipe.js';
 import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
 import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
 import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';

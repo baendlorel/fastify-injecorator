@@ -82,61 +82,6 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  packages/injecorator:
-    dependencies:
-      '@fastify/autoload':
-        specifier: ^6.3.1
-        version: 6.3.1
-      '@fastify/multipart':
-        specifier: ^9.3.0
-        version: 10.0.0
-      '@fastify/one-line-logger':
-        specifier: ^2.1.0
-        version: 2.1.0
-      '@fastify/sensible':
-        specifier: ^6.0.4
-        version: 6.0.4
-      '@fastify/static':
-        specifier: ^9.1.3
-        version: 9.1.3
-      '@fastify/swagger':
-        specifier: ^9.7.0
-        version: 9.7.0
-      '@fastify/swagger-ui':
-        specifier: ^6.0.0
-        version: 6.0.0
-      '@injecorator/core':
-        specifier: workspace:*
-        version: link:../core
-      axios:
-        specifier: ^1.18.1
-        version: 1.18.1
-      fastify:
-        specifier: ^5.9.0
-        version: 5.9.0
-      fastify-type-provider-zod:
-        specifier: 7.0.0
-        version: 7.0.0(@fastify/swagger@9.7.0)(fastify@5.9.0)(openapi-types@12.1.3)(zod@4.4.3)
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
-    devDependencies:
-      '@rollup/plugin-replace':
-        specifier: ^6.0.3
-        version: 6.0.3(rollup@4.62.2)
-      '@types/node':
-        specifier: ^26.1.0
-        version: 26.1.0
-      rollup-plugin-func-macro:
-        specifier: ^1.2.3
-        version: 1.2.3(rollup@4.62.2)
-      tsdown:
-        specifier: ^0.22.3
-        version: 0.22.3(tsx@4.22.5)(typescript@6.0.3)
-      typescript:
-        specifier: ^6.0.3
-        version: 6.0.3
-
   packages/nestify:
     dependencies:
       '@fastify/autoload':
@@ -154,27 +99,21 @@ importers:
       '@fastify/static':
         specifier: ^9.1.3
         version: 9.1.3
-      '@fastify/swagger':
-        specifier: ^9.7.0
-        version: 9.7.0
-      '@fastify/swagger-ui':
-        specifier: ^6.0.0
-        version: 6.0.0
       '@nestify/core':
         specifier: workspace:*
         version: link:../core
+      '@nestify/schema':
+        specifier: workspace:*
+        version: link:../schema
+      '@nestify/swagger':
+        specifier: workspace:*
+        version: link:../swagger
       axios:
         specifier: ^1.18.1
         version: 1.18.1
       fastify:
         specifier: ^5.9.0
         version: 5.9.0
-      fastify-type-provider-zod:
-        specifier: 7.0.0
-        version: 7.0.0(@fastify/swagger@9.7.0)(fastify@5.9.0)(openapi-types@12.1.3)(zod@4.4.3)
-      zod:
-        specifier: ^4.4.3
-        version: 4.4.3
     devDependencies:
       '@rollup/plugin-replace':
         specifier: ^6.0.3
@@ -197,6 +136,12 @@ importers:
       '@nestify/core':
         specifier: workspace:*
         version: link:../core
+      '@nestify/shared':
+        specifier: workspace:*
+        version: link:../shared
+      fastify-type-provider-zod:
+        specifier: 7.0.0
+        version: 7.0.0(@fastify/swagger@9.7.0)(fastify@5.9.0)(openapi-types@12.1.3)(zod@4.4.3)
       zod:
         specifier: ^4.4.3
         version: 4.4.3

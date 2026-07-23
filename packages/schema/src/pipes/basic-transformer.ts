@@ -1,11 +1,7 @@
 import type { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
-import { sym } from '@nestify/shared';
-import { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
-import { _isFunction, _isObject } from '@core/asserts/whether.js';
-
-import { ExecutionContext } from '@core/common/execution-context.js';
-import { promiseTry } from '../../../../../shared/src/promise-try.js';
-import { BadRequestException } from '@core/exceptions/index.js';
+import { sym, promiseTry } from '@nestify/shared';
+import type { PipeSchema, PipeFullSchema } from '@nestify/core';
+import { _isFunction, _isObject, ExecutionContext, BadRequestException } from '@nestify/core';
 
 type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
 

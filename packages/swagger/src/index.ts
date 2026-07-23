@@ -1,4 +1,7 @@
 // Swagger/OpenAPI integration
-// This package provides automatic API documentation generation
+// This package provides API documentation decorators and Swagger setup
 
-export {};
+export { ApiSchema } from './decorators/api-schema.js';
+export type { RouteApiSchema } from '@nestify/core';
+export { setupSwagger } from './setup.js';
+export type { SwaggerSetupOptions } from './setup.js';

@@ -1,7 +1,7 @@
 import { FastifyRequest } from 'fastify';
 import { Controller } from '../../../packages/core/decorators/router/controller.js';
 import { Get, Post } from '../../../packages/core/decorators/router/http-methods.js';
-import { Body } from '../../../packages/core/decorators/middlewares/pipe.js';
+import { Body } from '../../../packages/schema/src/decorators/pipe.js';
 import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
 import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
 import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';

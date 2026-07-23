@@ -11,13 +11,6 @@ import { injector } from './lazy-injector.js';
 import { metaGetModule } from './meta.js';
 import { registerController } from './route/controller.js';
 
-// internal basic pipes
-import { PipeBody } from '../decorators/middlewares/pipes/body.pipe.js';
-import { PipeIp } from '../decorators/middlewares/pipes/ip.pipe.js';
-import { PipeParams } from '../decorators/middlewares/pipes/params.pipe.js';
-import { PipeQuery } from '../decorators/middlewares/pipes/query.pipe.js';
-import { PipeRaw } from '../decorators/middlewares/pipes/raw.pipe.js';
-
 class ModuleRegister {
   private readonly moduleStack: Constructable[] = [];
   private app!: FastifyInstance;
@@ -103,12 +96,15 @@ class ModuleRegister {
     this.moduleStack.pop();
   }
 
-  createBasicPipes() {
-    injector.internalCreateInstanceByClass(PipeBody);
-    injector.internalCreateInstanceByClass(PipeParams);
-    injector.internalCreateInstanceByClass(PipeIp);
-    injector.internalCreateInstanceByClass(PipeQuery);
-    injector.internalCreateInstanceByClass(PipeRaw);
+  /**
+   * Create basic pipe instances via setup callback.
+   * Sub-packages (e.g. @nestify/schema) provide the setup function
+   * to register their preset pipes.
+   */
+  runSetup(setup?: (register: (cls: Constructable) => void) => void) {
+    if (setup) {
+      setup((cls) => injector.internalCreateInstanceByClass(cls));
+    }
   }
 
   /**
@@ -127,8 +123,8 @@ class ModuleRegister {
     const existedValidatorCompiler = app.validatorCompiler;
     app.setValidatorCompiler(() => () => true);
 
-    // create basic pipes
-    this.createBasicPipes();
+    // run setup callback to create basic pipes (from sub-packages)
+    this.runSetup(this.opts.setup);
 
     // register every module recursively
     this.visit(this.opts.rootModule);

@@ -1,8 +1,6 @@
-import { ReflectDeep } from 'reflect-deep';
-import { concatArr, sym } from '@nestify/shared';
-import { Constructable, Key } from '@nestify/shared';
-import { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
-import {
+import type { Constructable, Key } from '@nestify/shared';
+import type { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
+import type {
   ProviderMeta,
   ControllerMeta,
   InjectArg,
@@ -12,7 +10,7 @@ import {
   ProviderOptions,
   InjectToken,
 } from '@core/types/injecorator.js';
-import {
+import type {
   RouteApiSchema,
   InterceptorGetter,
   GuardGetter,
@@ -22,6 +20,8 @@ import {
   PipeFullSchema,
 } from '@core/types/middleware.js';
 
+import { ReflectDeep } from 'reflect-deep';
+import { concatArr, sym } from '@nestify/shared';
 import { splitPath, toModuleClass } from '@core/common/utils.js';
 import { collection } from './collection.js';
 import ph from './provider.js';

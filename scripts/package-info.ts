@@ -22,8 +22,8 @@ export interface PackageInfo {
 }
 
 const publishGroupMap = new Map<string, string[]>([
-  ['main', ['shared', 'core', 'injecorator']],
-  ['all', ['shared', 'core', 'schema', 'swagger', 'injecorator']],
+  ['main', ['shared', 'core', 'nestify']],
+  ['all', ['shared', 'core', 'schema', 'swagger', 'nestify']],
 ]);
 
 const getAbsolutePath = (who: string) => dirs.packages.join(who);

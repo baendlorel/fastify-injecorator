@@ -1,8 +1,9 @@
 import type { OrPromise } from '@nestify/shared';
-import type { ExecutionContext } from '@core/common/execution-context.js';
-import type { InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@core/types/middleware.js';
+import type { ExecutionContext, InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@nestify/core';
+import { Pipe } from '@nestify/core';
 import { basicTransformer } from './basic-transformer.js';
 
+@Pipe()
 export class PipeBody implements InjecoratorPipe {
   transform(context: ExecutionContext, input?: any[], schema?: PipeFullSchema): OrPromise<any[]>;
   async transform(context: ExecutionContext, ...args: PipeTransformerArgs) {

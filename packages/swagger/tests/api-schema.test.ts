@@ -46,7 +46,8 @@ describe('@ApiSchema decorator', () => {
 
   it('should throw when used on a class instead of a method', () => {
     expect(() => {
-      @ApiSchema({ summary: 'bad' } as any)
+      // @ts-expect-error
+      @ApiSchema({ summary: 'bad' })
       class BadClass {}
     }).toThrow();
   });
@@ -54,7 +55,8 @@ describe('@ApiSchema decorator', () => {
   it('should throw when schema is not an object', () => {
     expect(() => {
       class Ctrl {
-        @ApiSchema(null as any)
+        // @ts-expect-error
+        @ApiSchema(null)
         handler() {}
       }
     }).toThrow();

@@ -33,7 +33,7 @@ describe('Nestify umbrella — re-exports', () => {
     });
   });
 
-  describe('schema re-exports', () => {
+  describe('core re-exports (pipes)', () => {
     it('should export pipe decorators', () => {
       expect(typeof nestify.Body).toBe('function');
       expect(typeof nestify.Params).toBe('function');
@@ -53,7 +53,9 @@ describe('Nestify umbrella — re-exports', () => {
     it('should export setupBasicPipes', () => {
       expect(typeof nestify.setupBasicPipes).toBe('function');
     });
+  });
 
+  describe('schema re-exports (zod)', () => {
     it('should export zod integration utilities', () => {
       expect(nestify.serializerCompiler).toBeDefined();
       expect(nestify.validatorCompiler).toBeDefined();

@@ -46,7 +46,24 @@ export type { MultipartFile, FileUploadOptions, FileUploadMeta } from './types/m
 export { jwt, JwtService, JwtGuard } from './auth/index.js';
 export type { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from './types/auth.js';
 
-// & Exports for sub-packages (@nestify/schema, @nestify/swagger)
+// preset pipe decorators
+export { Body, Params, Query, Raw, Ip } from './decorators/pipes.js';
+
+// preset pipe classes
+export { PipeBody } from './pipes/body.pipe.js';
+export { PipeParams } from './pipes/params.pipe.js';
+export { PipeQuery } from './pipes/query.pipe.js';
+export { PipeIp } from './pipes/ip.pipe.js';
+export { PipeRaw } from './pipes/raw.pipe.js';
+export { isBasicPipe } from './pipes/is-basic-pipe.js';
+
+// validation engine
+export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js';
+
+// setup helper
+export { setupBasicPipes } from './setup.js';
+
+// & Exports for sub-packages (@nestify/swagger)
 // Metadata functions
 export { metaSetSchema } from './register/meta.js';
 // Assert utilities

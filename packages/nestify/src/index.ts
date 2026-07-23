@@ -13,7 +13,7 @@ export { APP_LOGGER, APP_INTERCEPTOR, APP_FILTER, APP_GUARD, APP_PIPE } from '@n
 import type { FastifyInstance } from 'fastify';
 import type { FastifyInjecoratorOptions } from '@nestify/core';
 import { fastifyInjecorator as coreApply } from '@nestify/core';
-import { setupBasicPipes } from '@nestify/schema';
+import { setupBasicPipes } from '@nestify/core';
 
 /**
  * Apply Injecorator modules to a Fastify instance.

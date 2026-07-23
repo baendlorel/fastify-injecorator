@@ -1,6 +1,6 @@
 import type { Constructable } from '@nestify/shared';
-import type { PipeSchema, PipeFullSchema } from '@nestify/core';
-import { UsePipes } from '@nestify/core';
+import type { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
+import { UsePipes } from '@core/decorators/middlewares/pipe.js';
 import { _assign } from '@nestify/shared';
 
 import { PipeBody } from '../pipes/body.pipe.js';

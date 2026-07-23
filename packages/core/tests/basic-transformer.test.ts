@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { BasicTransformer, PipeBody, PipeParams, PipeQuery } from '@schema/index.js';
-import { ExecutionContext, BadRequestException } from '@nestify/core';
+import { BasicTransformer, PipeBody, PipeParams, PipeQuery, ExecutionContext, BadRequestException } from '@nestify/core';
 
 /** Create a mock ExecutionContext for HTTP requests */
 function createMockContext(request: Record<string, any>, reply: any = undefined) {

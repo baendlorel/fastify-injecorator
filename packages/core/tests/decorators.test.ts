@@ -1,10 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-import { Body, Params, Query, Raw, Ip } from '@nestify/schema';
-import { PipeBody, PipeParams, PipeQuery, PipeIp, PipeRaw } from '@nestify/schema';
-import { sym } from '@nestify/shared';
+import { Body, Params, Query, Raw, Ip, PipeBody, PipeParams, PipeQuery, PipeIp, PipeRaw } from '@nestify/core';
 import type { PipeOptions } from '@nestify/core';
-import { metaGet } from '@core/src/register/meta.js';
+import { sym } from '@nestify/shared';
+import { metaGet } from '@core/register/meta.js';
 
 /** Read method-level pipe metadata set by @UsePipes */
 function getMethodPipes(cls: any, methodName: string): PipeOptions[] | undefined {

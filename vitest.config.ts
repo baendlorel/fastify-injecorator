@@ -7,12 +7,13 @@ const root = import.meta.dirname;
  * Custom Vite plugin to resolve tsconfig path aliases.
  * vitest 4's built-in resolve.alias with RegExp entries doesn't work properly
  * for path-based aliases (e.g. @core/xxx), so we use a resolveId hook instead.
+ *
+ * Only @core/ is needed here — source code inside core uses it for internal imports.
+ * Tests should use @nestify/core, @nestify/schema etc. (resolved via resolve.alias).
  */
 function tsconfigPathsPlugin(): Plugin {
   const mappings: Record<string, string> = {
     '@core/': path.resolve(root, 'packages/core/src/'),
-    '@schema/': path.resolve(root, 'packages/schema/src/'),
-    '@swagger/': path.resolve(root, 'packages/swagger/src/'),
     '@tests/': path.resolve(root, 'tests/'),
   };
 

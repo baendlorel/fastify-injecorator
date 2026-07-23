@@ -1,6 +1,7 @@
 import type { OrPromise } from '@nestify/shared';
-import type { ExecutionContext, InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@nestify/core';
-import { Pipe } from '@nestify/core';
+import type { InjecoratorPipe, PipeFullSchema, PipeTransformerArgs } from '@core/types/middleware.js';
+import type { ExecutionContext } from '@core/common/execution-context.js';
+import { Pipe } from '@core/decorators/middlewares/pipe.js';
 import { basicTransformer } from './basic-transformer.js';
 
 @Pipe()

@@ -29,8 +29,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@nestify/core": "workspace:*",
-    "@nestify/shared": "workspace:*",
     "fastify-type-provider-zod": "7.0.0",
     "zod": "^4.4.3"
   },

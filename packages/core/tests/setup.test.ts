@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 
-import { isBasicPipe, setupBasicPipes, PipeBody, PipeParams, PipeQuery, PipeIp, PipeRaw } from '@nestify/schema';
+import { isBasicPipe, setupBasicPipes, PipeBody, PipeParams, PipeQuery, PipeIp, PipeRaw } from '@nestify/core';
 
 describe('isBasicPipe', () => {
   it('should return true for all five basic pipe classes', () => {

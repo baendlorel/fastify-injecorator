@@ -47,7 +47,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@nestify/shared':
+      '@nestify-js/shared':
         specifier: workspace:*
         version: link:../shared
       cron-parser:
@@ -99,13 +99,13 @@ importers:
       '@fastify/static':
         specifier: ^9.1.3
         version: 9.1.3
-      '@nestify/core':
+      '@nestify-js/core':
         specifier: workspace:*
         version: link:../core
-      '@nestify/schema':
+      '@nestify-js/schema':
         specifier: workspace:*
         version: link:../schema
-      '@nestify/swagger':
+      '@nestify-js/swagger':
         specifier: workspace:*
         version: link:../swagger
       axios:
@@ -133,12 +133,6 @@ importers:
 
   packages/schema:
     dependencies:
-      '@nestify/core':
-        specifier: workspace:*
-        version: link:../core
-      '@nestify/shared':
-        specifier: workspace:*
-        version: link:../shared
       fastify-type-provider-zod:
         specifier: 7.0.0
         version: 7.0.0(@fastify/swagger@9.7.0)(fastify@5.9.0)(openapi-types@12.1.3)(zod@4.4.3)
@@ -191,7 +185,7 @@ importers:
       '@fastify/swagger-ui':
         specifier: ^6.0.0
         version: 6.0.0
-      '@nestify/core':
+      '@nestify-js/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

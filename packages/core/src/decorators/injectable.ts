@@ -1,4 +1,4 @@
-import { Constructable } from '@nestify/shared';
+import { Constructable } from '@nestify-js/shared';
 import { expectArray, expectClass, expectInjectable } from '@core/asserts/index.js';
 import { metaSetProvider, metaSetProviderOnClass } from '@core/register/meta.js';
 

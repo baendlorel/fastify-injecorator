@@ -1,4 +1,4 @@
-import { Func } from '@nestify/shared';
+import { Func } from '@nestify-js/shared';
 import { expectBoolean, expectFunction, expectKey, expectObject, expectString, expect } from './expect.js';
 
 export const expectClassDecoratorContext = (o: any, msg: string) => {

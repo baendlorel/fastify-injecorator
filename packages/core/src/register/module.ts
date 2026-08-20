@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
@@ -98,7 +98,7 @@ class ModuleRegister {
 
   /**
    * Create basic pipe instances via setup callback.
-   * Sub-packages (e.g. @nestify/schema) provide the setup function
+   * Sub-packages (e.g. @nestify-js/schema) provide the setup function
    * to register their preset pipes.
    */
   runSetup(setup?: (register: (cls: Constructable) => void) => void) {

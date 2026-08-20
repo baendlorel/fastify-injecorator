@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifySchema } from 'fastify';
-import type { Constructable, Key, OrPromise } from '@nestify/shared';
+import type { Constructable, Key, OrPromise } from '@nestify-js/shared';
 import type { ExecutionContext } from '@core/common/execution-context.js';
 import type { InjectToken } from './injecorator.js';
 

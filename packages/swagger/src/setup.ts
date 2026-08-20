@@ -22,7 +22,7 @@ export interface SwaggerSetupOptions {
  * @example
  * ```typescript
  * import Fastify from 'fastify';
- * import { setupSwagger } from '@nestify/swagger';
+ * import { setupSwagger } from '@nestify-js/swagger';
  *
  * const app = Fastify();
  * await setupSwagger(app, {

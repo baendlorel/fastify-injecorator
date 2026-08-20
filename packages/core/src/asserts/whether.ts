@@ -1,5 +1,5 @@
-import type { Constructable, Func, Key } from '@nestify/shared';
-import { _fnToString, _isArray } from '@nestify/shared';
+import type { Constructable, Func, Key } from '@nestify-js/shared';
+import { _fnToString, _isArray } from '@nestify-js/shared';
 import {
   InjectToken,
   InjectArg,

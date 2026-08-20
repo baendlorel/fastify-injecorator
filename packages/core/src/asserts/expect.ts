@@ -1,9 +1,9 @@
-import { Constructable, Func, Key } from '@nestify/shared';
+import { Constructable, Func, Key } from '@nestify-js/shared';
 import { InjectToken } from '@core/types/injecorator.js';
 
 import { InjecoratorError } from './error.js';
 import { _isConstructable } from './whether.js';
-import { _entries, _isArray } from '@nestify/shared';
+import { _entries, _isArray } from '@nestify-js/shared';
 
 // # Basic
 

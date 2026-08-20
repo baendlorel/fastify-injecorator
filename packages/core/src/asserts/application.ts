@@ -1,8 +1,8 @@
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
-import { sym } from '@nestify/shared';
+import { sym } from '@nestify-js/shared';
 
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 import type { InjectArg } from '@core/types/injecorator.js';
 
 import { expectClass, expectObject } from './expect.js';

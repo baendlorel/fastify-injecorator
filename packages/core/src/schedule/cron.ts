@@ -1,6 +1,6 @@
-import type { Constructable, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify-js/shared';
 import { CronExpressionParser } from 'cron-parser';
-import { _entries, sym } from '@nestify/shared';
+import { _entries, sym } from '@nestify-js/shared';
 
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
 import { metaGet, metaSet } from '@core/register/meta.js';

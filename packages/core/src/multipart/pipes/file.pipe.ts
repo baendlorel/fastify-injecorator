@@ -1,4 +1,4 @@
-import { sym } from '@nestify/shared';
+import { sym } from '@nestify-js/shared';
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { metaGet } from '@core/register/meta.js';
 import { InjecoratorPipe } from '@core/types/middleware.js';

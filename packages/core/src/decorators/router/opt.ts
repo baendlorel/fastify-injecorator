@@ -1,4 +1,4 @@
-import type { Func } from '@nestify/shared';
+import type { Func } from '@nestify-js/shared';
 import type { RouteOptType } from '@core/types/index.js';
 
 import { expectObject, expectMethodDecorator } from '@core/asserts/index.js';

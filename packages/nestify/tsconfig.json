@@ -15,10 +15,10 @@
     "outDir": "./dist",
     "rootDir": "..",
     "paths": {
-      "@nestify/core": ["../core/src/index.ts"],
-      "@nestify/schema": ["../schema/src/index.ts"],
-      "@nestify/swagger": ["../swagger/src/index.ts"],
-      "@nestify/shared": ["../shared/src/index.ts"]
+      "@nestify-js/core": ["../core/src/index.ts"],
+      "@nestify-js/schema": ["../schema/src/index.ts"],
+      "@nestify-js/swagger": ["../swagger/src/index.ts"],
+      "@nestify-js/shared": ["../shared/src/index.ts"]
     }
   },
   "include": ["**/*.ts"],

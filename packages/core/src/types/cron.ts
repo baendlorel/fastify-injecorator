@@ -1,4 +1,4 @@
-import { Func } from '@nestify/shared';
+import { Func } from '@nestify-js/shared';
 
 export interface CronOptions {
   expression: string;

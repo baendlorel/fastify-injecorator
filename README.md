@@ -1,4 +1,4 @@
-# Fastify Injecorator
+# Nestify
 
 [中文版本 README.zh.md](./README.zh.md)
 
@@ -11,7 +11,7 @@ This project was created because NestJS uses the old decorator syntax, but we wa
 ## Installation
 
 ```bash
-pnpm add fastify-injecorator
+pnpm add nestify-js
 ```
 
 ## API Documentation
@@ -25,7 +25,7 @@ Using of decorators looks basically like they are in NestJS, but with modern Sta
 These decorators are used to define HTTP routes on controller methods:
 
 ```typescript
-import { Get, Post, Put, Patch, Delete, HttpMethod } from 'fastify-injecorator';
+import { Get, Post, Put, Patch, Delete, HttpMethod } from 'nestify-js';
 
 @Controller('/api')
 class UserController {
@@ -302,7 +302,7 @@ import {
   UseGuards,
   Guard,
   apply,
-} from 'fastify-injecorator';
+} from 'nestify-js';
 
 // Service
 @Injectable()

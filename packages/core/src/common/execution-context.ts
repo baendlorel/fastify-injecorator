@@ -1,4 +1,4 @@
-import { Constructable, Func } from '@nestify/shared';
+import { Constructable, Func } from '@nestify-js/shared';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,

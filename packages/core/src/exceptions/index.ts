@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestify/shared';
+import { HttpStatus } from '@nestify-js/shared';
 import { BaseHttpException } from '@core/types/injecorator.js';
 
 /**

@@ -1,4 +1,4 @@
-import { Constructable } from '@nestify/shared';
+import { Constructable } from '@nestify-js/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 
 import { Guard } from '@core/decorators/middlewares/guard.js';

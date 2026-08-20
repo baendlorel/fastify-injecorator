@@ -1,4 +1,4 @@
-import type { Func } from '@nestify/shared';
+import type { Func } from '@nestify-js/shared';
 import { expectMethodDecorator, expectString, expectOrString } from '@core/asserts/index.js';
 import { metaSetRoute } from '@core/register/meta.js';
 

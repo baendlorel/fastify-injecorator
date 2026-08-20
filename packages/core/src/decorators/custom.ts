@@ -1,5 +1,5 @@
-import type { Constructable, Func, Key } from '@nestify/shared';
-import { sym } from '@nestify/shared';
+import type { Constructable, Func, Key } from '@nestify-js/shared';
+import { sym } from '@nestify-js/shared';
 import { expectDecoratorContext } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
 import { ExecutionContext } from '@core/common/execution-context.js';

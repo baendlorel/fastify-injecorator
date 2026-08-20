@@ -1,4 +1,4 @@
-import type { Func, Constructable } from '@nestify/shared';
+import type { Func, Constructable } from '@nestify-js/shared';
 import type { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { TaskifyAsync } from 'serial-task';

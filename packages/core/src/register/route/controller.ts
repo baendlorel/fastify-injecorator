@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
-import type { Constructable } from '@nestify/shared';
-import { _define, _values, sym, toAssigned } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
+import { _define, _values, sym, toAssigned } from '@nestify-js/shared';
 
 import { injector } from '../lazy-injector.js';
 import {

@@ -1,5 +1,5 @@
 import type { Constructable } from './types/primitive.js';
-import { _getPrototypeOf } from '@nestify/shared';
+import { _getPrototypeOf } from '@nestify-js/shared';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
 export const concatArr = <T extends readonly unknown[]>(...args: (T | undefined)[]) => {

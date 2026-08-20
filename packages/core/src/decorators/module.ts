@@ -1,8 +1,8 @@
 import type { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 
 import { ReflectDeep } from 'reflect-deep';
-import { sym } from '@nestify/shared';
+import { sym } from '@nestify-js/shared';
 
 import { createNamedClass } from '@core/common/utils.js';
 import { expectClassNotDecorated, expectModulable } from '@core/asserts/index.js';

@@ -11,8 +11,8 @@
     "outDir": "./dist",
     "rootDir": "..",
     "paths": {
-      "@nestify/core": ["../core/src/index.ts"],
-      "@nestify/shared": ["../shared/src/index.ts"],
+      "@nestify-js/core": ["../core/src/index.ts"],
+      "@nestify-js/shared": ["../shared/src/index.ts"],
       "@core/*": ["../core/*"]
     }
   },

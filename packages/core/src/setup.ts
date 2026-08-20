@@ -1,4 +1,4 @@
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 
 import { PipeBody } from './pipes/body.pipe.js';
 import { PipeParams } from './pipes/params.pipe.js';

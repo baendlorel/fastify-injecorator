@@ -63,7 +63,7 @@ export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js
 // setup helper
 export { setupBasicPipes } from './setup.js';
 
-// & Exports for sub-packages (@nestify/swagger)
+// & Exports for sub-packages (@nestify-js/swagger)
 // Metadata functions
 export { metaSetSchema } from './register/meta.js';
 // Assert utilities

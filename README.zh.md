@@ -1,4 +1,4 @@
-# Fastify Injecorator
+# Nestify
 
 [English Version README.md](./README.md)
 
@@ -11,7 +11,7 @@
 ## 安装
 
 ```bash
-pnpm add fastify-injecorator
+pnpm add nestify-js
 ```
 
 ## API 文档
@@ -25,7 +25,7 @@ pnpm add fastify-injecorator
 这些装饰器用于在控制器方法上定义 HTTP 路由：
 
 ```typescript
-import { Get, Post, Put, Patch, Delete, HttpMethod } from 'fastify-injecorator';
+import { Get, Post, Put, Patch, Delete, HttpMethod } from 'nestify-js';
 
 @Controller('/api')
 class UserController {

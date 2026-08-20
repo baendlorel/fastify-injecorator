@@ -1,4 +1,4 @@
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 import { expectInjectable, expectOrString } from '@core/asserts/index.js';
 import { metaSetController } from '@core/register/meta.js';
 

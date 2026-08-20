@@ -36,9 +36,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@nestify/core": "workspace:*",
-    "@nestify/schema": "workspace:*",
-    "@nestify/swagger": "workspace:*",
+    "@nestify-js/core": "workspace:*",
+    "@nestify-js/schema": "workspace:*",
+    "@nestify-js/swagger": "workspace:*",
     "@fastify/autoload": "^6.3.1",
     "@fastify/one-line-logger": "^2.1.0",
     "@fastify/sensible": "^6.0.4",

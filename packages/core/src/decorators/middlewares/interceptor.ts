@@ -1,4 +1,4 @@
-import type { Constructable, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify-js/shared';
 import type { InjecoratorInterceptor } from '@core/types/middleware.js';
 import type { InjectToken } from '@core/types/injecorator.js';
 

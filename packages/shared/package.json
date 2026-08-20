@@ -1,5 +1,5 @@
 {
-  "name": "@nestify/shared",
+  "name": "@nestify-js/shared",
   "version": "0.0.18",
   "description": "Shared utilities and types for nestify-js packages",
   "type": "module",

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { FastifyRequest } from 'fastify';
-import type { HttpStatus } from '@nestify/shared';
-import type { Constructable, Func, Key } from '@nestify/shared';
+import type { HttpStatus } from '@nestify-js/shared';
+import type { Constructable, Func, Key } from '@nestify-js/shared';
 
 export interface BaseHttpException {
   readonly message: string;
@@ -112,11 +112,11 @@ export interface FastifyInjecoratorOptions {
 
   /**
    * Setup callback for sub-packages to register auto-created instances.
-   * - e.g. `setupBasicPipes` from `@nestify/schema` creates preset pipe instances
+   * - e.g. `setupBasicPipes` from `@nestify-js/schema` creates preset pipe instances
    * @example
    * ```typescript
-   * import { apply } from '@nestify/core';
-   * import { setupBasicPipes } from '@nestify/schema';
+   * import { apply } from '@nestify-js/core';
+   * import { setupBasicPipes } from '@nestify-js/schema';
    * apply(app, { rootModule: AppModule, setup: setupBasicPipes });
    * ```
    */

@@ -1,4 +1,4 @@
-import type { Constructable, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify-js/shared';
 import type { InjectToken } from '@core/types/injecorator.js';
 
 import { expectInjectArg } from '@core/asserts/application.js';

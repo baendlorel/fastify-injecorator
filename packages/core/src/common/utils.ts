@@ -1,4 +1,4 @@
-import type { Constructable } from '@nestify/shared';
+import type { Constructable } from '@nestify-js/shared';
 import { DynamicModule } from '@core/types/injecorator.js';
 import { likeModule } from '@core/asserts/index.js';
 

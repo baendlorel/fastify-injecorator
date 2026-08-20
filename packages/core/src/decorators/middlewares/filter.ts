@@ -1,7 +1,7 @@
-import type { Constructable, Func } from '@nestify/shared';
+import type { Constructable, Func } from '@nestify-js/shared';
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { InjecoratorFilter } from '@core/types/middleware.js';
-import { subclassOf } from '@nestify/shared';
+import { subclassOf } from '@nestify-js/shared';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
 import { metaSetFilters, metaSetUseFilters } from '@core/register/meta.js';

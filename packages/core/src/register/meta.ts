@@ -1,4 +1,4 @@
-import type { Constructable, Key } from '@nestify/shared';
+import type { Constructable, Key } from '@nestify-js/shared';
 import type { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import type {
   ProviderMeta,
@@ -21,7 +21,7 @@ import type {
 } from '@core/types/middleware.js';
 
 import { ReflectDeep } from 'reflect-deep';
-import { concatArr, sym } from '@nestify/shared';
+import { concatArr, sym } from '@nestify-js/shared';
 import { splitPath, toModuleClass } from '@core/common/utils.js';
 import { collection } from './collection.js';
 import ph from './provider.js';

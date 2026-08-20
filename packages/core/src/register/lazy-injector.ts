@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
 import { InjecoratorMiddleware } from '@core/types/middleware.js';
-import { Constructable, Func, Key } from '@nestify/shared';
+import { Constructable, Func, Key } from '@nestify-js/shared';
 
 import { toModuleClass } from '@core/common/index.js';
 import { expectFunction, expectObject, expect, _isConstructable, _isKey, _isObject } from '@core/asserts/index.js';
@@ -10,7 +10,7 @@ import { bindCronJob } from '@core/schedule/cron.js';
 import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
 import { collection } from './collection.js';
-import { _construct, _getPrototypeOf, _ownKeys, APP_LOGGER } from '@nestify/shared';
+import { _construct, _getPrototypeOf, _ownKeys, APP_LOGGER } from '@nestify-js/shared';
 import { throws } from 'assert';
 
 export namespace injector {

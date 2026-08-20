@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
-import { ApiSchema } from '@nestify/swagger';
-import { sym } from '@nestify/shared';
+import { ApiSchema } from '@nestify-js/swagger';
+import { sym } from '@nestify-js/shared';
 import { metaGet } from '@core/src/register/meta.js';
 
 /** Read the apiSchema metadata set by @ApiSchema */

@@ -1,9 +1,9 @@
-import type { Constructable, Key } from '@nestify/shared';
+import type { Constructable, Key } from '@nestify-js/shared';
 import type { ModuleMeta } from '@core/types/injecorator.js';
 import type { PipeOptions } from '@core/types/middleware.js';
 
 import { ReflectDeep } from 'reflect-deep';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, APP_LOGGER, sym } from '@nestify/shared';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE, APP_LOGGER, sym } from '@nestify-js/shared';
 
 import { expect } from '@core/asserts/index.js';
 

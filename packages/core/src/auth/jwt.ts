@@ -1,6 +1,6 @@
 import { createHmac } from 'node:crypto';
 import { FastifyRequest } from 'fastify';
-import { _set, sym, _get } from '@nestify/shared';
+import { _set, sym, _get } from '@nestify-js/shared';
 
 import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 

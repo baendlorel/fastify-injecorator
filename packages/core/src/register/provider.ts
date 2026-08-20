@@ -1,5 +1,5 @@
 import { inspect } from 'node:util';
-import { Constructable, Key } from '@nestify/shared';
+import { Constructable, Key } from '@nestify-js/shared';
 import { expectClass, expectFunction, expectKey, _isConstructable, _isFunction } from '@core/asserts/index.js';
 import {
   InjectArg,

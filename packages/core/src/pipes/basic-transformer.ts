@@ -1,5 +1,5 @@
 import type { FastifySchemaCompiler, FastifyValidationResult as Validator } from 'fastify/types/schema.js';
-import { sym, promiseTry } from '@nestify/shared';
+import { sym, promiseTry } from '@nestify-js/shared';
 import type { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import { _isFunction, _isObject } from '@core/asserts/whether.js';
 import { ExecutionContext } from '@core/common/execution-context.js';

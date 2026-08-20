@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
-import type { Constructable, Key } from '@nestify/shared';
+import type { Constructable, Key } from '@nestify-js/shared';
 import { inspect } from 'node:util';
-import { sym, _values, _isArray } from '@nestify/shared';
+import { sym, _values, _isArray } from '@nestify-js/shared';
 
 import { RouteConfig } from '@core/types/index.js';
 import { toModuleClass } from '@core/common/utils.js';

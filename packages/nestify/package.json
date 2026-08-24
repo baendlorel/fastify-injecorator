@@ -1,6 +1,6 @@
 {
   "name": "nestify-js",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A NestJS like fastify plugin for dependency injection",
   "description_zh": "一个类似于 NestJS 的 Fastify 依赖注入插件",
   "purpose": "npm",
@@ -37,8 +37,6 @@
   "license": "MIT",
   "dependencies": {
     "@nestify-js/core": "workspace:*",
-    "@nestify-js/schema": "workspace:*",
-    "@nestify-js/swagger": "workspace:*",
     "@fastify/autoload": "^6.3.1",
     "@fastify/one-line-logger": "^2.1.0",
     "@fastify/sensible": "^6.0.4",

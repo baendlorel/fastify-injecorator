@@ -1,6 +1,6 @@
 {
   "name": "@nestify-js/schema",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Schema validation and utilities for nestify-js",
   "type": "module",
   "main": "./dist/index.cjs",

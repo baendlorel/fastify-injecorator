@@ -1,4 +1,4 @@
-import { type AnyFunction } from '@nestify-js/shared';
+import { type AnyFunction } from '@core/types/primitives.js';
 import { expectBoolean, expectFunction, expectKey, expectObject, expectString, expect } from './expect.js';
 
 export const expectClassDecoratorContext = (o: any, msg: string) => {

@@ -1,4 +1,4 @@
-import { type AnyFunction } from '@nestify-js/shared';
+import type { AnyFunction } from '@core/types/primitives.js';
 
 export interface CronOptions {
   expression: string;

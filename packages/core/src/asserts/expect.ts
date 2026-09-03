@@ -1,7 +1,8 @@
-import { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injecorator.js';
+import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
 import { InjecoratorError } from './error.js';
-import { _entries, _isArray, _isConstructable, type AnyFunction, type Constructor, type SSKey } from '@nestify-js/shared';
+import { _entries, _isArray, _isConstructable } from '@nestify-js/shared';
 
 // # Basic
 

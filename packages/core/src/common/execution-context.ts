@@ -1,4 +1,4 @@
-import { type Constructor, type AnyFunction } from '@nestify-js/shared';
+import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import {
   ArgsTypeMap,
   HttpArgumentsHost,

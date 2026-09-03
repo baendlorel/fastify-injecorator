@@ -1,5 +1,7 @@
-import { _isConstructable, _isKey, type AnyFunction, type Constructor } from '@nestify-js/shared';
+import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
+
+import { _isConstructable, _isKey } from '@nestify-js/shared';
 
 import { expectHasOneHook, expectInjectToken, expectObject, expectOrObject, expect } from '@core/asserts/index.js';
 import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js';
@@ -42,10 +44,7 @@ export function UsePipes(...pipes: (PipeOptions | Constructor)[]) {
   const normalized = pipes.map((pipe) => (_isConstructable(pipe) ? { pipe } : pipe));
   normalized.forEach(predicate);
 
-  return function (
-    target: Constructor | AnyFunction,
-    context: ClassDecoratorContext | ClassMethodDecoratorContext,
-  ) {
+  return function (target: Constructor | AnyFunction, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
     expectMiddleware([], target, context);
 
     metaSetUsePipes(context, normalized);

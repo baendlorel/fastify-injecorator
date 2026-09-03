@@ -1,4 +1,6 @@
-import { _isFunction, type AnyFunction, type Constructor } from '@nestify-js/shared';
+import type { AnyFunction, Constructor } from '@core/types/primitives.js';
+import { _isFunction } from '@nestify-js/shared';
+
 import type { FilterTask, GuardTask, InterceptorTask, PipeTask } from '@core/types/middleware.js';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { TaskifyAsync } from 'serial-task';

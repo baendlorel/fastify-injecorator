@@ -1,7 +1,8 @@
+import type { AnyFunction } from '@core/types/primitives.js';
 import type { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
+
 import { sym } from '@nestify-js/shared';
 import { metaSet } from '@core/register/meta.js';
-import { type AnyFunction } from '@nestify-js/shared';
 import { UsePipes } from '@core/decorators/middlewares/pipe.js';
 import { PipeFile } from './pipes/file.pipe.js';
 

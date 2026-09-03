@@ -1,4 +1,4 @@
-import { type Constructor, type AnyFunction, type SSKey } from '@nestify-js/shared';
+import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 import { sym } from '@nestify-js/shared';
 import { expectDecoratorContext } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';

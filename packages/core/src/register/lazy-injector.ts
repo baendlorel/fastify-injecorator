@@ -1,5 +1,6 @@
 import type { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
 import type { InjecoratorMiddleware } from '@core/types/middleware.js';
+import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
 import { FastifyInstance } from 'fastify';
 import {
@@ -10,9 +11,6 @@ import {
   _isObject,
   _ownKeys,
   APP_LOGGER,
-  type AnyFunction,
-  type Constructor,
-  type SSKey,
 } from '@nestify-js/shared';
 
 import { toModuleClass } from '@core/common/index.js';
@@ -64,9 +62,7 @@ export namespace injector {
     });
   }
 
-  export function getDetail<T extends object>(
-    token: InjectToken,
-  ): { instance: T; cls: Constructor | null } {
+  export function getDetail<T extends object>(token: InjectToken): { instance: T; cls: Constructor | null } {
     const instance = instanceMap.get(_isKey(token) ? token : token.name) as T;
     const cls = (_getPrototypeOf(instance)?.constructor ?? null) as Constructor | null;
     return { instance, cls };

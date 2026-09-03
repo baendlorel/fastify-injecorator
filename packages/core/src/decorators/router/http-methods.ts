@@ -1,4 +1,4 @@
-import { type AnyFunction } from '@nestify-js/shared';
+import type { AnyFunction } from '@core/types/primitives.js';
 import { expectMethodDecorator, expectString, expectOrString } from '@core/asserts/index.js';
 import { metaSetRoute } from '@core/register/meta.js';
 

@@ -1,4 +1,5 @@
-import { _fnToString, _isArray, _isConstructable, _isFunction, _isKey, _isObject, type AnyFunction, type Constructor } from '@nestify-js/shared';
+import { _fnToString, _isArray, _isConstructable, _isFunction, _isKey, _isObject } from '@nestify-js/shared';
+import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import {
   InjectToken,
   InjectArg,

@@ -1,4 +1,4 @@
-import { type Constructor, type AnyFunction } from '@nestify-js/shared';
+import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { InjecoratorFilter } from '@core/types/middleware.js';
 import { subclassOf } from '@nestify-js/shared';

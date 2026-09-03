@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { HttpStatus } from '@nestify-js/shared';
+import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
-import type { FastifyRequest } from 'fastify';
-import { type HttpStatus, type Constructor, type AnyFunction, type SSKey } from '@nestify-js/shared';
+import type { FastifyRequest as NestifyRequest } from 'fastify';
 
 export interface BaseHttpException {
   readonly message: string;
@@ -18,7 +19,7 @@ export type DataKeys<T> = {
   [K in keyof T]: T[K] extends AnyFunction ? never : K;
 }[keyof T];
 
-export type FastifyRequestDataKeys = Exclude<DataKeys<FastifyRequest>, undefined>;
+export type FastifyRequestDataKeys = Exclude<DataKeys<NestifyRequest>, undefined>;
 
 export type ArgExtractionPath = FastifyRequestDataKeys | `${FastifyRequestDataKeys}.${string}`;
 

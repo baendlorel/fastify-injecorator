@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply as NestifyReply, FastifyRequest as NestifyRequest } from 'fastify';
 
 /**
  * Abstraction over the original handler arguments, allowing retrieval
@@ -42,12 +42,12 @@ export interface HttpArgumentsHost {
   /**
    * Returns the HTTP request object.
    */
-  getRequest<T = FastifyRequest>(): T;
+  getRequest<T = NestifyRequest>(): T;
 
   /**
    * Returns the HTTP response object.
    */
-  getReply<T = FastifyReply>(): T;
+  getReply<T = NestifyReply>(): T;
 }
 
 /**
@@ -80,7 +80,7 @@ export interface WsArgumentsHost {
   getData<T = any>(): T;
 }
 
-export type ArgsTypeHttp = [FastifyRequest, FastifyReply];
+export type ArgsTypeHttp = [NestifyRequest, NestifyReply];
 export type ArgsTypeWebSocket = [any /* client */, any /* data */];
 export type ArgsTypeRpc = [any /* data */, any /* context */];
 export type ArgsType = ArgsTypeHttp | ArgsTypeWebSocket | ArgsTypeRpc;

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import fastify, {
   type FastifyServerOptions,
-  type FastifyPlugin,
+  type FastifyPluginCallback,
+  type FastifyPluginAsync,
   type FastifyPluginOptions,
   type FastifyListenOptions,
   type FastifyInstance as NestifyInstance,
@@ -14,9 +15,10 @@ import { apply } from './index.js';
 /**
  * A fastify plugin to be registered before modules are applied.
  * - tuple form: `[plugin]` or `[plugin, options]`
+ * - both callback-style and async-style plugins are accepted
  */
 export type NestifyPluginRegistration = readonly [
-  plugin: FastifyPlugin<any>,
+  plugin: FastifyPluginCallback<any> | FastifyPluginAsync<any>,
   options?: FastifyPluginOptions,
 ];
 

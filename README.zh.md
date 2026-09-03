@@ -286,10 +286,65 @@ class ApiController {
 }
 ```
 
-## 完整使用示例
+### 应用启动
+
+#### `nestify(rootModule, options?)`（推荐）
+
+一行代码完成：创建 fastify 实例、注册 fastify 插件、应用所有模块，并（可选地）开始监听端口。返回底层的 fastify 实例。
+
+```typescript
+import { nestify } from 'nestify-js';
+
+const app = await nestify(AppModule, {
+  // `fastify.logger` 的快捷方式
+  logger: { level: 'info' },
+
+  // 在模块应用之前注册的 fastify 插件
+  // - 元组形式：`[plugin]` 或 `[plugin, options]`
+  plugins: [
+    [multipart, { limits: { fileSize: 10 * 1024 * 1024 } }],
+    [staticFiles, { root: './public', prefix: '/' }],
+  ],
+
+  // 注册自动创建实例的 setup 回调
+  // - 例如内置的 `setupBasicPipes` 会创建预置的管道实例
+  setup: setupBasicPipes,
+
+  // 所有模块注册完成后开始监听
+  // - `true` 时读取 `PORT` / `HOST` 环境变量（默认 3000 / 0.0.0.0）
+  listen: true,
+  // 也可以覆盖：listen: { port: 8080, host: 'localhost' }
+});
+```
+
+可用选项：
+
+| 选项 | 类型 | 说明 |
+| --- | --- | --- |
+| `logger` | `FastifyServerOptions['logger']` | `fastify.logger` 的快捷方式 |
+| `fastify` | `FastifyServerOptions` | 传给 fastify 工厂函数的选项（`fastify(options)`） |
+| `plugins` | `readonly [plugin, options?][]` | 在模块应用之前注册的 fastify 插件（callback 风格和 async 风格都可以） |
+| `setup` | `(register: (cls: Constructor) => void) => void` | 注册自动创建实例的 setup 回调（如 `setupBasicPipes`） |
+| `listen` | `boolean \| Partial<FastifyListenOptions>` | 所有模块注册完成后开始监听 |
+| `allowCrossModuleCircularReference` | `boolean` | 允许**跨模块**循环依赖时必须设为 `true`（同模块内的循环依赖默认允许）。默认 `false` |
+
+#### `apply(app, options)`
+
+如果需要对 fastify 实例做更多控制（自定义插件、钩子、装饰器……），可以自己创建实例，改用更底层的 `apply()`：
 
 ```typescript
 import fastify from 'fastify';
+import { apply } from 'nestify-js';
+
+const app = fastify({ logger: true });
+
+await apply(app, { rootModule: AppModule });
+await app.listen({ port: 3000 });
+```
+
+## 完整使用示例
+
+```typescript
 import {
   Module,
   Controller,
@@ -301,8 +356,8 @@ import {
   Params,
   UseGuards,
   Guard,
-  apply,
-} from 'fastify-injecorator';
+  nestify,
+} from 'nestify-js';
 
 // 服务
 @Injectable()
@@ -377,14 +432,11 @@ class UserController {
 })
 class AppModule {}
 
-// 应用程序设置
-const app = fastify({ logger: true });
-
-await apply(app, {
-  rootModule: AppModule,
+// 启动应用
+await nestify(AppModule, {
+  logger: true,
+  listen: true, // 读取 `PORT` / `HOST` 环境变量，默认 3000 / 0.0.0.0
 });
-
-await app.listen({ port: 3000 });
 console.log('服务器运行在 http://localhost:3000');
 ```
 

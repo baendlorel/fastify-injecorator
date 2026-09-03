@@ -1,6 +1,6 @@
 {
   "name": "nestify-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A NestJS like fastify plugin for dependency injection - Monorepo",
   "private": true,
   "type": "module",

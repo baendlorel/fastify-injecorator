@@ -1,24 +1,24 @@
-import type { Constructable, Func } from '@nestify-js/shared';
+import { type Constructor, type AnyFunction } from '@nestify-js/shared';
 import { CronExpressionParser } from 'cron-parser';
 import { _entries, sym } from '@nestify-js/shared';
 
 import { expectMethodDecorator } from '@core/asserts/decorator-context.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
 
-export function Cron(expression: string): Func {
-  return function (target: Func, context: ClassMethodDecoratorContext) {
+export function Cron(expression: string): AnyFunction {
+  return function (target: AnyFunction, context: ClassMethodDecoratorContext) {
     expectMethodDecorator(target, context);
     metaSet<string>(context, [sym.cron, context.name], expression);
   };
 }
 
-const cronJobs: Func[] = [];
+const cronJobs: AnyFunction[] = [];
 
 /**
  * Bind cron jobs for a given instance
  * This function is called in lazy injector after all instances are created
  */
-export function bindCronJob(instance: InstanceType<Constructable>, sourceClass: Constructable) {
+export function bindCronJob(instance: InstanceType<Constructor>, sourceClass: Constructor) {
   const cronMeta = metaGet<Record<string, string>>(sourceClass, [sym.cron]);
   if (!cronMeta) {
     return;

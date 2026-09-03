@@ -1,7 +1,7 @@
 import { InjectToken } from '@core/types/injecorator.js';
 
 import { InjecoratorError } from './error.js';
-import { _entries, _isArray, _isConstructable } from '@nestify-js/shared';
+import { _entries, _isArray, _isConstructable, type AnyFunction, type Constructor, type SSKey } from '@nestify-js/shared';
 
 // # Basic
 
@@ -41,7 +41,7 @@ export const expectKey: (o: any, msg: string) => asserts o is InjectToken = (o, 
   }
 };
 
-export const expectClass: (o: any, msg: string) => asserts o is new (...args: any) => any = (o, msg) => {
+export const expectClass: (o: any, msg: string) => asserts o is Constructor = (o, msg) => {
   if (typeof o !== 'function') {
     _throw(msg);
   }
@@ -60,7 +60,7 @@ export const expectBoolean: (o: any, msg: string) => asserts o is boolean = (o, 
   }
 };
 
-export const expectFunction: (o: any, msg: string) => asserts o is (...args: any) => any = (o, msg) => {
+export const expectFunction: (o: any, msg: string) => asserts o is AnyFunction = (o, msg) => {
   if (typeof o !== 'function') {
     _throw(msg);
   }
@@ -91,9 +91,9 @@ export const expectArray: <T = any>(
 
 export const expectRecord: <V>(
   target: unknown,
-  predicate: (value: V, key?: string | symbol) => void,
+  predicate: (value: V, key?: SSKey) => void,
   msg: string,
-) => asserts target is Record<string | symbol, V> = (target, predicate, msg) => {
+) => asserts target is Record<SSKey, V> = (target, predicate, msg) => {
   expectObject(target, msg);
   for (const [key, value] of _entries(target)) {
     predicate(value, key);

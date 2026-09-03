@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import type { Constructable } from '@nestify-js/shared';
+import { type Constructor } from '@nestify-js/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
@@ -12,7 +12,7 @@ import { metaGetModule } from './meta.js';
 import { registerController } from './route/controller.js';
 
 class ModuleRegister {
-  private readonly moduleStack: Constructable[] = [];
+  private readonly moduleStack: Constructor[] = [];
   private app!: FastifyInstance;
   private opts!: FastifyInjecoratorOptions;
 
@@ -22,7 +22,7 @@ class ModuleRegister {
    * - global provider tokens from 'inject-keys.ts'
    * @param mod
    */
-  collectGlobal(mod: Constructable | DynamicModule) {
+  collectGlobal(mod: Constructor | DynamicModule) {
     const { moduleClass, isGlobal } = toDynamicModule(mod);
     if (isGlobal) {
       const alreadAdded = collection.addGlobalModule(moduleClass);
@@ -48,7 +48,7 @@ class ModuleRegister {
     }
   }
 
-  visit(mod: Constructable | DynamicModule, inherited: InheritedModuleMeta = { prefix: [] }): void {
+  visit(mod: Constructor | DynamicModule, inherited: InheritedModuleMeta = { prefix: [] }): void {
     const moduleClass = toModuleClass(mod);
 
     if (this.moduleStack.includes(moduleClass)) {
@@ -101,7 +101,7 @@ class ModuleRegister {
    * Sub-packages (e.g. @nestify-js/schema) provide the setup function
    * to register their preset pipes.
    */
-  runSetup(setup?: (register: (cls: Constructable) => void) => void) {
+  runSetup(setup?: (register: (cls: Constructor) => void) => void) {
     if (setup) {
       setup((cls) => injector.internalCreateInstanceByClass(cls));
     }

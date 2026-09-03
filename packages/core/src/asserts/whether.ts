@@ -1,4 +1,4 @@
-import { _fnToString, _isArray, _isConstructable, _isFunction, _isKey, _isObject } from '@nestify-js/shared';
+import { _fnToString, _isArray, _isConstructable, _isFunction, _isKey, _isObject, type AnyFunction, type Constructor } from '@nestify-js/shared';
 import {
   InjectToken,
   InjectArg,
@@ -18,7 +18,7 @@ import { metaGetModule } from '@core/register/meta.js';
  * @see https://github.com/baendlorel/get-function-features
  * @see https://github.com/baendlorel/js-is-arrow-function
  */
-export function isInjectedClassGetter(o: unknown): o is (...args: any) => any {
+export function isInjectedClassGetter(o: unknown): o is AnyFunction {
   if (typeof o !== 'function') {
     return false;
   }
@@ -32,7 +32,7 @@ export function isInjectedClassGetter(o: unknown): o is (...args: any) => any {
  * @param target
  * @returns
  */
-export function likeModule(target: unknown): target is new (...args: any) => any {
+export function likeModule(target: unknown): target is Constructor {
   if (!_isConstructable(target)) {
     return false;
   }

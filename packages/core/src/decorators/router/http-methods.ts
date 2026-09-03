@@ -1,10 +1,10 @@
-import type { Func } from '@nestify-js/shared';
+import { type AnyFunction } from '@nestify-js/shared';
 import { expectMethodDecorator, expectString, expectOrString } from '@core/asserts/index.js';
 import { metaSetRoute } from '@core/register/meta.js';
 
 function registerRoute(method: string) {
   return function (route?: string) {
-    return function (target: Func, context: ClassMethodDecoratorContext) {
+    return function (target: AnyFunction, context: ClassMethodDecoratorContext) {
       expectMethodDecorator(target, context);
       expectString(method, 'Method must be a string');
       expectOrString(route, 'Given route must be string or undefined');

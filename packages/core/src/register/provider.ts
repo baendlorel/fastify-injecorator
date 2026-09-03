@@ -1,5 +1,6 @@
 import type {
   InjectArg,
+  InjectToken,
   ProviderOptions,
   ProviderUseClass,
   ProviderUseValue,
@@ -8,21 +9,17 @@ import type {
 } from '@core/types/injecorator.js';
 
 import { inspect } from 'node:util';
-import { _isConstructable, _isFunction } from '@nestify-js/shared';
+import { _isConstructable, _isFunction, type Constructor, type SSKey } from '@nestify-js/shared';
 import { expectClass, expectFunction, expectKey } from '@core/asserts/index.js';
 
 namespace ph {
   export function match(
     opts: ProviderOptions,
     callbacks: {
-      useClass?: (token: string | symbol, cls: new (...args: any) => any) => unknown;
-      useValue?: (token: string | symbol, value: InstanceType<new (...args: any) => any>) => unknown;
-      useFactory?: (
-        token: string | symbol,
-        factory: (...instances: any[]) => any,
-        inject: (new (...args: any) => any)[],
-      ) => unknown;
-      useExisting?: (token: string | symbol, existingToken: string | symbol) => unknown;
+      useClass?: (token: SSKey, cls: Constructor) => unknown;
+      useValue?: (token: SSKey, value: InstanceType<Constructor>) => unknown;
+      useFactory?: (token: SSKey, factory: (...instances: any[]) => any, inject: InjectToken[]) => unknown;
+      useExisting?: (token: SSKey, existingToken: SSKey) => unknown;
     },
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;

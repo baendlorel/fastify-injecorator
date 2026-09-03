@@ -1,4 +1,4 @@
-import type { Constructable, Key } from '@nestify-js/shared';
+import { type Constructor, type SSKey } from '@nestify-js/shared';
 import type { RouteBasic, RouteConfig, RouteOptType } from '@core/types/index.js';
 import type {
   ProviderMeta,
@@ -32,14 +32,14 @@ import ph from './provider.js';
 /**
  * Directly set metadata on the context
  */
-export function metaSet<T = unknown>(context: DecoratorContext, keys: Key[], value: T) {
+export function metaSet<T = unknown>(context: DecoratorContext, keys: SSKey[], value: T) {
   return ReflectDeep.set<T>(context.metadata, [sym.root, ...keys], value);
 }
 
 /**
  * Directly get metadata on the context
  */
-export function metaGet<T = unknown>(cls: Constructable, keys: Key[]) {
+export function metaGet<T = unknown>(cls: Constructor, keys: SSKey[]) {
   return ReflectDeep.get<T>(cls, [sym.metadata, sym.root, ...keys]);
 }
 
@@ -49,7 +49,7 @@ export function metaSetController(context: ClassDecoratorContext, prefix?: strin
   return metaSet(context, [sym.provider], data) && metaSet(context, [sym.controller], controlled);
 }
 
-export function metaGetController(cls: Constructable): ControllerMeta {
+export function metaGetController(cls: Constructor): ControllerMeta {
   return metaGet(cls, [sym.controller]) as ControllerMeta;
 }
 
@@ -65,8 +65,8 @@ export function metaSetRoute(context: ClassMethodDecoratorContext, httpMethod: s
   return metaSet(context, [sym.route.root, context.name, sym.route.base], basic);
 }
 
-export function metaGetRoute(cls: Constructable): Record<Key, RouteConfig> {
-  return metaGet(cls, [sym.route.root]) as Record<Key, RouteConfig>;
+export function metaGetRoute(cls: Constructor): Record<SSKey, RouteConfig> {
+  return metaGet(cls, [sym.route.root]) as Record<SSKey, RouteConfig>;
 }
 
 /**
@@ -100,8 +100,8 @@ export function metaSetInject(context: ClassFieldDecoratorContext, dependency: I
   return metaSet(context, [sym.injection, context.name], o);
 }
 
-export function metaGetInject(cls: Constructable): Record<Key, InjectMetadata> | undefined {
-  return metaGet<Record<Key, InjectMetadata>>(cls, [sym.injection]);
+export function metaGetInject(cls: Constructor): Record<SSKey, InjectMetadata> | undefined {
+  return metaGet<Record<SSKey, InjectMetadata>>(cls, [sym.injection]);
 }
 
 /**
@@ -117,12 +117,12 @@ export function metaSetProvider(context: ClassDecoratorContext, args: unknown[] 
  *
  * Metadata is stored at: `class[sym.metadata][sym.root][sym.provider]`
  */
-export function metaSetProviderOnClass(target: Constructable, args: unknown[] = []): boolean {
+export function metaSetProviderOnClass(target: Constructor, args: unknown[] = []): boolean {
   const data: ProviderMeta = { args };
   return ReflectDeep.set(target, [sym.metadata, sym.root, sym.provider], data);
 }
 
-export function metaGetProvider(cls: Constructable): ProviderMeta {
+export function metaGetProvider(cls: Constructor): ProviderMeta {
   return metaGet(cls, [sym.provider]) as ProviderMeta;
 }
 
@@ -142,13 +142,13 @@ export function metaSetModule(context: ClassDecoratorContext, options: Partial<M
     imports: [...new Set(imports)],
     exports: [...new Set(exports)],
     get accessibleProviderTokens() {
-      const imported: Key[] = imports
-        .map((m: Constructable | DynamicModule) => {
+      const imported: SSKey[] = imports
+        .map((m: Constructor | DynamicModule) => {
           const moduleClass = toModuleClass(m);
           return metaGetModule(moduleClass).exports.map((e) => e.name);
         })
         .flat();
-      const providerTokens: Key[] = providers.map((p: ProviderOptions) => ph.getToken(p));
+      const providerTokens: SSKey[] = providers.map((p: ProviderOptions) => ph.getToken(p));
       return [...providerTokens, ...imported, ...collection.globalProviders];
     },
     outer,
@@ -156,7 +156,7 @@ export function metaSetModule(context: ClassDecoratorContext, options: Partial<M
   });
 }
 
-export function metaGetModule(cls: Constructable): ModuleMeta {
+export function metaGetModule(cls: Constructor): ModuleMeta {
   return metaGet(cls, [sym.module]) as ModuleMeta;
 }
 
@@ -166,7 +166,7 @@ export function metaSetInterceptor(context: ClassDecoratorContext) {
   return metaSet(context, [sym.interceptor.root], true);
 }
 
-export function metaIsInterceptor(cls: Constructable): boolean {
+export function metaIsInterceptor(cls: Constructor): boolean {
   return Boolean(metaGet(cls, [sym.interceptor.root]));
 }
 
@@ -174,15 +174,15 @@ export function metaSetGuard(context: ClassDecoratorContext) {
   return metaSet(context, [sym.guard.root], true);
 }
 
-export function metaIsGuard(cls: Constructable): boolean {
+export function metaIsGuard(cls: Constructor): boolean {
   return Boolean(metaGet(cls, [sym.guard.root]));
 }
 
-export function metaSetFilters(context: ClassDecoratorContext, exceptionClasses: Constructable[]): boolean {
+export function metaSetFilters(context: ClassDecoratorContext, exceptionClasses: Constructor[]): boolean {
   return metaSet(context, [sym.filter.root], exceptionClasses);
 }
 
-export function metaGetFilters(cls: Constructable): Constructable[] | undefined {
+export function metaGetFilters(cls: Constructor): Constructor[] | undefined {
   return metaGet(cls, [sym.filter.root]);
 }
 
@@ -190,7 +190,7 @@ export function metaSetPipe(context: ClassDecoratorContext): boolean {
   return metaSet(context, [sym.pipe.root], true);
 }
 
-export function metaIsPipe(cls: Constructable): boolean {
+export function metaIsPipe(cls: Constructor): boolean {
   return Boolean(metaGet(cls, [sym.pipe.root]));
 }
 // #endregion
@@ -211,10 +211,10 @@ export function metaSetUseInterceptors(
   return metaSet(context, [sym.interceptor.handler, context.name], tokens);
 }
 
-export function metaGetUseInterceptors(cls: Constructable): InterceptorGetter {
+export function metaGetUseInterceptors(cls: Constructor): InterceptorGetter {
   const controller = metaGet<InjectToken[]>(cls, [sym.interceptor.controller]);
-  const handler = metaGet<Record<Key, InjectToken[]>>(cls, [sym.interceptor.handler]) ?? {};
-  return function (field: Key) {
+  const handler = metaGet<Record<SSKey, InjectToken[]>>(cls, [sym.interceptor.handler]) ?? {};
+  return function (field: SSKey) {
     return concatArr(collection.globalInterceptors, controller, handler[field]);
   };
 }
@@ -229,10 +229,10 @@ export function metaSetUseGuards(
   return metaSet(context, [sym.guard.handler, context.name], tokens);
 }
 
-export function metaGetUseGuards(cls: Constructable): GuardGetter {
+export function metaGetUseGuards(cls: Constructor): GuardGetter {
   const controller = metaGet<InjectToken[]>(cls, [sym.guard.controller]);
-  const handler = metaGet<Record<Key, InjectToken[]>>(cls, [sym.guard.handler]) ?? {};
-  return function (field: Key) {
+  const handler = metaGet<Record<SSKey, InjectToken[]>>(cls, [sym.guard.handler]) ?? {};
+  return function (field: SSKey) {
     return concatArr(collection.globalGuards, controller, handler[field]);
   };
 }
@@ -247,10 +247,10 @@ export function metaSetUseFilters(
   return metaSet(context, [sym.filter.handler, context.name], tokens);
 }
 
-export function metaGetUseFilters(cls: Constructable): FilterGetter {
+export function metaGetUseFilters(cls: Constructor): FilterGetter {
   const controller = metaGet<InjectToken[]>(cls, [sym.filter.controller]);
-  const handler = metaGet<Record<Key, InjectToken[]>>(cls, [sym.filter.handler]) ?? {};
-  return function (field: Key) {
+  const handler = metaGet<Record<SSKey, InjectToken[]>>(cls, [sym.filter.handler]) ?? {};
+  return function (field: SSKey) {
     return concatArr(collection.globalFilters, controller, handler[field]);
   };
 }
@@ -265,10 +265,10 @@ export function metaSetUsePipes(
   return metaSet(context, [sym.pipe.handler, context.name], pipes);
 }
 
-export function metaGetUsePipes(cls: Constructable): PipeGetter {
+export function metaGetUsePipes(cls: Constructor): PipeGetter {
   const controller = metaGet<PipeOptions[]>(cls, [sym.pipe.controller]);
-  const handler = metaGet<Record<Key, PipeOptions[]>>(cls, [sym.pipe.handler]) ?? {};
-  return function (field: Key) {
+  const handler = metaGet<Record<SSKey, PipeOptions[]>>(cls, [sym.pipe.handler]) ?? {};
+  return function (field: SSKey) {
     return concatArr(collection.globalPipes, controller, handler[field]);
   };
 }
@@ -276,7 +276,7 @@ export function metaGetUsePipes(cls: Constructable): PipeGetter {
 /**
  * Fisrt method pipe is used to set schema for swagger
  */
-export function metaGetFirstMethodPipeSchema(cls: Constructable, field: Key): PipeFullSchema | undefined {
+export function metaGetFirstMethodPipeSchema(cls: Constructor, field: SSKey): PipeFullSchema | undefined {
   const methodPipes = metaGet<PipeOptions[]>(cls, [sym.pipe.handler, field]);
   if (!methodPipes) {
     // length > 0 is already assured by @UsePipes

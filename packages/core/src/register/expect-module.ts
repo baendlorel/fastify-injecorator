@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
-import type { Constructable, Key } from '@nestify-js/shared';
 import { inspect } from 'node:util';
-import { sym, _values, _isArray } from '@nestify-js/shared';
+import {
+  sym,
+  _values,
+  _isArray,
+  _isConstructable,
+  _isKey,
+  _isObject,
+  _isPathNode,
+  type Constructor,
+  type SSKey,
+} from '@nestify-js/shared';
 
 import { RouteConfig } from '@core/types/index.js';
 import { toModuleClass } from '@core/common/utils.js';
@@ -18,10 +27,6 @@ import {
   expectString,
   expectOrObject,
   expect,
-  _isConstructable,
-  _isKey,
-  _isObject,
-  _isPathNode,
 } from '@core/asserts/index.js';
 import { metaGetController, metaGetInject, metaGetModule, metaGetProvider, metaGetRoute } from '@core/register/meta.js';
 import ph from './provider.js';
@@ -37,7 +42,7 @@ const injectableCache = new Set<any>();
  *   - args: an array of constructor arguments
  * - injections?: a record of class dependencies
  */
-export function expectProvider(target: unknown): asserts target is Constructable {
+export function expectProvider(target: unknown): asserts target is Constructor {
   expectClass(target, `Target is not a class: ${String(target)} ${Object(target).name}`);
 
   // Should have args[]
@@ -130,7 +135,7 @@ export function expectController(target: unknown) {
  * @param target
  * @returns
  */
-export function expectModule(target: unknown): asserts target is Constructable {
+export function expectModule(target: unknown): asserts target is Constructor {
   if (moduleCache.has(target)) {
     return;
   }
@@ -171,7 +176,7 @@ export function expectModule(target: unknown): asserts target is Constructable {
  * @param opts Will only check when it is a class
  * @param apTokens accessible provider tokens
  */
-export function expectAccessible(opts: ProviderOptions, apTokens: Key[]) {
+export function expectAccessible(opts: ProviderOptions, apTokens: SSKey[]) {
   const tks = getDependencyTokens(opts);
   if (!tks) {
     return;
@@ -189,7 +194,7 @@ export function clearExpectCache() {
   injectableCache.clear();
 }
 
-function getDependencyTokens(options: ProviderOptions): Key[] | null {
+function getDependencyTokens(options: ProviderOptions): SSKey[] | null {
   if (_isConstructable(options)) {
     const injections = metaGetInject(options);
     if (!_isObject(injections)) {
@@ -208,7 +213,7 @@ function getDependencyTokens(options: ProviderOptions): Key[] | null {
 
   if ('inject' in options) {
     if (_isArray(options.inject)) {
-      options.inject.map((arg) => (_isKey(arg) ? arg : arg.name));
+      return options.inject.map((arg) => (_isKey(arg) ? arg : arg.name));
     } else {
       return null;
     }

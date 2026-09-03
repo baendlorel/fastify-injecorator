@@ -1,4 +1,4 @@
-import type { Constructable } from '@nestify-js/shared';
+import { type Constructor } from '@nestify-js/shared';
 
 import { PipeBody } from './pipes/body.pipe.js';
 import { PipeParams } from './pipes/params.pipe.js';
@@ -12,7 +12,7 @@ import { PipeRaw } from './pipes/raw.pipe.js';
  *
  * @param register Function to register a class as an auto-created instance
  */
-export function setupBasicPipes(register: (cls: Constructable) => void) {
+export function setupBasicPipes(register: (cls: Constructor) => void) {
   register(PipeBody);
   register(PipeParams);
   register(PipeIp);

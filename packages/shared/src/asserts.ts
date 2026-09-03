@@ -1,15 +1,17 @@
+import { type AnyFunction, type Constructor, type SSKey } from './types/primitive.js';
+
 export function _isObject<T extends object>(o: unknown): o is T {
   return typeof o === 'object' && o !== null;
 }
 
-export function _isKey(o: unknown): o is string | symbol {
+export function _isKey(o: unknown): o is SSKey {
   return typeof o === 'string' || typeof o === 'symbol';
 }
 
 /**
  * Only criterion: newable
  */
-export function _isConstructable(o: any): o is new (...args: any) => any {
+export function _isConstructable(o: any): o is Constructor {
   if (typeof o !== 'function') {
     return false;
   }
@@ -23,11 +25,11 @@ export function _isConstructable(o: any): o is new (...args: any) => any {
   }
 }
 
-export function _isFunction(o: any): o is (...args: any) => any {
+export function _isFunction(o: any): o is AnyFunction {
   return typeof o === 'function';
 }
 
-export function _orFunction(o: any): o is ((...args: any) => any) | undefined {
+export function _orFunction(o: any): o is AnyFunction | undefined {
   return typeof o === 'function' || o === undefined;
 }
 

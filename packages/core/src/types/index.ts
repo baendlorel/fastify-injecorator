@@ -12,7 +12,7 @@ import type {
   RouteShorthandOptions,
 } from 'fastify';
 import type { RouteApiSchema } from './middleware.js';
-import type { Key } from '@nestify-js/shared';
+import { type SSKey } from '@nestify-js/shared';
 import { sym } from '@nestify-js/shared';
 
 export * from './auth.js';
@@ -39,7 +39,7 @@ export type RouteOptType<
 >;
 
 export interface RouteBasic {
-  field: Key;
+  field: SSKey;
   method: string;
   route: string[];
 }

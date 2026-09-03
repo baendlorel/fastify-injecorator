@@ -1,3 +1,4 @@
+import { type AnyFunction, type Constructor } from '@nestify-js/shared';
 import type { InjecoratorInterceptor } from '@core/types/middleware.js';
 import type { InjectToken } from '@core/types/injecorator.js';
 
@@ -11,7 +12,7 @@ const hooks: (keyof InjecoratorInterceptor)[] = ['intercept'];
  * Use on services, configurations, etc.
  */
 export function Interceptor() {
-  return function (target: new (...args: any) => any, context: ClassDecoratorContext) {
+  return function (target: Constructor, context: ClassDecoratorContext) {
     expectHasOneHook<InjecoratorInterceptor>(
       target,
       hooks,
@@ -31,7 +32,7 @@ export function Interceptor() {
 export function UseInterceptors(...interceptors: InjectToken[]) {
   expect(interceptors.length > 0, '@UseInterceptors requires at least one interceptor');
   return function (
-    target: (new (...args: any) => any) | ((...args: any) => any),
+    target: Constructor | AnyFunction,
     context: ClassDecoratorContext | ClassMethodDecoratorContext,
   ) {
     expectMiddleware(interceptors, target, context);

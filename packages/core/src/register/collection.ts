@@ -1,4 +1,4 @@
-import type { Constructable, Key } from '@nestify-js/shared';
+import { type Constructor, type SSKey } from '@nestify-js/shared';
 import type { ModuleMeta } from '@core/types/injecorator.js';
 import type { PipeOptions } from '@core/types/middleware.js';
 
@@ -11,8 +11,8 @@ import { expect } from '@core/asserts/index.js';
  * Collection of some global metadata
  */
 export namespace collection {
-  export const globalModules = new Set<Constructable>();
-  export const globalProviders = new Set<Key>();
+  export const globalModules = new Set<Constructor>();
+  export const globalProviders = new Set<SSKey>();
   export const globalInterceptors: symbol[] = [];
   export const globalGuards: symbol[] = [];
   export const globalFilters: symbol[] = [];
@@ -24,7 +24,7 @@ export namespace collection {
    * @param middleware tokens like `APP_FILTER`...
    * @returns
    */
-  export function addGlobalMiddleware(middleware: Key) {
+  export function addGlobalMiddleware(middleware: SSKey) {
     const name = typeof middleware === 'symbol' ? middleware.description : middleware;
     switch (middleware) {
       case APP_FILTER:
@@ -50,7 +50,7 @@ export namespace collection {
   /**
    * @returns whether this module is already added
    */
-  export function addGlobalModule(moduleClass: Constructable): boolean {
+  export function addGlobalModule(moduleClass: Constructor): boolean {
     if (globalModules.has(moduleClass)) {
       return false;
     }

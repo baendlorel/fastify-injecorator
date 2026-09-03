@@ -1,4 +1,4 @@
-import { Func } from '@nestify-js/shared';
+import { type AnyFunction } from '@nestify-js/shared';
 import { expectBoolean, expectFunction, expectKey, expectObject, expectString, expect } from './expect.js';
 
 export const expectClassDecoratorContext = (o: any, msg: string) => {
@@ -78,7 +78,7 @@ export const expectDecoratorContext = (o: any, msg: string) => {
   expectObject(o.metadata, msg);
 };
 
-export const expectMethodDecorator = (target: Func, context: ClassMethodDecoratorContext) => {
+export const expectMethodDecorator = (target: AnyFunction, context: ClassMethodDecoratorContext) => {
   expectFunction(target, 'Target should be a function');
   expectClassMethodDecoratorContext(context, 'Must be used on a class method');
 };

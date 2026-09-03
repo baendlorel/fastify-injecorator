@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { FastifyRequest } from 'fastify';
-import type { HttpStatus } from '@nestify-js/shared';
-import type { Constructable, Func, Key } from '@nestify-js/shared';
+import { type HttpStatus, type Constructor, type AnyFunction, type SSKey } from '@nestify-js/shared';
 
 export interface BaseHttpException {
   readonly message: string;
@@ -16,22 +15,22 @@ export interface BaseHttpException {
 }
 
 export type DataKeys<T> = {
-  [K in keyof T]: T[K] extends Func ? never : K;
+  [K in keyof T]: T[K] extends AnyFunction ? never : K;
 }[keyof T];
 
 export type FastifyRequestDataKeys = Exclude<DataKeys<FastifyRequest>, undefined>;
 
 export type ArgExtractionPath = FastifyRequestDataKeys | `${FastifyRequestDataKeys}.${string}`;
 
-export type InjectToken = Key | Constructable;
+export type InjectToken = SSKey | Constructor;
 
-export type InjectArg = InjectToken | (() => Constructable);
+export type InjectArg = InjectToken | (() => Constructor);
 
 export interface ProviderUseFactory {
   /**
    * The unique token used to identify and inject this provider.
    */
-  provide: Key;
+  provide: SSKey;
 
   /**
    * Provide via factory function.
@@ -40,14 +39,14 @@ export interface ProviderUseFactory {
    */
   useFactory: (...instances: any[]) => any;
 
-  inject?: (Constructable | Key)[];
+  inject?: (Constructor | SSKey)[];
 }
 
 export interface ProviderUseValue {
   /**
    * The unique token used to identify and inject this provider.
    */
-  provide: Key;
+  provide: SSKey;
 
   /**
    * Directly provide a value. No dependency injection is performed.
@@ -60,32 +59,32 @@ export interface ProviderUseClass {
   /**
    * The unique token used to identify and inject this provider.
    */
-  provide: Key;
+  provide: SSKey;
 
   /**
    * Provide via class. Managed by Injecorator, dependencies are automatically injected.
    */
-  useClass: Constructable;
+  useClass: Constructor;
 }
 
 export interface ProviderUseExisting {
   /**
    * The unique token used to identify and inject this provider.
    */
-  provide: Key;
+  provide: SSKey;
 
   /**
    * Provide by referencing an existing provider. No chain lookup; only the referenced provider is used.
    */
-  useExisting: Key;
+  useExisting: SSKey;
 }
 
 export type ProviderStandardOptions = ProviderUseFactory | ProviderUseValue | ProviderUseClass | ProviderUseExisting;
 
-export type ProviderOptions = ProviderStandardOptions | Constructable;
+export type ProviderOptions = ProviderStandardOptions | Constructor;
 
 export interface DynamicModule {
-  moduleClass: Constructable;
+  moduleClass: Constructor;
 
   /**
    * When "true", makes a module global-scoped.
@@ -100,7 +99,7 @@ export interface DynamicModule {
 }
 
 export interface FastifyInjecoratorOptions {
-  rootModule: Constructable;
+  rootModule: Constructor;
 
   /**
    * Injecorator naturally allows circular references, but:
@@ -120,12 +119,12 @@ export interface FastifyInjecoratorOptions {
    * apply(app, { rootModule: AppModule, setup: setupBasicPipes });
    * ```
    */
-  setup?: (register: (cls: Constructable) => void) => void;
+  setup?: (register: (cls: Constructor) => void) => void;
 }
 
 export interface LazyInjectEntry {
-  provide: Key;
-  propertyKey: Key;
+  provide: SSKey;
+  propertyKey: SSKey;
   dependency: InjectArg;
 }
 
@@ -159,7 +158,7 @@ export interface ModuleMeta {
   /**
    * Controllers declared in this module
    */
-  readonly controllers: Constructable[];
+  readonly controllers: Constructor[];
 
   /**
    * ! Only modules can be imported. After importing, providers in this module can import services from other modules.
@@ -167,7 +166,7 @@ export interface ModuleMeta {
    * Import other modules
    * - Must be classes decorated with `@Module`
    */
-  readonly imports: (Constructable | DynamicModule)[];
+  readonly imports: (Constructor | DynamicModule)[];
 
   /**
    * ! Controllers cannot be exported
@@ -175,7 +174,7 @@ export interface ModuleMeta {
    * Export services to other modules
    * - These are classes decorated with `@Injectable`
    */
-  readonly exports: Constructable[];
+  readonly exports: Constructor[];
 
   /**
    * Prefix applied to each controller
@@ -183,7 +182,7 @@ export interface ModuleMeta {
    */
   readonly prefix: string;
 
-  get accessibleProviderTokens(): Key[];
+  get accessibleProviderTokens(): SSKey[];
 
   readonly outer: boolean;
 }

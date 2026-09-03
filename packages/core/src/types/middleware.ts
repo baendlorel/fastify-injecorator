@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FastifySchema } from 'fastify';
-import type { Constructable, Key, OrPromise } from '@nestify-js/shared';
+import { type Constructor, type SSKey, type OrPromise } from '@nestify-js/shared';
 import type { ExecutionContext } from '@core/common/execution-context.js';
 import type { InjectToken } from './injecorator.js';
 
@@ -10,7 +10,7 @@ import type { InjectToken } from './injecorator.js';
  * @param classMethod method from the class
  * @returns middleware array
  */
-export type MiddlewareGetter<T = InjectToken> = (field: Key) => T[];
+export type MiddlewareGetter<T = InjectToken> = (field: SSKey) => T[];
 export type GuardGetter = MiddlewareGetter;
 export type InterceptorGetter = MiddlewareGetter;
 export type PipeGetter = MiddlewareGetter<PipeOptions>;
@@ -43,7 +43,7 @@ export interface PipeOptions {
    * Pipe class
    * - if `inputPath` is not given, pipe transformer will take the whole `request`
    */
-  pipe: Key | Constructable<InjecoratorPipe>;
+  pipe: SSKey | Constructor<InjecoratorPipe>;
 }
 
 export interface InjecoratorGuard {

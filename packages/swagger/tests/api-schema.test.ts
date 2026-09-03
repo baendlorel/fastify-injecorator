@@ -55,7 +55,6 @@ describe('@ApiSchema decorator', () => {
   it('should throw when schema is not an object', () => {
     expect(() => {
       class Ctrl {
-        // @ts-expect-error
         @ApiSchema(null)
         handler() {}
       }

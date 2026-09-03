@@ -1,4 +1,4 @@
-import { Func } from '@nestify-js/shared';
+import { type AnyFunction } from '@nestify-js/shared';
 
 export interface CronOptions {
   expression: string;
@@ -6,5 +6,5 @@ export interface CronOptions {
   /**
    * This will generate arguments for the cron job function.
    */
-  argsGetter: Func;
+  argsGetter: AnyFunction;
 }

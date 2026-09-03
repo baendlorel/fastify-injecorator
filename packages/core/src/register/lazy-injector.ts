@@ -10,6 +10,9 @@ import {
   _isObject,
   _ownKeys,
   APP_LOGGER,
+  type AnyFunction,
+  type Constructor,
+  type SSKey,
 } from '@nestify-js/shared';
 
 import { toModuleClass } from '@core/common/index.js';
@@ -29,7 +32,7 @@ export namespace injector {
   /**
    * A map from token to the instance of Class
    */
-  const instanceMap = new Map<string | symbol, any>();
+  const instanceMap = new Map<SSKey, any>();
 
   function getProvide(opts: ProviderOptions) {
     return _isConstructable(opts) ? opts.name : opts.provide;
@@ -39,7 +42,7 @@ export namespace injector {
     return instanceMap.get(_isKey(token) ? token : token.name) as T | undefined;
   }
 
-  export function internalCreateInstanceByClass(cls: new (...args: any) => any) {
+  export function internalCreateInstanceByClass(cls: Constructor) {
     instanceMap.set(cls.name, new cls());
   }
 
@@ -50,12 +53,12 @@ export namespace injector {
    */
   export function getMiddlewareHooks<T extends InjecoratorMiddleware>(
     tokens: InjectToken[],
-    handlerName: string | symbol,
-  ): Func[] {
+    handlerName: SSKey,
+  ): AnyFunction[] {
     return tokens.map((token) => {
       const instance = get(_isKey(token) ? token : token.name);
       expectObject<T>(instance, `Cannot find class for token: ${String(token)}`);
-      const handler = instance[handlerName];
+      const handler = (instance as unknown as Record<SSKey, AnyFunction>)[handlerName];
       expectFunction(handler, `Handler '${String(handlerName)}' not found in ${String(token)}`);
       return (...args) => handler.apply(instance, args);
     });
@@ -63,9 +66,9 @@ export namespace injector {
 
   export function getDetail<T extends object>(
     token: InjectToken,
-  ): { instance: T; cls: (new (...args: any) => any) | null } {
+  ): { instance: T; cls: Constructor | null } {
     const instance = instanceMap.get(_isKey(token) ? token : token.name) as T;
-    const cls = (_getPrototypeOf(instance)?.constructor ?? null) as (new (...args: any) => any) | null;
+    const cls = (_getPrototypeOf(instance)?.constructor ?? null) as Constructor | null;
     return { instance, cls };
   }
 
@@ -75,7 +78,7 @@ export namespace injector {
    * - Record the token, injected field name and `injectArg` into a list
    *   - This list will be used by `apply` after all instances are created
    */
-  export function createInstanceByClass(token: string | symbol, cls: new (...args: any) => any) {
+  export function createInstanceByClass(token: SSKey, cls: Constructor) {
     const { args } = metaGetProvider(cls);
     const instance = _construct(cls, args);
     instanceMap.set(token, instance);
@@ -98,10 +101,10 @@ export namespace injector {
     return instance;
   }
 
-  export function createInstance(opts: ProviderOptions): InstanceType<Constructable> {
+  export function createInstance(opts: ProviderOptions): InstanceType<Constructor> {
     const token = getProvide(opts);
     const exist = instanceMap.get(token);
-    if (_isObject<InstanceType<Constructable>>(exist)) {
+    if (_isObject<InstanceType<Constructor>>(exist)) {
       return exist;
     }
     return ph.match(opts, {
@@ -162,7 +165,7 @@ export namespace injector {
     // & Bind cron jobs for all instances
     for (const instance of map.values()) {
       if (_isObject(instance)) {
-        const cls = _getPrototypeOf(instance)?.constructor as Constructable | undefined;
+        const cls = _getPrototypeOf(instance)?.constructor as Constructor | undefined;
         if (cls) {
           bindCronJob(instance, cls);
         }
@@ -179,10 +182,10 @@ export namespace injector {
     }
   }
 
-  export function checkCircularDependency(rootModule: Constructable) {
-    const stack: Constructable[] = [];
+  export function checkCircularDependency(rootModule: Constructor) {
+    const stack: Constructor[] = [];
 
-    const visit = (m: Constructable | DynamicModule) => {
+    const visit = (m: Constructor | DynamicModule) => {
       const moduleClass = toModuleClass(m);
       if (stack.includes(moduleClass)) {
         const chain = stack.map((s) => s.name).join(' -> ');

@@ -1,4 +1,4 @@
-import type { Constructable, Func, Key } from '@nestify-js/shared';
+import { type Constructor, type AnyFunction, type SSKey } from '@nestify-js/shared';
 import { sym } from '@nestify-js/shared';
 import { expectDecoratorContext } from '@core/asserts/index.js';
 import { metaGet, metaSet } from '@core/register/meta.js';
@@ -38,9 +38,9 @@ import { ExecutionContext } from '@core/common/execution-context.js';
  * }
  * ```
  */
-export function createCustomDecorator<T = unknown>(key: Key) {
+export function createCustomDecorator<T = unknown>(key: SSKey) {
   return function (metadata: T) {
-    return function (target: Constructable | Func, context: DecoratorContext) {
+    return function (target: Constructor | AnyFunction, context: DecoratorContext) {
       expectDecoratorContext(context, `__func__ Invalid decorator context, got ${typeof context}`);
 
       if (context.kind === 'class') {
@@ -76,7 +76,7 @@ export function createCustomDecorator<T = unknown>(key: Key) {
  * }
  * ```
  */
-export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
+export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, key: SSKey): T | undefined {
   return metaGet<T>(context.getClass(), [sym.custom.root, key]);
 }
 
@@ -100,6 +100,6 @@ export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, k
  * }
  * ```
  */
-export function getCustomMethodMetadata<T = unknown>(context: ExecutionContext, key: Key): T | undefined {
+export function getCustomMethodMetadata<T = unknown>(context: ExecutionContext, key: SSKey): T | undefined {
   return metaGet<T>(context.getClass(), [sym.custom.root, sym.custom.method, context.getHandler().name, key]);
 }

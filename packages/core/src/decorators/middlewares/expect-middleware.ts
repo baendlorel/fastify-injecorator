@@ -1,4 +1,4 @@
-import type { Constructable, Func } from '@nestify-js/shared';
+import { type Constructor, type AnyFunction } from '@nestify-js/shared';
 import type { InjectToken } from '@core/types/injecorator.js';
 
 import { expectInjectArg } from '@core/asserts/application.js';
@@ -12,11 +12,11 @@ import { expectClass, expectFunction } from '@core/asserts/expect.js';
  */
 export function expectMiddleware(
   tokens: InjectToken[],
-  target: Constructable | Func,
+  target: Constructor | AnyFunction,
   context: ClassDecoratorContext | ClassMethodDecoratorContext,
 ) {
   if (context.kind === 'class') {
-    expectClass(target as Constructable, 'target of class decorator must be a class');
+    expectClass(target as Constructor, 'target of class decorator must be a class');
     expectClassDecoratorContext(context, 'Invalid decorator context for class middleware decorator');
   } else {
     expectFunction(target, 'target of method decorator must be a function');

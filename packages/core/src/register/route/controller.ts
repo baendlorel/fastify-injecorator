@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import type { Constructable } from '@nestify-js/shared';
+import { type Constructor } from '@nestify-js/shared';
 import { _define, _values, sym, toAssigned } from '@nestify-js/shared';
 
 import { injector } from '../lazy-injector.js';
@@ -32,7 +32,7 @@ function concatRoute(...routes: string[][]): string {
   return '/' + flatRoutes.map((r) => `${r}/`).join('');
 }
 
-export function registerController(app: FastifyInstance, controller: Constructable, modulePrefix: string[]) {
+export function registerController(app: FastifyInstance, controller: Constructor, modulePrefix: string[]) {
   const controllerPrefix = metaGetController(controller).prefix;
   const routes = metaGetRoute(controller);
   const instance = injector.createInstance(controller);

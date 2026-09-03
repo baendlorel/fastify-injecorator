@@ -1,7 +1,7 @@
 import type { FileUploadOptions, FileUploadMeta } from '@core/types/multipart.js';
 import { sym } from '@nestify-js/shared';
 import { metaSet } from '@core/register/meta.js';
-import { Func } from '@nestify-js/shared';
+import { type AnyFunction } from '@nestify-js/shared';
 import { UsePipes } from '@core/decorators/middlewares/pipe.js';
 import { PipeFile } from './pipes/file.pipe.js';
 
@@ -29,9 +29,9 @@ import { PipeFile } from './pipes/file.pipe.js';
  * }
  * ```
  */
-export function File(fieldName?: string, options?: FileUploadOptions): Func;
-export function File(options?: FileUploadOptions): Func;
-export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: FileUploadOptions): Func {
+export function File(fieldName?: string, options?: FileUploadOptions): AnyFunction;
+export function File(options?: FileUploadOptions): AnyFunction;
+export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: FileUploadOptions): AnyFunction {
   let fieldName: string | undefined;
   let opts: FileUploadOptions = {};
 
@@ -42,7 +42,7 @@ export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: 
     opts = fieldNameOrOptions;
   }
 
-  return function (target: Func, context: ClassMethodDecoratorContext) {
+  return function (target: AnyFunction, context: ClassMethodDecoratorContext) {
     const uploadMeta: FileUploadMeta = {
       ...opts,
       fieldName: fieldName || opts.fieldName,
@@ -80,9 +80,9 @@ export function File(fieldNameOrOptions?: string | FileUploadOptions, options?: 
  * }
  * ```
  */
-export function Files(fieldName?: string, options?: FileUploadOptions): Func;
-export function Files(options?: FileUploadOptions): Func;
-export function Files(fieldNameOrOptions?: string | FileUploadOptions, options?: FileUploadOptions): Func {
+export function Files(fieldName?: string, options?: FileUploadOptions): AnyFunction;
+export function Files(options?: FileUploadOptions): AnyFunction;
+export function Files(fieldNameOrOptions?: string | FileUploadOptions, options?: FileUploadOptions): AnyFunction {
   let fieldName: string | undefined;
   let opts: FileUploadOptions = {};
 
@@ -93,7 +93,7 @@ export function Files(fieldNameOrOptions?: string | FileUploadOptions, options?:
     opts = fieldNameOrOptions;
   }
 
-  return function (target: Func, context: ClassMethodDecoratorContext) {
+  return function (target: AnyFunction, context: ClassMethodDecoratorContext) {
     const uploadMeta: FileUploadMeta = {
       ...opts,
       fieldName: fieldName || opts.fieldName,

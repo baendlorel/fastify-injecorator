@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify';
+import { type FastifyInstance as NestifyInstance } from 'fastify';
 import { NestifyOptions } from '@core/types/injecorator.js';
 import { startCronJobs } from '@core/schedule/cron.js';
 
@@ -19,7 +19,7 @@ function normalize(opts: Partial<NestifyOptions>): NestifyOptions {
   return normalized;
 }
 
-export async function apply(app: FastifyInstance, partialOpts: Partial<NestifyOptions>): Promise<void> {
+export async function apply(app: NestifyInstance, partialOpts: Partial<NestifyOptions>): Promise<void> {
   const opts = normalize(partialOpts);
 
   moduleRegister.apply(app, opts);

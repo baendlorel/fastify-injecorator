@@ -34,14 +34,18 @@ export type {
 
 export type { NestifyOptions } from '@core/types/index.js';
 
-export type { FastifyRequest as NestifyRequest, FastifyReply as NestifyReply } from 'fastify';
+export type {
+  FastifyRequest as NestifyRequest,
+  FastifyReply as NestifyReply,
+  FastifyInstance as NestifyInstance,
+} from 'fastify';
 
 // export common exceptions for use
 export * from './exceptions/index.js';
 export { ExecutionContext } from './common/execution-context.js';
 
 // creator
-export { apply as fastifyInjecorator } from './register/index.js';
+export { apply } from './register/index.js';
 
 // multipart/file upload support (requires @fastify/multipart peer dependency)
 export { File, Files, PipeFile, UploadedFile } from './multipart/index.js';

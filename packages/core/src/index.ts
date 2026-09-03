@@ -32,7 +32,9 @@ export type {
   RouteApiSchema,
 } from './types/middleware.js';
 
-export type { FastifyInjecoratorOptions } from '@core/types/index.js';
+export type { NestifyOptions } from '@core/types/index.js';
+
+export type { FastifyRequest as NestifyRequest, FastifyReply as NestifyReply } from 'fastify';
 
 // export common exceptions for use
 export * from './exceptions/index.js';

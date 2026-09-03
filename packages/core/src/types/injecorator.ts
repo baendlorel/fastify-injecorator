@@ -98,7 +98,7 @@ export interface DynamicModule {
   isGlobal?: boolean;
 }
 
-export interface FastifyInjecoratorOptions {
+export interface NestifyOptions {
   rootModule: Constructor;
 
   /**

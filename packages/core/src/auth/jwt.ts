@@ -1,5 +1,5 @@
 import { createHmac } from 'node:crypto';
-import { FastifyRequest } from 'fastify';
+import type { FastifyRequest as NestifyRequest } from 'fastify';
 import { _set, sym, _get } from '@nestify-js/shared';
 
 import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
@@ -12,19 +12,14 @@ import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '
 export class JwtService {
   // # actually static but not static methods
   /**
-   * Create a different jwt service instance with your own options
-   * - but usually, using `this.configure` method is enough
+   * Set user info into request object.
    */
-  create(options?: JwtModuleOptions) {
-    return new JwtService(options);
-  }
-
-  setUserToRequest(request: FastifyRequest, user: any): boolean {
+  static setUserToRequest(request: NestifyRequest, user: any): boolean {
     return _set(request, sym.user, user);
   }
 
-  getUserFromRequest(request: FastifyRequest): any {
-    return _get(request, sym.user);
+  static getUserFromRequest<T = any>(request: NestifyRequest): T {
+    return _get(request, sym.user) as T;
   }
 
   // # privates
@@ -33,7 +28,7 @@ export class JwtService {
   private defaultVerifyOptions?: JwtVerifyOptions;
 
   constructor(options?: JwtModuleOptions) {
-    this.secret = options?.secret || '';
+    this.secret = options?.secret || 'nestify-js-jwt-secret';
     this.defaultSignOptions = options?.signOptions;
     this.defaultVerifyOptions = options?.verifyOptions;
   }
@@ -220,4 +215,8 @@ export class JwtService {
     }
   }
 }
+
+/**
+ * This is a JwtService instance, you can use `jwt.configure` to set options.
+ */
 export const jwt = new JwtService();

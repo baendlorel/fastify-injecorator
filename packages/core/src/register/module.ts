@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import type { FastifyInjecoratorOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
+import type { NestifyOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
 import { type Constructor } from '@nestify-js/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
@@ -14,7 +14,7 @@ import { registerController } from './route/controller.js';
 class ModuleRegister {
   private readonly moduleStack: Constructor[] = [];
   private app!: FastifyInstance;
-  private opts!: FastifyInjecoratorOptions;
+  private opts!: NestifyOptions;
 
   /**
    * Collect every global things into `collection`
@@ -111,7 +111,7 @@ class ModuleRegister {
    * @param app fastify instance
    * @param rootModule the main module
    */
-  apply(app: FastifyInstance, opts: FastifyInjecoratorOptions) {
+  apply(app: FastifyInstance, opts: NestifyOptions) {
     this.app = app;
     this.opts = opts;
 

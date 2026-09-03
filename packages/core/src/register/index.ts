@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { FastifyInjecoratorOptions } from '@core/types/injecorator.js';
+import { NestifyOptions } from '@core/types/injecorator.js';
 import { startCronJobs } from '@core/schedule/cron.js';
 
 import { clearExpectCache, expectModule } from './expect-module.js';
@@ -11,15 +11,15 @@ function clear() {
   // collection.clear();
 }
 
-function normalize(opts: Partial<FastifyInjecoratorOptions>): FastifyInjecoratorOptions {
-  const normalized: FastifyInjecoratorOptions = Object(opts);
+function normalize(opts: Partial<NestifyOptions>): NestifyOptions {
+  const normalized: NestifyOptions = Object(opts);
   expectModule(normalized.rootModule);
   normalized.allowCrossModuleCircularReference ??= false;
 
   return normalized;
 }
 
-export async function apply(app: FastifyInstance, partialOpts: Partial<FastifyInjecoratorOptions>): Promise<void> {
+export async function apply(app: FastifyInstance, partialOpts: Partial<NestifyOptions>): Promise<void> {
   const opts = normalize(partialOpts);
 
   moduleRegister.apply(app, opts);

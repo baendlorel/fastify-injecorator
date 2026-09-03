@@ -1,5 +1,6 @@
 import { type Constructor } from '@nestify-js/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
+import { JwtService } from './jwt.js';
 
 import { Guard } from '@core/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
@@ -28,7 +29,7 @@ const guards = new Map<typeof defaultJwt, Constructor<InjecoratorGuard>>();
  * }
  * ```
  */
-export function JwtGuard(jwt = defaultJwt) {
+export function JwtGuard(jwt: JwtService = defaultJwt) {
   const guardClass = guards.get(jwt);
   if (guardClass) {
     return guardClass;
@@ -52,7 +53,7 @@ export function JwtGuard(jwt = defaultJwt) {
         const payload = jwt.verify(token);
 
         // Attach user to request object
-        jwt.setUserToRequest(request, payload);
+        JwtService.setUserToRequest(request, payload);
 
         return true;
       } catch (error) {

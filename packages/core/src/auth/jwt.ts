@@ -74,7 +74,7 @@ export class JwtService {
   /**
    * Sign a payload and return JWT token
    */
-  async sign(payload: JwtPayload, options?: JwtSignOptions): Promise<string> {
+  sign(payload: JwtPayload, options?: JwtSignOptions): string {
     const mergedOptions = { ...this.defaultSignOptions, ...options };
 
     // Create header

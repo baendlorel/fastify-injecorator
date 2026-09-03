@@ -1,8 +1,7 @@
 // Main Fastify integration package
-// Re-exports core, schema, and swagger for all-in-one usage
+// Re-exports core and swagger for all-in-one usage
 
 export * from '@nestify-js/core';
-export * from '@nestify-js/schema';
 export * from '@nestify-js/swagger';
 export { HttpStatus } from '@nestify-js/shared';
 

@@ -2,7 +2,6 @@
   "extends": "../../tsconfig.json",
   "references": [
     { "path": "../core" },
-    { "path": "../schema" },
     { "path": "../swagger" }
   ],
   "compilerOptions": {
@@ -16,7 +15,6 @@
     "rootDir": "..",
     "paths": {
       "@nestify-js/core": ["../core/src/index.ts"],
-      "@nestify-js/schema": ["../schema/src/index.ts"],
       "@nestify-js/swagger": ["../swagger/src/index.ts"],
       "@nestify-js/shared": ["../shared/src/index.ts"]
     }

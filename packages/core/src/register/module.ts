@@ -98,8 +98,7 @@ class ModuleRegister {
 
   /**
    * Create basic pipe instances via setup callback.
-   * Sub-packages (e.g. @nestify-js/schema) provide the setup function
-   * to register their preset pipes.
+   * e.g. the built-in `setupBasicPipes` registers core preset pipes.
    */
   runSetup(setup?: (register: (cls: Constructor) => void) => void) {
     if (setup) {

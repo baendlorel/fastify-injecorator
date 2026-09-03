@@ -9,7 +9,7 @@ const root = import.meta.dirname;
  * for path-based aliases (e.g. @core/xxx), so we use a resolveId hook instead.
  *
  * Only @core/ is needed here — source code inside core uses it for internal imports.
- * Tests should use @nestify/core, @nestify/schema etc. (resolved via resolve.alias).
+ * Tests should use @nestify-js/core etc. (resolved via workspace node_modules).
  */
 function tsconfigPathsPlugin(): Plugin {
   const mappings: Record<string, string> = {
@@ -43,7 +43,6 @@ export default defineConfig({
       // Workspace package entry points (string-based, these work fine)
       { find: '@nestify/shared', replacement: path.resolve(root, 'packages/shared/src/index.ts') },
       { find: '@nestify/core', replacement: path.resolve(root, 'packages/core/src/index.ts') },
-      { find: '@nestify/schema', replacement: path.resolve(root, 'packages/schema/src/index.ts') },
       { find: '@nestify/swagger', replacement: path.resolve(root, 'packages/swagger/src/index.ts') },
       { find: '@nestify/injecorator', replacement: path.resolve(root, 'packages/nestify/src/index.ts') },
     ],

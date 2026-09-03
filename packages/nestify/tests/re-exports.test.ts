@@ -11,6 +11,7 @@ describe('Nestify umbrella — re-exports', () => {
       expect(typeof nestify.Patch).toBe('function');
       expect(typeof nestify.Put).toBe('function');
       expect(typeof nestify.Delete).toBe('function');
+      expect(typeof nestify.ApiSchema).toBe('function');
     });
 
     it('should export DI decorators', () => {
@@ -55,19 +56,7 @@ describe('Nestify umbrella — re-exports', () => {
     });
   });
 
-  describe('schema re-exports (zod)', () => {
-    it('should export zod integration utilities', () => {
-      expect(nestify.serializerCompiler).toBeDefined();
-      expect(nestify.validatorCompiler).toBeDefined();
-      // ZodTypeProvider is a type-only export, not available at runtime
-    });
-  });
-
   describe('swagger re-exports', () => {
-    it('should export ApiSchema decorator', () => {
-      expect(typeof nestify.ApiSchema).toBe('function');
-    });
-
     it('should export setupSwagger function', () => {
       expect(typeof nestify.setupSwagger).toBe('function');
     });

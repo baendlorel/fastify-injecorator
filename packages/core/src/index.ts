@@ -1,6 +1,7 @@
 // router decorators
 export { Delete, Get, Patch, Post, Put, HttpMethod } from './decorators/router/http-methods.js';
 export { Opt } from './decorators/router/opt.js';
+export { ApiSchema } from './decorators/router/api-schema.js';
 export { Controller } from './decorators/router/controller.js';
 
 export { Inject } from './decorators/inject.js';
@@ -64,9 +65,3 @@ export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js
 
 // setup helper
 export { setupBasicPipes } from './setup.js';
-
-// & Exports for sub-packages (@nestify-js/swagger)
-// Metadata functions
-export { metaSetSchema } from './register/meta.js';
-// Assert utilities
-export { expectMethodDecorator, expectObject } from './asserts/index.js';

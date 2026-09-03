@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
-import { ApiSchema } from '@nestify-js/swagger';
+import { ApiSchema } from '@nestify-js/core';
 import { sym } from '@nestify-js/shared';
-import { metaGet } from '@core/src/register/meta.js';
+import { metaGet } from '../src/register/meta.js';
 
 /** Read the apiSchema metadata set by @ApiSchema */
 function getApiSchema(cls: any, methodName: string) {
@@ -55,6 +55,7 @@ describe('@ApiSchema decorator', () => {
   it('should throw when schema is not an object', () => {
     expect(() => {
       class Ctrl {
+        // @ts-expect-error deliberate misuse
         @ApiSchema(null)
         handler() {}
       }

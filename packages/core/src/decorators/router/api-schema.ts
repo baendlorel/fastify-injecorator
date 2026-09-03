@@ -1,6 +1,8 @@
 import { type AnyFunction } from '@nestify-js/shared';
-import type { RouteApiSchema } from '@nestify-js/core';
-import { expectMethodDecorator, expectObject, metaSetSchema } from '@nestify-js/core';
+import type { RouteApiSchema } from '@core/types/middleware.js';
+
+import { expectObject, expectMethodDecorator } from '@core/asserts/index.js';
+import { metaSetSchema } from '@core/register/meta.js';
 
 /**
  * Set api schema info, **not validation schema**

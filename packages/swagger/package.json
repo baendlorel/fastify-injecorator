@@ -1,6 +1,6 @@
 {
   "name": "@nestify-js/swagger",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Swagger/OpenAPI integration for nestify-js",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -1,6 +1,7 @@
 // Shared utilities and types
 // This package contains common utilities used across all nestify-js packages
 
+export * from './asserts.js';
 export * from './consts.js';
 export * from './native.js';
 export * from './promise-try.js';

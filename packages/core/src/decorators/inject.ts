@@ -1,5 +1,6 @@
-import { InjectArg } from '@core/types/injecorator.js';
-import { expect, expectClassFieldDecoratorContext, _isFunction, _isKey } from '@core/asserts/index.js';
+import type { InjectArg } from '@core/types/injecorator.js';
+import { _isFunction, _isKey } from '@nestify-js/shared';
+import { expect, expectClassFieldDecoratorContext } from '@core/asserts/index.js';
 import { metaSetInject } from '@core/register/meta.js';
 
 export function Inject(token: InjectArg) {

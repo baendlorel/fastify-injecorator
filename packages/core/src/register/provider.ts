@@ -1,7 +1,4 @@
-import { inspect } from 'node:util';
-import { Constructable, Key } from '@nestify-js/shared';
-import { expectClass, expectFunction, expectKey, _isConstructable, _isFunction } from '@core/asserts/index.js';
-import {
+import type {
   InjectArg,
   ProviderOptions,
   ProviderUseClass,
@@ -10,19 +7,22 @@ import {
   ProviderUseExisting,
 } from '@core/types/injecorator.js';
 
+import { inspect } from 'node:util';
+import { _isConstructable, _isFunction } from '@nestify-js/shared';
+import { expectClass, expectFunction, expectKey } from '@core/asserts/index.js';
+
 namespace ph {
   export function match(
     opts: ProviderOptions,
     callbacks: {
-      useClass?: (token: Key, cls: Constructable) => unknown;
-      useValue?: (token: Key, value: InstanceType<Constructable>) => unknown;
+      useClass?: (token: string | symbol, cls: new (...args: any) => any) => unknown;
+      useValue?: (token: string | symbol, value: InstanceType<new (...args: any) => any>) => unknown;
       useFactory?: (
-        token: Key,
-        // TODO 实际上InstanceType<Class>就是any啊！
-        factory: (...instances: InstanceType<Constructable>[]) => InstanceType<Constructable>,
-        inject: (Constructable | Key)[],
+        token: string | symbol,
+        factory: (...instances: any[]) => any,
+        inject: (new (...args: any) => any)[],
       ) => unknown;
-      useExisting?: (token: Key, existingToken: Key) => unknown;
+      useExisting?: (token: string | symbol, existingToken: string | symbol) => unknown;
     },
   ) {
     const { useClass, useExisting, useFactory, useValue } = callbacks;

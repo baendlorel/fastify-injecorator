@@ -1,17 +1,24 @@
+import type { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
+import type { InjecoratorMiddleware } from '@core/types/middleware.js';
+
 import { FastifyInstance } from 'fastify';
-import { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
-import { InjecoratorMiddleware } from '@core/types/middleware.js';
-import { Constructable, Func, Key } from '@nestify-js/shared';
+import {
+  _construct,
+  _getPrototypeOf,
+  _isConstructable,
+  _isKey,
+  _isObject,
+  _ownKeys,
+  APP_LOGGER,
+} from '@nestify-js/shared';
 
 import { toModuleClass } from '@core/common/index.js';
-import { expectFunction, expectObject, expect, _isConstructable, _isKey, _isObject } from '@core/asserts/index.js';
+import { expectFunction, expectObject, expect } from '@core/asserts/index.js';
 import { bindCronJob } from '@core/schedule/cron.js';
 
 import { metaGetInject, metaGetModule, metaGetProvider } from './meta.js';
 import ph from './provider.js';
 import { collection } from './collection.js';
-import { _construct, _getPrototypeOf, _ownKeys, APP_LOGGER } from '@nestify-js/shared';
-import { throws } from 'assert';
 
 export namespace injector {
   /**
@@ -22,7 +29,7 @@ export namespace injector {
   /**
    * A map from token to the instance of Class
    */
-  const instanceMap = new Map<Key, InstanceType<Constructable> | null>();
+  const instanceMap = new Map<string | symbol, any>();
 
   function getProvide(opts: ProviderOptions) {
     return _isConstructable(opts) ? opts.name : opts.provide;
@@ -32,7 +39,7 @@ export namespace injector {
     return instanceMap.get(_isKey(token) ? token : token.name) as T | undefined;
   }
 
-  export function internalCreateInstanceByClass(cls: Constructable) {
+  export function internalCreateInstanceByClass(cls: new (...args: any) => any) {
     instanceMap.set(cls.name, new cls());
   }
 
@@ -43,7 +50,7 @@ export namespace injector {
    */
   export function getMiddlewareHooks<T extends InjecoratorMiddleware>(
     tokens: InjectToken[],
-    handlerName: keyof T & Key,
+    handlerName: string | symbol,
   ): Func[] {
     return tokens.map((token) => {
       const instance = get(_isKey(token) ? token : token.name);
@@ -54,9 +61,11 @@ export namespace injector {
     });
   }
 
-  export function getDetail<T extends object>(token: InjectToken): { instance: T; cls: Constructable | null } {
+  export function getDetail<T extends object>(
+    token: InjectToken,
+  ): { instance: T; cls: (new (...args: any) => any) | null } {
     const instance = instanceMap.get(_isKey(token) ? token : token.name) as T;
-    const cls = (_getPrototypeOf(instance)?.constructor ?? null) as Constructable | null;
+    const cls = (_getPrototypeOf(instance)?.constructor ?? null) as (new (...args: any) => any) | null;
     return { instance, cls };
   }
 
@@ -66,7 +75,7 @@ export namespace injector {
    * - Record the token, injected field name and `injectArg` into a list
    *   - This list will be used by `apply` after all instances are created
    */
-  export function createInstanceByClass(token: Key, cls: Constructable) {
+  export function createInstanceByClass(token: string | symbol, cls: new (...args: any) => any) {
     const { args } = metaGetProvider(cls);
     const instance = _construct(cls, args);
     instanceMap.set(token, instance);

@@ -16,6 +16,7 @@ import type { Key } from '@nestify-js/shared';
 import { sym } from '@nestify-js/shared';
 
 export * from './auth.js';
+export * from './injecorator.js';
 
 export type RouteOptType<
   RawServer extends RawServerBase = RawServerDefault,

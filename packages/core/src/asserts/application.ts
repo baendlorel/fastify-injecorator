@@ -1,13 +1,13 @@
+import type { InjectArg } from '@core/types/injecorator.js';
+
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';
 import { sym } from '@nestify-js/shared';
 
-import type { Constructable } from '@nestify-js/shared';
-import type { InjectArg } from '@core/types/injecorator.js';
-
+import { _isFunction } from '@nestify-js/shared';
 import { expectClass, expectObject } from './expect.js';
 import { expectClassDecoratorContext } from './decorator-context.js';
-import { isInjectToken, isInjectArg, isProviderOptions, _isFunction } from './whether.js';
+import { isInjectToken, isInjectArg, isProviderOptions } from './whether.js';
 
 export const expectInjectToken = (o: any, msg: string) => {
   if (!isInjectToken(o)) {
@@ -20,13 +20,13 @@ export const expectRouted = (context: ClassMethodDecoratorContext) => {
   expectObject(o, 'Should be decorated with route decorators(like @Post) first');
 };
 
-export const expectInjectable = (target: Constructable, context: ClassDecoratorContext) => {
+export const expectInjectable = (target: new (...args: any) => any, context: ClassDecoratorContext) => {
   expectClass(target, '@Injectable/@Controller can only be used on classes');
   expectClassDecoratorContext(context, '@Injectable/@Controller can only be used on classes');
   expectNotDecorated(context, sym.provider);
 };
 
-export const expectModulable = (target: Constructable, context: ClassDecoratorContext) => {
+export const expectModulable = (target: new (...args: any) => any, context: ClassDecoratorContext) => {
   expectClass(target, '@Module can only be used on classes');
   expectClassDecoratorContext(context, '@Module can only be used on classes');
   expectNotDecorated(context, sym.module);
@@ -38,7 +38,7 @@ export const expectNotDecorated = (context: DecoratorContext, flag: symbol) => {
   }
 };
 
-export const expectClassNotDecorated = (cls: Constructable, flag: symbol) => {
+export const expectClassNotDecorated = (cls: new (...args: any) => any, flag: symbol) => {
   if (ReflectDeep.has(cls, [sym.metadata, sym.root, flag])) {
     _throw(`'${String(cls.name)}' is already decorated`);
   }
@@ -60,7 +60,7 @@ export const expectProviderOptions = (target: unknown) => {
  * Middleware class must at least have 1 hook implemented
  * @param target it is a Middleware class
  */
-export const expectHasOneHook = <T>(target: Constructable<T>, hooks: (keyof T)[], msg: string): void => {
+export const expectHasOneHook = <T>(target: new (...args: any) => T, hooks: (keyof T)[], msg: string): void => {
   const proto = target.prototype as T;
   expectObject(proto, 'Prototype should be an object');
   for (let i = 0; i < hooks.length; i++) {

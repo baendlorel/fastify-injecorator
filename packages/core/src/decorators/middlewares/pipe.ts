@@ -1,15 +1,7 @@
-import type { Constructable, Func } from '@nestify-js/shared';
+import { _isConstructable, _isKey } from '@nestify-js/shared';
 import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
 
-import {
-  expectHasOneHook,
-  expectInjectToken,
-  expectObject,
-  expectOrObject,
-  expect,
-  _isConstructable,
-  _isKey,
-} from '@core/asserts/index.js';
+import { expectHasOneHook, expectInjectToken, expectObject, expectOrObject, expect } from '@core/asserts/index.js';
 import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js';
 
 import { Injectable } from '../injectable.js';
@@ -17,7 +9,7 @@ import { expectMiddleware } from './expect-middleware.js';
 
 const hooks: (keyof InjecoratorPipe)[] = ['transform'];
 export function Pipe() {
-  return function (target: Constructable, context: ClassDecoratorContext) {
+  return function (target: new (...args: any) => any, context: ClassDecoratorContext) {
     expectHasOneHook<InjecoratorPipe>(
       target,
       hooks,
@@ -45,12 +37,15 @@ function predicate(opts: PipeOptions) {
  * - Pipe is designed for http requests/replies, so it will not work on Injectables(Although there will not be any errors)
  * @param pipes PipeOptions or PipeClass
  */
-export function UsePipes(...pipes: (PipeOptions | Constructable)[]) {
+export function UsePipes(...pipes: (PipeOptions | (new (...args: any) => any))[]) {
   expect(pipes.length > 0, '@UsePipes requires at least one pipe option or pipe class');
   const normalized = pipes.map((pipe) => (_isConstructable(pipe) ? { pipe } : pipe));
   normalized.forEach(predicate);
 
-  return function (target: Constructable | Func, context: ClassDecoratorContext | ClassMethodDecoratorContext) {
+  return function (
+    target: (new (...args: any) => any) | ((...args: any) => any),
+    context: ClassDecoratorContext | ClassMethodDecoratorContext,
+  ) {
     expectMiddleware([], target, context);
 
     metaSetUsePipes(context, normalized);

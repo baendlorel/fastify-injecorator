@@ -31,6 +31,8 @@ export type {
   RouteApiSchema,
 } from './types/middleware.js';
 
+export type { FastifyInjecoratorOptions } from '@core/types/index.js';
+
 // export common exceptions for use
 export * from './exceptions/index.js';
 export { ExecutionContext } from './common/execution-context.js';
@@ -67,5 +69,4 @@ export { setupBasicPipes } from './setup.js';
 // Metadata functions
 export { metaSetSchema } from './register/meta.js';
 // Assert utilities
-export { _isFunction, _isObject } from './asserts/whether.js';
 export { expectMethodDecorator, expectObject } from './asserts/index.js';

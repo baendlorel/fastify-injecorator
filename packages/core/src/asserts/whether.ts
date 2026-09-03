@@ -1,5 +1,4 @@
-import type { Constructable, Func, Key } from '@nestify-js/shared';
-import { _fnToString, _isArray } from '@nestify-js/shared';
+import { _fnToString, _isArray, _isConstructable, _isFunction, _isKey, _isObject } from '@nestify-js/shared';
 import {
   InjectToken,
   InjectArg,
@@ -12,43 +11,6 @@ import {
 
 import { metaGetModule } from '@core/register/meta.js';
 
-export function _isObject<T extends object>(o: unknown): o is T {
-  return typeof o === 'object' && o !== null;
-}
-
-export function _isKey(o: unknown): o is Key {
-  return typeof o === 'string' || typeof o === 'symbol';
-}
-
-/**
- * Only criterion: newable
- */
-export function _isConstructable(o: any): o is Constructable {
-  if (typeof o !== 'function') {
-    return false;
-  }
-
-  try {
-    const temp = new Proxy(o, { construct: () => ({}) });
-    new temp();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function _isFunction(o: any): o is Func {
-  return typeof o === 'function';
-}
-
-export function _orFunction(o: any): o is Func | undefined {
-  return typeof o === 'function' || o === undefined;
-}
-
-export function _isPathNode(p: string): boolean {
-  return /^[a-zA-Z0-9_-]+$/.test(p);
-}
-
 /**
  * The goal is to tell whether the target is like `() => ProviderClass`
  * - Might be not so accurate under some extreme circumstances like bound functions or proxied functions, etc.
@@ -56,7 +18,7 @@ export function _isPathNode(p: string): boolean {
  * @see https://github.com/baendlorel/get-function-features
  * @see https://github.com/baendlorel/js-is-arrow-function
  */
-export function isInjectedClassGetter(o: unknown): o is Func {
+export function isInjectedClassGetter(o: unknown): o is (...args: any) => any {
   if (typeof o !== 'function') {
     return false;
   }
@@ -70,7 +32,7 @@ export function isInjectedClassGetter(o: unknown): o is Func {
  * @param target
  * @returns
  */
-export function likeModule(target: unknown): target is Constructable {
+export function likeModule(target: unknown): target is new (...args: any) => any {
   if (!_isConstructable(target)) {
     return false;
   }

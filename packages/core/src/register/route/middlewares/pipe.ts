@@ -16,14 +16,9 @@ export function createPipe(pipeOpts: PipeOptions[]): TaskifyAsync<PipeTask> {
 
   return createSerialTaskAsync<PipeTask>({
     tasks: injector.getMiddlewareHooks<InjecoratorPipe>(tokens, 'transform'),
-    resultWrapper: (_task, i, _tasks, args) => {
-      if (schemas[i] === undefined) {
-        args.splice(2);
-      } else {
-        args[2] = schemas[i];
-      }
-      return args;
-    },
+    // * the [cx] is the initial args of the whole pipeline.
+    // So it would be [context, input?, schema?]
+    resultWrapper: (_task, i, _tasks, [cx], lastReturn) => [cx, lastReturn, schemas[i]],
     breakCondition: () => false,
     skipCondition: () => false,
   });

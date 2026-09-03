@@ -81,13 +81,13 @@ class BasicTransformer {
     }
   }
 
-  private async main(context: ExecutionContext, httpPart: NestifyHttpPart, schema?: PipeFullSchema) {
-    const request = context.switchToHttp().getRequest();
-    const data = request[httpPart];
+  private async main(context: ExecutionContext, part: NestifyHttpPart, schema?: PipeFullSchema) {
+    const req = context.switchToHttp().getRequest();
+    const data = req[part];
     const args = [data, context.switchToHttp().getReply()];
-    const neededSchema = this.getNeededSchema(httpPart, schema);
+    const neededSchema = this.getNeededSchema(part, schema);
 
-    const validator = this.getValidator(request.server.validatorCompiler, neededSchema);
+    const validator = this.getValidator(req.server.validatorCompiler, neededSchema);
     if (!validator) {
       return args;
     }

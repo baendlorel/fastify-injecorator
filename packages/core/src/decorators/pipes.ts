@@ -27,6 +27,7 @@ function mergeSchema(
 /**
  * Decorated method will be called with `handler(request.body, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
+ * - **Attention** this decorator will ignore the last pipe's return value, force to extract the value from `request` object.
  * @param input The pipe will validate `body` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.body` to provide swagger info
  * @param ok will be set to `{ response: { 200: okSchema } }`
@@ -39,6 +40,7 @@ export function Body(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchema
 /**
  * Decorated method will be called with `handler(request.params, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
+ * - **Attention** this decorator will ignore the last pipe's return value, force to extract the value from `request` object.
  * @param input The pipe will validate `params` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.params` to provide swagger info
  * @param ok will be set to `{ response: { 200: okSchema } }`
@@ -51,6 +53,7 @@ export function Params(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSche
 /**
  * Decorated method will be called with `handler(request.query, reply)
  * - `fastify.setValidatorCompiler` will be used for validation
+ * - **Attention** this decorator will ignore the last pipe's return value, force to extract the value from `request` object.
  * @param input The pipe will validate `query` against this schema, using `validatorCompiler`(if it is provided too)
  * - Only the schema of the **FIRST** `PipeOption` will be mounted to `schema.querystring` to provide swagger info
  * @param ok will be set to `{ response: { 200: okSchema } }`
@@ -62,6 +65,7 @@ export function Query(input?: PipeSchema, ok?: PipeSchema, other?: PipeFullSchem
 
 /**
  * Decorated method will be called with `handler(request.raw, reply)
+ * - **Attention** this decorator will ignore the last pipe's return value, force to extract the value from `request` object.
  */
 export function Raw() {
   return UsePipes({ pipe: PipeRaw });
@@ -69,6 +73,7 @@ export function Raw() {
 
 /**
  * Decorated method will be called with `handler(request.ip, reply)
+ * - **Attention** this decorator will ignore the last pipe's return value, force to extract the value from `request` object.
  */
 export function Ip() {
   return UsePipes({ pipe: PipeIp });

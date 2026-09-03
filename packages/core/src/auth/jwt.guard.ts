@@ -20,7 +20,7 @@ const guards = new Map<typeof defaultJwt, Constructor<InjecoratorGuard>>();
  * Usage:
  * ```typescript
  * @Controller('protected')
- * @UseGuards(JwtGuard)
+ * @UseGuards(JwtGuard())
  * class ProtectedController {
  *   @Get('profile')
  *   getProfile(@Req() request: FastifyRequest) {

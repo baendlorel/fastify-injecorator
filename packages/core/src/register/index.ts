@@ -31,3 +31,6 @@ export async function apply(app: NestifyInstance, partialOpts: Partial<NestifyOp
   // Start cron jobs after all modules are initialized
   startCronJobs();
 }
+
+export { nestify } from './nestify.js';
+export type { NestifyBootOptions, NestifyPluginRegistration } from './nestify.js';

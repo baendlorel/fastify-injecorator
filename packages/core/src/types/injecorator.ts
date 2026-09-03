@@ -114,8 +114,8 @@ export interface NestifyOptions {
    * - e.g. the built-in `setupBasicPipes` creates preset pipe instances
    * @example
    * ```typescript
-   * import { fastifyInjecorator, setupBasicPipes } from '@nestify-js/core';
-   * fastifyInjecorator(app, { rootModule: AppModule, setup: setupBasicPipes });
+   * import { apply, setupBasicPipes } from '@nestify-js/core';
+   * apply(app, { rootModule: AppModule, setup: setupBasicPipes });
    * ```
    */
   setup?: (register: (cls: Constructor) => void) => void;

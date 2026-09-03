@@ -45,7 +45,8 @@ export * from './exceptions/index.js';
 export { ExecutionContext } from './common/execution-context.js';
 
 // creator
-export { apply } from './register/index.js';
+export { apply, nestify } from './register/index.js';
+export type { NestifyBootOptions, NestifyPluginRegistration } from './register/nestify.js';
 
 // multipart/file upload support (requires @fastify/multipart peer dependency)
 export { File, Files, PipeFile, UploadedFile } from './multipart/index.js';

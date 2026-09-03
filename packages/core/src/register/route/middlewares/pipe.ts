@@ -18,6 +18,7 @@ export function createPipe(pipeOpts: PipeOptions[]): TaskifyAsync<PipeTask> {
     tasks: injector.getMiddlewareHooks<InjecoratorPipe>(tokens, 'transform'),
     // * the [cx] is the initial args of the whole pipeline.
     // So it would be [context, input?, schema?]
+    // & Fisrt call of the whole task will use this wrapper to wrap values.
     resultWrapper: (_task, i, _tasks, [cx], lastReturn) => [cx, lastReturn, schemas[i]],
     breakCondition: () => false,
     skipCondition: () => false,

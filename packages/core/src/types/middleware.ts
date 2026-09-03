@@ -71,7 +71,7 @@ export interface InjecoratorPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
-   * @param input comes from last pipe or the request object
+   * @param input comes from last pipe's return value, or `undefined` if it's the first
    * @param schema validation schema, if provided in the pipe options
    * @returns returned value will be passed to the next pipe or as the `input` argument
    */

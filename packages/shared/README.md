@@ -286,10 +286,65 @@ class ApiController {
 }
 ```
 
-## Complete Usage Example
+### Application Bootstrap
+
+#### `nestify(rootModule, options?)` (recommended)
+
+Creates the fastify instance, registers fastify plugins, applies all modules and (optionally) starts listening — all in one call. Returns the underlying fastify instance.
+
+```typescript
+import { nestify } from 'nestify-js';
+
+const app = await nestify(AppModule, {
+  // shortcut for `fastify.logger`
+  logger: { level: 'info' },
+
+  // fastify plugins registered before modules are applied
+  // - tuple form: `[plugin]` or `[plugin, options]`
+  plugins: [
+    [multipart, { limits: { fileSize: 10 * 1024 * 1024 } }],
+    [staticFiles, { root: './public', prefix: '/' }],
+  ],
+
+  // setup callback to register auto-created instances
+  // - e.g. the built-in `setupBasicPipes` creates preset pipe instances
+  setup: setupBasicPipes,
+
+  // start listening after all modules are registered
+  // - `true` uses the `PORT` / `HOST` env vars (falling back to 3000 / 0.0.0.0)
+  listen: true,
+  // or override: listen: { port: 8080, host: 'localhost' }
+});
+```
+
+Available options:
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `logger` | `FastifyServerOptions['logger']` | Shortcut for `fastify.logger` |
+| `fastify` | `FastifyServerOptions` | Options passed to the fastify factory (`fastify(options)`) |
+| `plugins` | `readonly [plugin, options?][]` | Fastify plugins registered before modules are applied (callback-style and async-style are both accepted) |
+| `setup` | `(register: (cls: Constructor) => void) => void` | Setup callback to register auto-created instances (e.g. `setupBasicPipes`) |
+| `listen` | `boolean \| Partial<FastifyListenOptions>` | Start listening after all modules are registered |
+| `allowCrossModuleCircularReference` | `boolean` | Must be `true` to allow **cross-module** circular dependencies (same-module circular references are always allowed). `@default false` |
+
+#### `apply(app, options)`
+
+If you need more control over the fastify instance (custom plugins, hooks, decorators...), create it yourself and use the lower-level `apply()` instead:
 
 ```typescript
 import fastify from 'fastify';
+import { apply } from 'nestify-js';
+
+const app = fastify({ logger: true });
+
+await apply(app, { rootModule: AppModule });
+await app.listen({ port: 3000 });
+```
+
+## Complete Usage Example
+
+```typescript
 import {
   Module,
   Controller,
@@ -301,7 +356,7 @@ import {
   Params,
   UseGuards,
   Guard,
-  apply,
+  nestify,
 } from 'nestify-js';
 
 // Service
@@ -377,14 +432,11 @@ class UserController {
 })
 class AppModule {}
 
-// Application setup
-const app = fastify({ logger: true });
-
-await apply(app, {
-  rootModule: AppModule,
+// Application bootstrap
+await nestify(AppModule, {
+  logger: true,
+  listen: true, // uses the `PORT` / `HOST` env vars, defaults to 3000 / 0.0.0.0
 });
-
-await app.listen({ port: 3000 });
 console.log('Server running on http://localhost:3000');
 ```
 

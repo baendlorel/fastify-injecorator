@@ -4,7 +4,7 @@ import type { PipeSchema, PipeFullSchema } from '@core/types/middleware.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { BadRequestException } from '@core/exceptions/index.js';
 
-type HttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
+export type NestifyHttpPart = 'body' | 'params' | 'query' | 'ip' | 'raw';
 
 type Compiler = FastifySchemaCompiler<PipeSchema>;
 
@@ -61,7 +61,7 @@ class BasicTransformer {
     return sym.none; // Validation passed
   }
 
-  private getNeededSchema(httpPart: HttpPart, schema?: PipeFullSchema) {
+  private getNeededSchema(httpPart: NestifyHttpPart, schema?: PipeFullSchema) {
     if (schema === undefined) {
       return undefined;
     }
@@ -81,7 +81,7 @@ class BasicTransformer {
     }
   }
 
-  private async main(context: ExecutionContext, httpPart: HttpPart, schema?: PipeFullSchema) {
+  private async main(context: ExecutionContext, httpPart: NestifyHttpPart, schema?: PipeFullSchema) {
     const request = context.switchToHttp().getRequest();
     const data = request[httpPart];
     const args = [data, context.switchToHttp().getReply()];

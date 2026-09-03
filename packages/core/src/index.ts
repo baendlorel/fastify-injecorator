@@ -19,7 +19,6 @@ export { UseGuards } from './decorators/middlewares/guard.js';
 export { UseInterceptors } from './decorators/middlewares/interceptor.js';
 export { UsePipes } from './decorators/middlewares/pipe.js';
 export { UseFilters } from './decorators/middlewares/filter.js';
-
 export type {
   InjecoratorGuard,
   InjecoratorInterceptor,
@@ -66,6 +65,7 @@ export { PipeQuery } from './pipes/query.pipe.js';
 export { PipeIp } from './pipes/ip.pipe.js';
 export { PipeRaw } from './pipes/raw.pipe.js';
 export { isBasicPipe } from './pipes/is-basic-pipe.js';
+export type { NestifyHttpPart } from './pipes/basic-transformer.js';
 
 // validation engine
 export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js';

@@ -50,6 +50,7 @@
     "typescript": "^6.0.3"
   },
   "scripts": {
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "test": "vitest"
   }
 }

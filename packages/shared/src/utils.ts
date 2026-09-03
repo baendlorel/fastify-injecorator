@@ -1,4 +1,4 @@
-import { _getPrototypeOf } from '@nestify-js/shared';
+import { _getPrototypeOf } from './native.js';
 
 type ArrValue<T> = T extends readonly (infer U)[] ? U : never;
 export const concatArr = <T extends readonly unknown[]>(...args: (T | undefined)[]) => {

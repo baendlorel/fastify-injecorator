@@ -2,7 +2,6 @@
 // Re-exports core and swagger for all-in-one usage
 
 export * from '@nestify-js/core';
-export * from '@nestify-js/swagger';
 export { HttpStatus } from '@nestify-js/shared';
 
 // common keys

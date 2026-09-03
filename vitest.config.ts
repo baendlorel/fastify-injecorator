@@ -41,10 +41,13 @@ export default defineConfig({
   resolve: {
     alias: [
       // Workspace package entry points (string-based, these work fine)
-      { find: '@nestify/shared', replacement: path.resolve(root, 'packages/shared/src/index.ts') },
-      { find: '@nestify/core', replacement: path.resolve(root, 'packages/core/src/index.ts') },
-      { find: '@nestify/swagger', replacement: path.resolve(root, 'packages/swagger/src/index.ts') },
-      { find: '@nestify/injecorator', replacement: path.resolve(root, 'packages/nestify/src/index.ts') },
+      { find: '@nestify-js/shared', replacement: path.resolve(root, 'packages/shared/src/index.ts') },
+      { find: '@nestify-js/core', replacement: path.resolve(root, 'packages/core/src/index.ts') },
+      { find: '@nestify-js/swagger', replacement: path.resolve(root, 'packages/swagger/src/index.ts') },
     ],
   },
 });
+
+// '@nestify-js/shared/': path.resolve(root, 'packages/shared/src/'),
+// '@nestify-js/swagger/': path.resolve(root, 'packages/swagger/src/'),
+// '@nestify-js/core/': path.resolve(root, 'packages/core/src/'),

@@ -1,11 +1,11 @@
 import { FastifyRequest } from 'fastify';
-import { Controller } from '../../../packages/core/decorators/router/controller.js';
-import { Get, Post } from '../../../packages/core/decorators/router/http-methods.js';
-import { Body } from '../../../packages/schema/src/decorators/pipe.js';
-import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
-import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
-import { Inject } from '../../../packages/core/decorators/inject.js';
+import { Controller } from '../../../packages/core/src/decorators/router/controller.js';
+import { Get, Post } from '../../../packages/core/src/decorators/router/http-methods.js';
+import { Body } from '../../../packages/core/src/decorators/pipes.js';
+import { UseGuards } from '../../../packages/core/src/decorators/middlewares/guard.js';
+import { UseInterceptors } from '../../../packages/core/src/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/src/decorators/middlewares/filter.js';
+import { Inject } from '../../../packages/core/src/decorators/inject.js';
 
 import { UserService } from '../services/user.service.js';
 import { JwtGuard } from '../../../packages/core/src/auth/jwt.guard.js';
@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Get('profile')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard())
   getProfile(req: FastifyRequest) {
     const user = (req as any).user;
     return {

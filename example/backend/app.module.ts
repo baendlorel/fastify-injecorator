@@ -1,4 +1,4 @@
-import { Module } from '../../packages/core/decorators/module.js';
+import { Module } from '../../packages/core/src/decorators/module.js';
 
 // Services
 import { UserService } from './services/user.service.js';
@@ -40,6 +40,9 @@ import { ScheduledTasks } from './cron/scheduled-tasks.js';
 
     // Guards
     RolesGuard,
+
+    // Auth (JwtGuard() returns a cached guard class bound to the default jwt instance)
+    JwtGuard(),
 
     // Interceptors
     LoggingInterceptor,

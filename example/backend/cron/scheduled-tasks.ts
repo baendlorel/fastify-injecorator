@@ -1,6 +1,6 @@
-import { Injectable } from '../../../packages/core/decorators/injectable.js';
+import { Injectable } from '../../../packages/core/src/decorators/injectable.js';
 import { Cron } from '../../../packages/core/src/schedule/cron.js';
-import { Inject } from '../../../packages/core/decorators/inject.js';
+import { Inject } from '../../../packages/core/src/decorators/inject.js';
 import { LoggerService } from '../services/logger.service.js';
 
 @Injectable()
@@ -15,10 +15,7 @@ export class ScheduledTasks {
   }
 
   // Run every 30 seconds
-  @Cron({
-    expression: '*/30 * * * * *',
-    argsGetter: () => [],
-  })
+  @Cron('*/30 * * * * *')
   handleFrequentCron() {
     this.logger.log('Cron job executed: Running every 30 seconds');
   }

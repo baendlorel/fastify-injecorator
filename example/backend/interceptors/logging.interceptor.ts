@@ -1,5 +1,5 @@
-import { Interceptor } from '../../../packages/core/decorators/middlewares/interceptor.js';
-import { Inject } from '../../../packages/core/decorators/inject.js';
+import { Interceptor } from '../../../packages/core/src/decorators/middlewares/interceptor.js';
+import { Inject } from '../../../packages/core/src/decorators/inject.js';
 import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
 import { InjecoratorInterceptor } from '../../../packages/core/src/types/middleware.js';
 import { LoggerService } from '../services/logger.service.js';

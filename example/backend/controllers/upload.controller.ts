@@ -1,8 +1,8 @@
-import { Controller } from '../../../packages/core/decorators/router/controller.js';
-import { Post } from '../../../packages/core/decorators/router/http-methods.js';
+import { Controller } from '../../../packages/core/src/decorators/router/controller.js';
+import { Post } from '../../../packages/core/src/decorators/router/http-methods.js';
 import { File, Files } from '../../../packages/core/src/multipart/decorators.js';
-import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
+import { UseInterceptors } from '../../../packages/core/src/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/src/decorators/middlewares/filter.js';
 import type { MultipartFile } from '../../../packages/core/src/types/multipart.js';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';

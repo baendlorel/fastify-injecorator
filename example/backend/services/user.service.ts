@@ -1,4 +1,4 @@
-import { Injectable } from '../../../packages/core/decorators/injectable.js';
+import { Injectable } from '../../../packages/core/src/decorators/injectable.js';
 
 export interface User {
   id: number;

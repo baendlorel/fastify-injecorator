@@ -1,15 +1,12 @@
-import fastify from 'fastify';
 import multipart from '@fastify/multipart';
 import staticFiles from '@fastify/static';
 import { join } from 'path';
 
-import { apply } from '../../packages/core/src/register/index.js';
-import { setupBasicPipes } from '../../packages/schema/src/setup.js';
+import { nestify, setupBasicPipes } from '../../packages/core/src/index.js';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
-  // Configure JWT secret
-  const app = fastify({
+  await nestify(AppModule, {
     logger: {
       level: 'info',
       transport: {
@@ -21,30 +18,24 @@ async function bootstrap() {
         },
       },
     },
+
+    // Register multipart for file upload support
+    // and serve static files (frontend)
+    // NOTE: `as any` is only needed because this example imports core
+    // directly from source, so two fastify copies (example's and the root
+    // workspace's) coexist and their types don't unify.
+    plugins: [
+      [multipart as any, { limits: { fileSize: 10 * 1024 * 1024, files: 10 } }],
+      [staticFiles as any, { root: join(import.meta.dirname, '..', 'frontend'), prefix: '/' }],
+    ],
+
+    setup: setupBasicPipes,
+
+    // Start the server (port/host default to PORT / HOST env, then 3000 / 0.0.0.0)
+    listen: true,
   });
 
-  // Register multipart for file upload support
-  await app.register(multipart as any, {
-    limits: {
-      fileSize: 10 * 1024 * 1024, // 10MB
-      files: 10,
-    },
-  });
-
-  // Serve static files (frontend)
-  await app.register(staticFiles, {
-    root: join(import.meta.dirname, '..', 'frontend'),
-    prefix: '/',
-  });
-
-  // Apply Injecorator modules
-  await apply(app as any, { rootModule: AppModule, setup: setupBasicPipes });
-
-  // Start the server
   const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
-  const host = process.env.HOST || '0.0.0.0';
-
-  await app.listen({ port, host });
 
   console.log(`
 🚀 Server is running!

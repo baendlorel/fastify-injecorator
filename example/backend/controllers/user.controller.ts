@@ -1,10 +1,10 @@
-import { Controller } from '../../../packages/core/decorators/router/controller.js';
-import { Get, Post, Patch, Delete } from '../../../packages/core/decorators/router/http-methods.js';
-import { Body, Params, Query } from '../../../packages/schema/src/decorators/pipe.js';
-import { UseGuards } from '../../../packages/core/decorators/middlewares/guard.js';
-import { UseInterceptors } from '../../../packages/core/decorators/middlewares/interceptor.js';
-import { UseFilters } from '../../../packages/core/decorators/middlewares/filter.js';
-import { Inject } from '../../../packages/core/decorators/inject.js';
+import { Controller } from '../../../packages/core/src/decorators/router/controller.js';
+import { Get, Post, Patch, Delete } from '../../../packages/core/src/decorators/router/http-methods.js';
+import { Body, Params, Query } from '../../../packages/core/src/decorators/pipes.js';
+import { UseGuards } from '../../../packages/core/src/decorators/middlewares/guard.js';
+import { UseInterceptors } from '../../../packages/core/src/decorators/middlewares/interceptor.js';
+import { UseFilters } from '../../../packages/core/src/decorators/middlewares/filter.js';
+import { Inject } from '../../../packages/core/src/decorators/inject.js';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
 import { UserService } from '../services/user.service.js';
@@ -48,7 +48,7 @@ export class UserController {
 
   @Post()
   @Body()
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard(), RolesGuard)
   @Roles(['admin'])
   create(body: any) {
     const { username, email, role } = body;
@@ -60,7 +60,7 @@ export class UserController {
 
   @Patch(':id')
   @Body()
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard(), RolesGuard)
   @Roles(['admin'])
   update(body: any, reply: FastifyReply, req: FastifyRequest) {
     const id = parseInt((req.params as any).id, 10);
@@ -75,7 +75,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard(), RolesGuard)
   @Roles(['admin'])
   delete(req: FastifyRequest) {
     const id = parseInt((req.params as any).id, 10);

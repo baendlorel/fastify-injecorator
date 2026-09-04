@@ -1,4 +1,4 @@
-import { type Constructor } from '@nestify-js/shared';
+import { _define, type Constructor } from '@nestify-js/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 import { JwtService } from './jwt.js';
 
@@ -77,6 +77,9 @@ export function JwtGuard(jwt: JwtService = defaultJwt) {
       return type === 'Bearer' ? token : null;
     }
   }
+
+  // & Prevent class name collision in case of multiple guards being created dynamically
+  _define(JwtGuardClass, 'name', { value: 'JwtGuardClass' + guards.size, configurable: true });
 
   guards.set(jwt, JwtGuardClass);
   return JwtGuardClass;

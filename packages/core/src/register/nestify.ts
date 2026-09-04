@@ -7,8 +7,8 @@ import fastify, {
   type FastifyListenOptions,
   type FastifyInstance as NestifyInstance,
 } from 'fastify';
-import { type Constructor } from '@nestify-js/shared';
-import { type NestifyOptions } from '@core/types/injecorator.js';
+import type { Constructor } from '@nestify-js/shared';
+import type { NestifyOptions, ProviderOptions } from '@core/types/injecorator.js';
 
 import { apply } from './index.js';
 
@@ -29,9 +29,31 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
   fastify?: FastifyServerOptions;
 
   /**
-   * Shortcut for `fastify.logger`
+   * Middlewares listed here are no need to be registered in `@Module({providers:[...]})` manually.
+   * - Only register, you can use them manually.
    */
-  logger?: FastifyServerOptions['logger'];
+  registerGlobalMiddlewares?: ProviderOptions[];
+
+  /**
+   * This will be the bottom filter of all filters
+   * - Automically applied globally
+   */
+  useGlobalFilters?: ProviderOptions[];
+  /**
+   * Execute order: global → controller → route
+   * - Automically applied globally
+   */
+  useGlobalPipes?: ProviderOptions[];
+  /**
+   * Execute order: global → controller → route → controller → global
+   * - Automically applied globally
+   */
+  useGlobalInterceptors?: ProviderOptions[];
+  /**
+   * Execute order: global → controller → route
+   * - Automically applied globally
+   */
+  useGlobalGuards?: ProviderOptions[];
 
   /**
    * Fastify plugins registered before modules are applied
@@ -72,12 +94,9 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
  * ```
  */
 export async function nestify(rootModule: Constructor, opts: NestifyBootOptions = {}): Promise<NestifyInstance> {
-  const { fastify: serverOptions, logger, plugins, listen, ...rest } = opts;
+  const { fastify: serverOptions, plugins, listen, ...rest } = opts;
 
-  const app = fastify({
-    ...serverOptions,
-    logger: logger ?? serverOptions?.logger,
-  });
+  const app = fastify(serverOptions);
 
   for (const [plugin, options] of plugins ?? []) {
     await app.register(plugin, options);

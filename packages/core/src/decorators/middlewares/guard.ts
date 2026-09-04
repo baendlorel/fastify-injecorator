@@ -1,11 +1,10 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { InjecoratorGuard } from '@core/types/middleware.js';
-import { ReflectDeep } from 'reflect-deep';
 import { sym } from '@nestify-js/shared';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
-import { metaSetGuard, metaSetUseGuards } from '@core/register/meta.js';
+import { metaSetGuard, metaSetProvider, metaSetUseGuards } from '@core/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
@@ -28,9 +27,9 @@ export function Guard() {
 
 export function _GuardSet(cls: Constructor) {
   const metadata = {};
-  ReflectDeep.set(cls, [sym.metadata, sym.root, sym.guard.root], metadata);
+  cls[sym.metadata] = metadata;
   const context = { kind: 'class' as const, name: cls.name, metadata, addInitializer: () => {} };
-  Injectable()(cls, context);
+  metaSetProvider(context);
   metaSetGuard(context);
 }
 

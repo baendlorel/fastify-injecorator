@@ -11,7 +11,10 @@ export namespace sym {
 
   export const none = Symbol('none');
 
-  export const root = Symbol('root');
+  /**
+   * Used for nestify framework to mark the root of the metadata
+   */
+  export const root = Symbol('nestify-root');
 
   /**
    * Stores the `module` information.

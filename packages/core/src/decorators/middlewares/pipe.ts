@@ -1,11 +1,10 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
 
-import { ReflectDeep } from 'reflect-deep';
 import { _isConstructable, _isKey, sym } from '@nestify-js/shared';
 
 import { expectHasOneHook, expectInjectToken, expectObject, expectOrObject, expect } from '@core/asserts/index.js';
-import { metaSetPipe, metaIsPipe, metaSetUsePipes } from '@core/register/meta.js';
+import { metaSetPipe, metaIsPipe, metaSetUsePipes, metaSetProvider } from '@core/register/meta.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -26,9 +25,9 @@ export function Pipe() {
 
 export function _PipeSet(cls: Constructor) {
   const metadata = {};
-  ReflectDeep.set(cls, [sym.metadata, sym.root, sym.pipe.root], metadata);
+  cls[sym.metadata] = metadata;
   const context = { kind: 'class' as const, name: cls.name, metadata, addInitializer: () => {} };
-  Injectable()(cls, context);
+  metaSetProvider(context);
   metaSetPipe(context);
 }
 

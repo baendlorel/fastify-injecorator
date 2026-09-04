@@ -76,10 +76,18 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
  * ```
  */
 export async function nestify(rootModule: Constructor, opts: NestifyBootOptions = {}): Promise<NestifyInstance> {
-  const { fastify: serverOptions = {}, plugins, listen, ignoreTrailingSlash, ...rest } = opts;
+  const { fastify: serverOptions = {}, plugins, listen, ignoreTrailingSlash = true, ...rest } = opts;
 
-  serverOptions.ignoreTrailingSlash = ignoreTrailingSlash ?? serverOptions.ignoreTrailingSlash ?? true;
-  const app = fastify(serverOptions);
+  // `ignoreTrailingSlash` moved into `routerOptions` in fastify@5;
+  // strip the deprecated top-level field to avoid FSTDEP022
+  const { routerOptions, ...otherServerOptions } = serverOptions;
+  const app = fastify({
+    ...otherServerOptions,
+    routerOptions: {
+      ...routerOptions,
+      ignoreTrailingSlash,
+    },
+  });
 
   for (const [plugin, options] of plugins ?? []) {
     await app.register(plugin, options);

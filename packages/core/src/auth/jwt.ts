@@ -1,8 +1,9 @@
 import { createHmac } from 'node:crypto';
 import type { FastifyRequest as NestifyRequest } from 'fastify';
+import type { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 import { _set, sym, _get, _isObject, _isArray } from '@nestify-js/shared';
 
-import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
+import { UnauthorizedException } from '@core/exceptions/index.js';
 
 /**
  * Simple JWT Service implementation
@@ -283,7 +284,7 @@ export class JwtService {
     if (!mergedOptions.ignoreExpiration && payload.exp) {
       const clockTolerance = mergedOptions.clockTolerance || 0;
       if (now > payload.exp + clockTolerance) {
-        throw new Error('Token expired');
+        throw new UnauthorizedException('Token expired');
       }
     }
 
@@ -291,7 +292,7 @@ export class JwtService {
     if (payload.nbf) {
       const clockTolerance = mergedOptions.clockTolerance || 0;
       if (now < payload.nbf - clockTolerance) {
-        throw new Error('Token not yet valid');
+        throw new UnauthorizedException('Token not yet valid');
       }
     }
 

@@ -1,7 +1,7 @@
-export class InjecoratorError extends Error {
+export class NestifyError extends Error {
   constructor(message?: string) {
     super(message);
-    this.name = '__NAME__';
+    this.name = 'NestifyError';
   }
 }
 

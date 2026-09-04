@@ -1,7 +1,7 @@
 import type { InjectToken } from '@core/types/injecorator.js';
 import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
-import { InjecoratorError } from './error.js';
+import { NestifyError } from './error.js';
 import { _entries, _isArray, _isConstructable } from '@nestify-js/shared';
 
 // # Basic
@@ -80,7 +80,7 @@ export const expectArray: <T = any>(
   predicate?: (value: T, index: number, array: T[]) => void,
 ) => asserts arr is T[] = (arr, msg, predicate) => {
   if (!_isArray(arr)) {
-    throw new InjecoratorError(msg);
+    throw new NestifyError(msg);
   }
 
   if (predicate) {

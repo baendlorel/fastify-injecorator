@@ -3,7 +3,6 @@ import { defineConfig } from 'tsdown';
 import funcMacro from 'rollup-plugin-func-macro';
 import { replacePlugin } from './scripts/replace.js';
 
-const isDev = process.env.NODE_ENV === 'development';
 const lib = process.env.LIB_DIR!;
 const root = import.meta.dirname;
 const packDir = root.join('packages');
@@ -25,6 +24,6 @@ export default defineConfig({
     '@swagger/': packDir.join('swagger', 'src'),
     '@tests/': root.join('tests'),
   },
-  minify: true,
+  minify: lib.includes('core') ? false : true,
   plugins: [replacePlugin(), funcMacro()],
 });

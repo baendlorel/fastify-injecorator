@@ -5,18 +5,22 @@ import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { expectArray, expectClass } from '@core/asserts/index.js';
 import { injector } from '@core/register/lazy-injector.js';
 import { metaGetFilters } from '@core/register/meta.js';
+import { HttpException } from '@core/exceptions/index.js';
 
 const defaultFilter: TaskifyAsync<FilterTask> = async (context, exception) => {
   const http = context.switchToHttp();
   const reply = http.getReply();
-  const message = (exception as Error)?.message ?? String(exception);
-  // reply.log.error(`${http.getRequest().url} - ${message}`);
 
-  reply.status(400).send({
-    error: 'Bad Request',
-    message,
-    details: exception,
-  });
+  if (exception instanceof HttpException) {
+    reply.status(exception.statusCode).send(exception.getResponse());
+  } else {
+    const message = (exception as Error)?.message ?? String(exception);
+    reply.status(400).send({
+      error: 'Bad Request',
+      statusCode: 400,
+      message,
+    });
+  }
 
   return {
     value: undefined,

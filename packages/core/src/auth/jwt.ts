@@ -1,6 +1,6 @@
 import { createHmac } from 'node:crypto';
 import type { FastifyRequest as NestifyRequest } from 'fastify';
-import { _set, sym, _get } from '@nestify-js/shared';
+import { _set, sym, _get, _isObject, _isArray } from '@nestify-js/shared';
 
 import { JwtPayload, JwtSignOptions, JwtVerifyOptions, JwtModuleOptions } from '@core/types/auth.js';
 
@@ -24,13 +24,13 @@ export class JwtService {
 
   // # privates
   private secret: string;
-  private defaultSignOptions?: JwtSignOptions;
-  private defaultVerifyOptions?: JwtVerifyOptions;
+  private defaultSignOptions: Required<JwtSignOptions>;
+  private defaultVerifyOptions: Required<JwtVerifyOptions>;
 
   constructor(options?: JwtModuleOptions) {
     this.secret = options?.secret || 'nestify-js-jwt-secret';
-    this.defaultSignOptions = options?.signOptions;
-    this.defaultVerifyOptions = options?.verifyOptions;
+    this.defaultSignOptions = this.validateSignOptions(options?.signOptions ?? {});
+    this.defaultVerifyOptions = this.validateVerifyOptions(options?.verifyOptions ?? {});
   }
 
   /**
@@ -39,8 +39,12 @@ export class JwtService {
    */
   configure(options: JwtModuleOptions): void {
     this.secret = options.secret;
-    this.defaultSignOptions = options.signOptions;
-    this.defaultVerifyOptions = options.verifyOptions;
+    this.defaultSignOptions = this.validateSignOptions(options.signOptions ?? {});
+    this.defaultVerifyOptions = this.validateVerifyOptions(options.verifyOptions ?? {});
+  }
+
+  get expiresIn(): number {
+    return this.defaultSignOptions.expiresIn;
   }
 
   /**
@@ -71,19 +75,130 @@ export class JwtService {
     return this.base64UrlEncode(hmac.digest().toString('binary'));
   }
 
-  private validateSignOptions(options: JwtSignOptions): void {
-    if (typeof options.expiresIn !== 'number') {
-      throw new Error('expiresIn must be a number representing seconds');
+  private validateSignOptions(options: JwtSignOptions): Required<JwtSignOptions> {
+    if (!_isObject<JwtSignOptions>(options) || _isArray(options)) {
+      throw new Error('signOptions must be an object');
     }
+
+    const normalized: Required<JwtSignOptions> = {
+      expiresIn: 3600, // default: 1 hour
+      audience: undefined as unknown as string,
+      issuer: '',
+      jwtid: '',
+      subject: '',
+      notBefore: 0,
+      algorithm: 'HS256',
+    };
+
+    if (options.expiresIn !== undefined) {
+      if (typeof options.expiresIn !== 'number' || !Number.isFinite(options.expiresIn) || options.expiresIn <= 0) {
+        throw new Error('expiresIn must be a positive finite number representing seconds');
+      }
+      normalized.expiresIn = options.expiresIn;
+    }
+
+    if (options.audience !== undefined) {
+      const audiences = _isArray(options.audience) ? options.audience : [options.audience];
+      if (audiences.some((aud) => typeof aud !== 'string' || aud.length === 0)) {
+        throw new Error('audience must be a non-empty string or an array of non-empty strings');
+      }
+      normalized.audience = options.audience as string;
+    }
+
+    if (options.issuer !== undefined) {
+      if (typeof options.issuer !== 'string' || options.issuer.length === 0) {
+        throw new Error('issuer must be a non-empty string');
+      }
+      normalized.issuer = options.issuer;
+    }
+
+    if (options.jwtid !== undefined) {
+      if (typeof options.jwtid !== 'string' || options.jwtid.length === 0) {
+        throw new Error('jwtid must be a non-empty string');
+      }
+      normalized.jwtid = options.jwtid;
+    }
+
+    if (options.subject !== undefined) {
+      if (typeof options.subject !== 'string' || options.subject.length === 0) {
+        throw new Error('subject must be a non-empty string');
+      }
+      normalized.subject = options.subject;
+    }
+
+    if (options.notBefore !== undefined) {
+      const notBefore = typeof options.notBefore === 'string' ? Number(options.notBefore) : options.notBefore;
+      if (typeof notBefore !== 'number' || !Number.isFinite(notBefore) || notBefore < 0) {
+        throw new Error('notBefore must be a non-negative number of seconds (or a numeric string)');
+      }
+      normalized.notBefore = notBefore;
+    }
+
+    const supportedAlgorithms = ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512'] as const;
+    if (options.algorithm !== undefined) {
+      if (!supportedAlgorithms.includes(options.algorithm)) {
+        throw new Error(`algorithm must be one of: ${supportedAlgorithms.join(', ')}`);
+      }
+      normalized.algorithm = options.algorithm;
+    }
+
+    return normalized;
   }
 
-  private validateVerifyOptions(options: JwtVerifyOptions): void {}
+  private validateVerifyOptions(options: JwtVerifyOptions): Required<JwtVerifyOptions> {
+    if (!_isObject<JwtVerifyOptions>(options) || _isArray(options)) {
+      throw new Error('verifyOptions must be an object');
+    }
+
+    const normalized: Required<JwtVerifyOptions> = {
+      audience: undefined as unknown as string,
+      issuer: undefined as unknown as string,
+      ignoreExpiration: false,
+      clockTolerance: 0,
+    };
+
+    if (options.audience !== undefined) {
+      const audiences = _isArray(options.audience) ? options.audience : [options.audience];
+      if (audiences.some((aud) => typeof aud !== 'string' || aud.length === 0)) {
+        throw new Error('audience must be a non-empty string or an array of non-empty strings');
+      }
+      normalized.audience = options.audience as string;
+    }
+
+    if (options.issuer !== undefined) {
+      const issuers = _isArray(options.issuer) ? options.issuer : [options.issuer];
+      if (issuers.some((iss) => typeof iss !== 'string' || iss.length === 0)) {
+        throw new Error('issuer must be a non-empty string or an array of non-empty strings');
+      }
+      normalized.issuer = options.issuer as string;
+    }
+
+    if (options.ignoreExpiration !== undefined) {
+      if (typeof options.ignoreExpiration !== 'boolean') {
+        throw new Error('ignoreExpiration must be a boolean');
+      }
+      normalized.ignoreExpiration = options.ignoreExpiration;
+    }
+
+    if (options.clockTolerance !== undefined) {
+      if (
+        typeof options.clockTolerance !== 'number' ||
+        !Number.isFinite(options.clockTolerance) ||
+        options.clockTolerance < 0
+      ) {
+        throw new Error('clockTolerance must be a non-negative finite number representing seconds');
+      }
+      normalized.clockTolerance = options.clockTolerance;
+    }
+
+    return normalized;
+  }
 
   /**
    * Sign a payload and return JWT token
    */
   sign(payload: JwtPayload, options?: JwtSignOptions): string {
-    const mergedOptions = { ...this.defaultSignOptions, ...options };
+    const mergedOptions = this.validateSignOptions({ ...this.defaultSignOptions, ...options });
 
     // Create header
     const header = {
@@ -141,7 +256,7 @@ export class JwtService {
    * Verify and decode a JWT token
    */
   verify<T = JwtPayload>(token: string, options?: JwtVerifyOptions): T {
-    const mergedOptions = { ...this.defaultVerifyOptions, ...options };
+    const mergedOptions = this.validateVerifyOptions({ ...this.defaultVerifyOptions, ...options });
 
     // Split token
     const parts = token.split('.');
@@ -182,8 +297,8 @@ export class JwtService {
 
     // Check audience
     if (mergedOptions.audience) {
-      const audiences = Array.isArray(mergedOptions.audience) ? mergedOptions.audience : [mergedOptions.audience];
-      const tokenAudiences = Array.isArray(payload.aud) ? payload.aud : payload.aud ? [payload.aud] : [];
+      const audiences = _isArray(mergedOptions.audience) ? mergedOptions.audience : [mergedOptions.audience];
+      const tokenAudiences = _isArray(payload.aud) ? payload.aud : payload.aud ? [payload.aud] : [];
 
       if (!audiences.some((aud) => tokenAudiences.includes(aud))) {
         throw new Error('Token audience mismatch');
@@ -192,7 +307,7 @@ export class JwtService {
 
     // Check issuer
     if (mergedOptions.issuer) {
-      const issuers = Array.isArray(mergedOptions.issuer) ? mergedOptions.issuer : [mergedOptions.issuer];
+      const issuers = _isArray(mergedOptions.issuer) ? mergedOptions.issuer : [mergedOptions.issuer];
 
       if (!issuers.includes(payload.iss)) {
         throw new Error('Token issuer mismatch');

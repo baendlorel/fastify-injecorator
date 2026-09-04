@@ -11,10 +11,9 @@ export interface JwtPayload {
  */
 export interface JwtSignOptions {
   /**
-   * Token expiration time
-   * - e.g., '1h', '7d', '30m', etc.
+   * Token expiration time(unit: seconds)
    */
-  expiresIn?: string | number;
+  expiresIn?: number;
 
   /**
    * Token audience

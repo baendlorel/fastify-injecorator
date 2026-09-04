@@ -71,6 +71,14 @@ export class JwtService {
     return this.base64UrlEncode(hmac.digest().toString('binary'));
   }
 
+  private validateSignOptions(options: JwtSignOptions): void {
+    if (typeof options.expiresIn !== 'number') {
+      throw new Error('expiresIn must be a number representing seconds');
+    }
+  }
+
+  private validateVerifyOptions(options: JwtVerifyOptions): void {}
+
   /**
    * Sign a payload and return JWT token
    */
@@ -92,11 +100,7 @@ export class JwtService {
 
     // Add optional claims
     if (mergedOptions.expiresIn) {
-      if (typeof mergedOptions.expiresIn === 'number') {
-        jwtPayload.exp = now + mergedOptions.expiresIn;
-      } else {
-        jwtPayload.exp = now + Number(mergedOptions.expiresIn);
-      }
+      jwtPayload.exp = now + mergedOptions.expiresIn;
     }
 
     if (mergedOptions.audience) {

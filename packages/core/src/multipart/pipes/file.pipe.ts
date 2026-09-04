@@ -1,10 +1,11 @@
+import type { InjecoratorPipe } from '@core/types/middleware.js';
+import type { FileUploadMeta, MultipartFile } from '@core/types/multipart.js';
+
 import { sym } from '@nestify-js/shared';
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { metaGet } from '@core/register/meta.js';
-import { InjecoratorPipe } from '@core/types/middleware.js';
-import { FileUploadMeta, MultipartFile } from '@core/types/multipart.js';
+import { _PipeSet } from '@core/decorators/middlewares/pipe.js';
 import { UploadedFile } from '../uploaded-file.js';
-import { Pipe } from '@core/decorators/middlewares/pipe.js';
 
 /**
  * Pipe for handling file uploads
@@ -12,8 +13,7 @@ import { Pipe } from '@core/decorators/middlewares/pipe.js';
  *
  * Note: Requires @fastify/multipart to be installed and registered with Fastify
  */
-@Pipe()
-export class PipeFile implements InjecoratorPipe {
+class PipeFile implements InjecoratorPipe {
   async transform(context: ExecutionContext, input?: any[]): Promise<any[]> {
     const request = context.switchToHttp().getRequest();
     const sourceClass = context.getClass();
@@ -79,3 +79,7 @@ export class PipeFile implements InjecoratorPipe {
     }
   }
 }
+
+_PipeSet(PipeFile);
+
+export { PipeFile };

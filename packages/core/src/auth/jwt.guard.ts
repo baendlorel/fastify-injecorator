@@ -2,7 +2,7 @@ import { _define, type Constructor } from '@nestify-js/shared';
 import { InjecoratorGuard } from '@core/types/middleware.js';
 import { JwtService } from './jwt.js';
 
-import { Guard } from '@core/decorators/middlewares/guard.js';
+import { _GuardSet } from '@core/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
 import { jwt as defaultJwt } from './jwt.js';
 
@@ -35,8 +35,8 @@ export function JwtGuard(jwt: JwtService = defaultJwt) {
     return guardClass;
   }
 
-  @Guard()
   class JwtGuardClass implements InjecoratorGuard {
+    static {}
     canActivate(context: ExecutionContext): boolean {
       const http = context.switchToHttp();
       const request = http.getRequest();
@@ -77,6 +77,9 @@ export function JwtGuard(jwt: JwtService = defaultJwt) {
       return type === 'Bearer' ? token : null;
     }
   }
+
+  // ! Try to prevent using @Guard
+  _GuardSet(JwtGuardClass);
 
   // & Prevent class name collision in case of multiple guards being created dynamically
   _define(JwtGuardClass, 'name', { value: 'JwtGuardClass' + guards.size, configurable: true });

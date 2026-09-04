@@ -31,8 +31,6 @@ export default defineConfig({
   },
   minify: false,
   plugins: [
-    replacePlugin(),
-    funcMacro(),
     babel({
       include: [join(packDir, 'src', '**', '*.ts')],
       extensions: ['.ts'],
@@ -44,5 +42,7 @@ export default defineConfig({
       presets: [presetTypescript],
       plugins: [[proposalDecorators, { version: '2023-11' }]],
     }),
+    funcMacro(),
+    replacePlugin(),
   ],
 });

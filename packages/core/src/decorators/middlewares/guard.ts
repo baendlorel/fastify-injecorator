@@ -27,7 +27,7 @@ export function Guard() {
 
 export function _GuardSet(cls: Constructor) {
   const metadata = {};
-  cls[sym.metadata] = metadata;
+  (cls as any)[sym.metadata] = metadata;
   const context = { kind: 'class' as const, name: cls.name, metadata, addInitializer: () => {} };
   metaSetProvider(context);
   metaSetGuard(context);

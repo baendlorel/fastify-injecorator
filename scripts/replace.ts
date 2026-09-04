@@ -11,6 +11,7 @@ export const replacePlugin = () =>
     "_throw('": `throw new Error('[nestify-js error] `,
     '_throw(`': 'throw new Error(`[nestify-js error] ',
     '_throw("': `throw new Error("[nestify-js error] `,
+    '_throw(': `throw new Error("[nestify-js error] "+`,
     'declare const __IS_PROD__: boolean;\n': '',
     'const __IS_PROD__: boolean;\n': '',
     'logger.info(': "console.log(`%cinfo - __func__:`, 'color:#007ACC',",

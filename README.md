@@ -165,32 +165,73 @@ class UserModule {}
 
 ### Middleware System
 
+There are four kinds of middleware: **Guards**, **Interceptors**, **Pipes** and **Filters**.
+
+Execution order of a single request:
+
+```
+Request → Interceptor(enter) → Guard → Pipe → Controller method → Interceptor(leave)
+                   └────────── Exception → Filter ──────────┘
+```
+
+#### Registration Rules (Important)
+
+- **Built-in middlewares are auto-registered**: the framework's preset pipes (`PipeBody` / `PipeQuery` / `PipeParams` / `PipeIp` / `PipeRaw` / `PipeFile`) and `JwtGuard` are automatically instantiated during `apply()`. They work out of the box, no configuration needed.
+- **Custom middlewares must be registered**: like NestJS, classes decorated by `@Guard()` / `@Interceptor()` / `@Pipe()` / `@Filter()` must appear in some module's `providers`, otherwise route registration fails with `Cannot find class for token`.
+- **Where to apply**: `@UseGuards` / `@UseInterceptors` / `@UsePipes` / `@UseFilters` can be applied on a **controller class** (affects all its routes) or on a **method** (affects only that route). Middlewares of the same kind run in order: global → controller → method.
+- Middleware classes are `Injectable` too, so `@Inject` property injection works inside them.
+
 #### Guards
 
-Guards control access to routes:
+Guards control access to routes. Returning `false` or throwing from `canActivate` aborts the request:
 
 ```typescript
 @Guard()
 class AuthGuard implements InjecoratorGuard {
-  canActivate(context: ExecutionContext): boolean {
+  // Dependency injection works
+  @Inject(AuthService)
+  authService: AuthService;
+
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    return request.headers.authorization != null;
+    return request.headers.authorization === 'Bearer valid-token';
+    // Or throw new UnauthorizedException() for a specific error
   }
 }
 
+// Must be registered in providers before use
+@Module({ controllers: [AdminController], providers: [AuthGuard] })
+class AdminModule {}
+
 @Controller('/admin')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard) // Controller level: applies to all routes
 class AdminController {
   @Get('/dashboard')
   getDashboard() {
     return { data: 'sensitive' };
   }
+
+  @Get('/stats')
+  @UseGuards(AnotherGuard) // Method level: appended after controller-level guards
+  getStats() {
+    return { data: 'stats' };
+  }
 }
+```
+
+Register a global guard with the `APP_GUARD` token to guard every route (each kind of global middleware can only be registered once):
+
+```typescript
+@Module({
+  controllers: [AppController],
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
+})
+class AppModule {}
 ```
 
 #### Interceptors
 
-Interceptors can modify request/response flow:
+Interceptors run before the controller method; the returned function is called after the method finishes (useful for logging, timing, response wrapping). The returned function receives the handler's return value (or the caught error):
 
 ```typescript
 @Interceptor()
@@ -199,8 +240,9 @@ class LoggingInterceptor implements InjecoratorInterceptor {
     const start = Date.now();
     console.log('Request started');
 
-    return () => {
+    return (result: any) => {
       console.log(`Request completed in ${Date.now() - start}ms`);
+      return result; // Can be modified; the return value becomes the final response
     };
   }
 }
@@ -215,59 +257,89 @@ class ApiController {
 }
 ```
 
+Global interceptor: `{ provide: APP_INTERCEPTOR, useClass: LoggingInterceptor }`.
+
 #### Pipes
 
-Pipes transform and validate input data:
+Pipes validate and transform input data. Each pipe's return value becomes the next pipe's `input`.
+
+**Custom pipes** are applied via `@UsePipes`, optionally with a validation schema (validation is based on fastify's `validatorCompiler`):
 
 ```typescript
 @Pipe()
-class ValidationPipe implements InjecoratorPipe {
-  transform(context: ExecutionContext, input: any[]) {
-    // Transform and validate input
-    return input;
+class TrimPipe implements InjecoratorPipe {
+  async transform(context: ExecutionContext, input: any[], schema?: PipeFullSchema) {
+    // `input` comes from the previous step; the return value goes to the next pipe or the handler
+    return input.map((v) => (typeof v === 'string' ? v.trim() : v));
   }
 }
 
 @Controller('/users')
+@UsePipes(TrimPipe) // Also works without a schema (transformation only)
 class UserController {
   @Post('/')
+  @UsePipes({
+    pipe: TrimPipe,
+    schema: { body: { type: 'object', required: ['name'] } }, // PipeOptions: pipe + schema
+  })
+  createUser() {
+    // ...
+  }
+}
+```
+
+**Built-in pipes** (auto-registered, use them directly) extract data from the `request` object and pass it to the handler:
+
+```typescript
+@Controller('/users')
+class UserController {
+  // @Body(schema?, ok?, other?)
+  // - schema: JSON Schema to validate request.body
+  // - ok: generates the response.200 schema (for swagger)
+  // - other: remaining fastify route schema (e.g. headers, response)
+  @Post('/')
   @Body({ type: 'object', required: ['name', 'email'] })
-  createUser(@Body() body: any) {
-    return { user: body };
+  createUser(body: any) {
+    return { user: body }; // Handler receives request.body
   }
 
   @Get('/')
   @Query({ type: 'object' })
-  getUsers(@Query() query: any) {
-    return { users: [], query };
+  getUsers(query: any) {
+    return { query }; // Handler receives request.query
   }
 
   @Get('/:id')
   @Params({ type: 'object', required: ['id'] })
-  getUser(@Params() params: any) {
-    return { user: { id: params.id } };
+  getUser(params: any) {
+    return { id: params.id }; // Handler receives request.params
   }
 
   @Get('/ip')
-  getUserIP(@Ip() ip: string) {
-    return { ip };
+  getUserIP(ip: string) {
+    return { ip }; // Handler receives request.ip
   }
 
   @Post('/raw')
-  handleRaw(@Raw() raw: any) {
+  handleRaw(raw: any) {
+    // @Raw(): handler receives request.raw (the raw Node request)
     return { received: true };
   }
 }
 ```
 
+> **Note**: `@Body` / `@Query` / `@Params` / `@Ip` / `@Raw` ignore the previous pipe's return value and always extract from the `request` object. When chaining pipes, put them last or handle the data yourself in a custom pipe.
+
+Global pipe: `{ provide: APP_PIPE, useClass: MyPipe }` (or `{ provide: APP_PIPE, useValue: { pipe: MyPipe, schema: {...} } }`).
+
 #### Filters
 
-Filters handle exceptions:
+Filters handle exceptions thrown by routes. Specify the exception classes to catch in the decorator (omit to catch all):
 
 ```typescript
 @Filter(HttpException)
 class HttpExceptionFilter implements InjecoratorFilter {
-  catch(exception: HttpException, context: ExecutionContext) {
+  catch(context: ExecutionContext, exception: HttpException) {
     const response = context.switchToHttp().getReply();
     response.status(exception.status).send({
       error: exception.message,
@@ -284,6 +356,41 @@ class ApiController {
     throw new HttpException('Something went wrong', 400);
   }
 }
+```
+
+Global filter: `{ provide: APP_FILTER, useClass: HttpExceptionFilter }`.
+
+#### Built-in JWT Guard
+
+The framework ships with `JwtGuard` (auto-registered, no need to add it to providers). It extracts and verifies the token from `Authorization: Bearer <token>` and attaches the decoded payload to the request:
+
+```typescript
+import { JwtGuard, JwtService, jwt } from 'nestify-js';
+
+// `jwt` is the default JwtService instance; you can also pass your own: JwtGuard(myJwt)
+@Controller('protected')
+@UseGuards(JwtGuard())
+class ProtectedController {
+  @Get('profile')
+  async getProfile(request: any) {
+    // The first handler argument is the pipe result; you can also read
+    // the request in guards/interceptors via context.switchToHttp().getRequest()
+    return request;
+  }
+}
+```
+
+#### ExecutionContext
+
+All middlewares access request information through `context: ExecutionContext`:
+
+```typescript
+const http = context.switchToHttp();
+const request = http.getRequest<FastifyRequest>(); // fastify request object
+const reply = http.getReply<FastifyReply>(); // fastify reply object
+
+context.getClass(); // Current controller class
+context.getHandler(); // Current handler method
 ```
 
 ### Application Bootstrap
@@ -306,9 +413,8 @@ const app = await nestify(AppModule, {
     [staticFiles, { root: './public', prefix: '/' }],
   ],
 
-  // setup callback to register auto-created instances
-  // - e.g. the built-in `setupBasicPipes` creates preset pipe instances
-  setup: setupBasicPipes,
+  // Setup callback to register auto-created instances (optional)
+  // - Built-in pipes and JwtGuard are auto-registered, usually not needed
 
   // start listening after all modules are registered
   // - `true` uses the `PORT` / `HOST` env vars (falling back to 3000 / 0.0.0.0)
@@ -324,7 +430,7 @@ Available options:
 | `logger` | `FastifyServerOptions['logger']` | Shortcut for `fastify.logger` |
 | `fastify` | `FastifyServerOptions` | Options passed to the fastify factory (`fastify(options)`) |
 | `plugins` | `readonly [plugin, options?][]` | Fastify plugins registered before modules are applied (callback-style and async-style are both accepted) |
-| `setup` | `(register: (cls: Constructor) => void) => void` | Setup callback to register auto-created instances (e.g. `setupBasicPipes`) |
+| `setup` | `(register: (cls: Constructor) => void) => void` | Setup callback to register auto-created instances (optional; built-in pipes/JwtGuard are auto-registered, usually not needed) |
 | `listen` | `boolean \| Partial<FastifyListenOptions>` | Start listening after all modules are registered |
 | `allowCrossModuleCircularReference` | `boolean` | Must be `true` to allow **cross-module** circular dependencies (same-module circular references are always allowed). `@default false` |
 

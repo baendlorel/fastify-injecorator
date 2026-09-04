@@ -165,32 +165,73 @@ class UserModule {}
 
 ### 中间件系统
 
+中间件共四种：**守卫（Guard）**、**拦截器（Interceptor）**、**管道（Pipe）**、**过滤器（Filter）**。
+
+单个请求的执行顺序：
+
+```
+请求 → 拦截器(进入) → 守卫 → 管道 → 控制器方法 → 拦截器(离开)
+              └──────── 异常 → 过滤器 ─────────┘
+```
+
+#### 注册规则（重要）
+
+- **内置中间件自动注册**：框架内置的管道（`PipeBody` / `PipeQuery` / `PipeParams` / `PipeIp` / `PipeRaw` / `PipeFile`）和 `JwtGuard` 会在 `apply()` 时自动创建实例，开箱即用，无需任何配置。
+- **自定义中间件必须注册**：被 `@Guard()` / `@Interceptor()` / `@Pipe()` / `@Filter()` 标记的类和 NestJS 一样，必须出现在某个模块的 `providers` 中，否则路由注册时会报 `Cannot find class for token` 错误。
+- **使用位置**：`@UseGuards` / `@UseInterceptors` / `@UsePipes` / `@UseFilters` 既可以标在**控制器类**上（对该控制器所有路由生效），也可以标在**方法**上（只对该路由生效）。同类中间件按 全局 → 控制器 → 方法 的顺序依次执行。
+- 中间件类本身也是 `Injectable`，支持 `@Inject` 属性注入。
+
 #### 守卫 (Guards)
 
-守卫控制对路由的访问：
+守卫控制对路由的访问。`canActivate` 返回 `false` 或抛出异常都会中断请求：
 
 ```typescript
 @Guard()
 class AuthGuard implements InjecoratorGuard {
-  canActivate(context: ExecutionContext): boolean {
+  // 支持依赖注入
+  @Inject(AuthService)
+  authService: AuthService;
+
+  canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    return request.headers.authorization != null;
+    return request.headers.authorization === 'Bearer valid-token';
+    // 也可以直接 throw new UnauthorizedException() 给出具体错误
   }
 }
 
+// 注册进 providers 后才能使用
+@Module({ controllers: [AdminController], providers: [AuthGuard] })
+class AdminModule {}
+
 @Controller('/admin')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard) // 控制器级：所有路由生效
 class AdminController {
   @Get('/dashboard')
   getDashboard() {
     return { data: '敏感数据' };
   }
+
+  @Get('/stats')
+  @UseGuards(AnotherGuard) // 方法级：只对此路由生效（追加在控制器级之后）
+  getStats() {
+    return { data: '统计数据' };
+  }
 }
+```
+
+全局守卫使用 `APP_GUARD` 作为 token 注册，对所有路由生效（每种全局中间件只能注册一个）：
+
+```typescript
+@Module({
+  controllers: [AppController],
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
+})
+class AppModule {}
 ```
 
 #### 拦截器 (Interceptors)
 
-拦截器可以修改请求/响应流：
+拦截器在进入控制器方法前执行，返回的函数会在方法结束后调用（可用于日志、耗时统计、响应包装）。返回的函数会收到控制器方法的返回值（或捕获到的错误）：
 
 ```typescript
 @Interceptor()
@@ -199,8 +240,9 @@ class LoggingInterceptor implements InjecoratorInterceptor {
     const start = Date.now();
     console.log('请求开始');
 
-    return () => {
+    return (result: any) => {
       console.log(`请求完成，耗时 ${Date.now() - start}ms`);
+      return result; // 可以修改后返回，作为最终的响应值
     };
   }
 }
@@ -215,59 +257,89 @@ class ApiController {
 }
 ```
 
+全局拦截器使用 `{ provide: APP_INTERCEPTOR, useClass: LoggingInterceptor }`。
+
 #### 管道 (Pipes)
 
-管道转换和验证输入数据：
+管道负责验证和转换输入数据，前一个管道的返回值会作为下一个管道的 `input`。
+
+**自定义管道**通过 `@UsePipes` 使用，可附带验证 schema（校验基于 fastify 的 `validatorCompiler`）：
 
 ```typescript
 @Pipe()
-class ValidationPipe implements InjecoratorPipe {
-  transform(context: ExecutionContext, input: any[]) {
-    // 转换和验证输入
-    return input;
+class TrimPipe implements InjecoratorPipe {
+  async transform(context: ExecutionContext, input: any[], schema?: PipeFullSchema) {
+    // input 是上一步的数据；返回值传给下一个管道或控制器方法
+    return input.map((v) => (typeof v === 'string' ? v.trim() : v));
   }
 }
 
 @Controller('/users')
+@UsePipes(TrimPipe) // 也可以不传 schema，只做转换
 class UserController {
   @Post('/')
+  @UsePipes({
+    pipe: TrimPipe,
+    schema: { body: { type: 'object', required: ['name'] } }, // PipeOptions：pipe + schema
+  })
+  createUser() {
+    // ...
+  }
+}
+```
+
+**内置管道**（自动注册，直接使用）会从 `request` 对象提取数据并作为控制器方法的参数：
+
+```typescript
+@Controller('/users')
+class UserController {
+  // @Body(schema?, ok?, other?)
+  // - schema: 校验 request.body 的 JSON Schema
+  // - ok: 生成 response.200 的 schema（供 swagger 使用）
+  // - other: 其余 fastify route schema（如 headers、response 等）
+  @Post('/')
   @Body({ type: 'object', required: ['name', 'email'] })
-  createUser(@Body() body: any) {
-    return { user: body };
+  createUser(body: any) {
+    return { user: body }; // handler 收到 request.body
   }
 
   @Get('/')
   @Query({ type: 'object' })
-  getUsers(@Query() query: any) {
-    return { users: [], query };
+  getUsers(query: any) {
+    return { query }; // handler 收到 request.query
   }
 
   @Get('/:id')
   @Params({ type: 'object', required: ['id'] })
-  getUser(@Params() params: any) {
-    return { user: { id: params.id } };
+  getUser(params: any) {
+    return { id: params.id }; // handler 收到 request.params
   }
 
   @Get('/ip')
-  getUserIP(@Ip() ip: string) {
-    return { ip };
+  getUserIP(ip: string) {
+    return { ip }; // handler 收到 request.ip
   }
 
   @Post('/raw')
-  handleRaw(@Raw() raw: any) {
+  handleRaw(raw: any) {
+    // @Raw(): handler 收到 request.raw（原始 Node 请求）
     return { received: true };
   }
 }
 ```
 
+> **注意**：`@Body` / `@Query` / `@Params` / `@Ip` / `@Raw` 会忽略之前管道的返回值，强制从 `request` 对象提取数据。多个管道串行使用时请把它们放在最后，或在自定义管道中自行处理。
+
+全局管道使用 `{ provide: APP_PIPE, useClass: MyPipe }`（也可以是 `{ provide: APP_PIPE, useValue: { pipe: MyPipe, schema: {...} } }`）。
+
 #### 过滤器 (Filters)
 
-过滤器处理异常：
+过滤器处理路由抛出的异常。构造时可指定捕获的异常类型（不传则捕获所有）：
 
 ```typescript
 @Filter(HttpException)
 class HttpExceptionFilter implements InjecoratorFilter {
-  catch(exception: HttpException, context: ExecutionContext) {
+  catch(context: ExecutionContext, exception: HttpException) {
     const response = context.switchToHttp().getReply();
     response.status(exception.status).send({
       error: exception.message,
@@ -285,6 +357,42 @@ class ApiController {
   }
 }
 ```
+
+全局过滤器使用 `{ provide: APP_FILTER, useClass: HttpExceptionFilter }`。
+
+#### 内置 JWT 守卫
+
+框架内置 `JwtGuard`（自动注册，无需放进 providers），从 `Authorization: Bearer <token>` 提取并校验 token，校验通过后将解码的 payload 挂到 `request` 上：
+
+```typescript
+import { JwtGuard, JwtService, jwt } from 'nestify-js';
+
+// jwt 是默认的 JwtService 实例；也可以 new JwtService(...) 后传入 JwtGuard(myJwt)
+@Controller('protected')
+@UseGuards(JwtGuard())
+class ProtectedController {
+  @Get('profile')
+  async getProfile(request: any) {
+    // 方法第一个参数是管道结果；也可以在守卫/拦截器中
+    // 通过 context.switchToHttp().getRequest() 读取
+    return request;
+  }
+}
+```
+
+#### ExecutionContext
+
+所有中间件都通过 `context: ExecutionContext` 访问请求信息：
+
+```typescript
+const http = context.switchToHttp();
+const request = http.getRequest<FastifyRequest>(); // fastify 请求对象
+const reply = http.getReply<FastifyReply>(); // fastify 响应对象
+
+context.getClass(); // 当前控制器类
+context.getHandler(); // 当前处理方法
+```
+
 
 ### 应用启动
 
@@ -306,9 +414,8 @@ const app = await nestify(AppModule, {
     [staticFiles, { root: './public', prefix: '/' }],
   ],
 
-  // 注册自动创建实例的 setup 回调
-  // - 例如内置的 `setupBasicPipes` 会创建预置的管道实例
-  setup: setupBasicPipes,
+  // 注册自动创建实例的 setup 回调（可选）
+  // - 内置管道和 JwtGuard 已自动注册，通常无需配置
 
   // 所有模块注册完成后开始监听
   // - `true` 时读取 `PORT` / `HOST` 环境变量（默认 3000 / 0.0.0.0）
@@ -324,7 +431,7 @@ const app = await nestify(AppModule, {
 | `logger` | `FastifyServerOptions['logger']` | `fastify.logger` 的快捷方式 |
 | `fastify` | `FastifyServerOptions` | 传给 fastify 工厂函数的选项（`fastify(options)`） |
 | `plugins` | `readonly [plugin, options?][]` | 在模块应用之前注册的 fastify 插件（callback 风格和 async 风格都可以） |
-| `setup` | `(register: (cls: Constructor) => void) => void` | 注册自动创建实例的 setup 回调（如 `setupBasicPipes`） |
+| `setup` | `(register: (cls: Constructor) => void) => void` | 注册自动创建实例的 setup 回调（可选；内置管道/JwtGuard 已自动注册，一般无需使用） |
 | `listen` | `boolean \| Partial<FastifyListenOptions>` | 所有模块注册完成后开始监听 |
 | `allowCrossModuleCircularReference` | `boolean` | 允许**跨模块**循环依赖时必须设为 `true`（同模块内的循环依赖默认允许）。默认 `false` |
 

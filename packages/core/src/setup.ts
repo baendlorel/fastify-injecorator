@@ -1,21 +1,16 @@
-import { type Constructor } from '@nestify-js/shared';
+import type { ProviderOptions } from './types/injecorator.js';
 
 import { PipeBody } from './pipes/body.pipe.js';
 import { PipeParams } from './pipes/params.pipe.js';
 import { PipeIp } from './pipes/ip.pipe.js';
 import { PipeQuery } from './pipes/query.pipe.js';
 import { PipeRaw } from './pipes/raw.pipe.js';
+import { JwtGuard } from './auth/jwt.guard.js';
 
 /**
- * Register basic pipe instances into the injector.
- * Called during `apply()` via the `setup` callback.
- *
- * @param register Function to register a class as an auto-created instance
+ * Built-in middlewares that are prepended to `registerGlobalMiddlewares`
+ * during `apply()`.
+ * - Only registered (instantiated), no global effect
+ * - so they can be used via `@UsePipes(...)` / `@UseGuards(...)` directly
  */
-export function setupBasicPipes(register: (cls: Constructor) => void) {
-  register(PipeBody);
-  register(PipeParams);
-  register(PipeIp);
-  register(PipeQuery);
-  register(PipeRaw);
-}
+export const BuiltinMiddlewares: ProviderOptions[] = [PipeBody, PipeParams, PipeIp, PipeQuery, PipeRaw, JwtGuard()];

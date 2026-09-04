@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
-import type { NestifyOptions, DynamicModule, InheritedModuleMeta } from '@core/types/injecorator.js';
-import { type Constructor } from '@nestify-js/shared';
+import type { NestifyOptions, DynamicModule, InheritedModuleMeta, ProviderOptions } from '@core/types/injecorator.js';
+import { type Constructor, type SSKey } from '@nestify-js/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';
 import { tryToGetGlobalToken } from '@core/common/inject-keys.js';
@@ -9,6 +9,7 @@ import { collection } from './collection.js';
 import { expectAccessible, expectModule } from './expect-module.js';
 import { injector } from './lazy-injector.js';
 import { metaGetModule } from './meta.js';
+import ph from './provider.js';
 import { registerController } from './route/controller.js';
 
 class ModuleRegister {
@@ -97,13 +98,30 @@ class ModuleRegister {
   }
 
   /**
-   * Create basic pipe instances via setup callback.
-   * e.g. the built-in `setupBasicPipes` registers core preset pipes.
+   * Create instances of middlewares passed via boot options.
+   * - `registerGlobalMiddlewares`: only registered, no global effect
+   * - `useGlobalXXX`: applied globally after `registerGlobalMiddlewares`,
+   *   in their own array order
    */
-  runSetup(setup?: (register: (cls: Constructor) => void) => void) {
-    if (setup) {
-      setup((cls) => injector.internalCreateInstanceByClass(cls));
+  registerBootMiddlewares() {
+    const opts = this.opts;
+    for (let i = 0; i < (opts.registerGlobalMiddlewares ?? []).length; i++) {
+      injector.createInstance(opts.registerGlobalMiddlewares![i]);
     }
+
+    const registerGlobal = (list: ProviderOptions[] | undefined, push: (token: SSKey) => void) => {
+      for (let i = 0; i < (list ?? []).length; i++) {
+        const providerOptions = list![i];
+        injector.createInstance(providerOptions);
+        push(ph.getToken(providerOptions));
+      }
+    };
+
+    registerGlobal(opts.useGlobalGuards, (token) => collection.globalGuards.push(token));
+    registerGlobal(opts.useGlobalInterceptors, (token) => collection.globalInterceptors.push(token));
+    registerGlobal(opts.useGlobalFilters, (token) => collection.globalFilters.push(token));
+    // pipes are stored as PipeOptions
+    registerGlobal(opts.useGlobalPipes, (token) => collection.globalPipes.push({ pipe: token }));
   }
 
   /**
@@ -122,12 +140,8 @@ class ModuleRegister {
     const existedValidatorCompiler = app.validatorCompiler;
     app.setValidatorCompiler(() => () => true);
 
-    // run setup callback to create basic pipes (from sub-packages)
-    this.runSetup(this.opts.setup);
-
-    // & Auto-create instances for middlewares decorated by @Pipe/@Guard/@Interceptor/@Filter
-    // & createInstance dedupes by token, so module-registered ones will not be created twice
-    collection.autoInstances.forEach((cls) => injector.createInstance(cls));
+    // & Create instances of boot middlewares (registerGlobalMiddlewares + useGlobalXXX)
+    this.registerBootMiddlewares();
 
     // register every module recursively
     this.visit(this.opts.rootModule);

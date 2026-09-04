@@ -13,17 +13,10 @@ import { expect } from '@core/asserts/index.js';
 export namespace collection {
   export const globalModules = new Set<Constructor>();
   export const globalProviders = new Set<SSKey>();
-  export const globalInterceptors: symbol[] = [];
-  export const globalGuards: symbol[] = [];
-  export const globalFilters: symbol[] = [];
+  export const globalInterceptors: SSKey[] = [];
+  export const globalGuards: SSKey[] = [];
+  export const globalFilters: SSKey[] = [];
   export const globalPipes: PipeOptions[] = [];
-
-  /**
-   * Internal middleware classes (e.g. preset pipes, JwtGuard) registered
-   * via `_PipeSet`/`_GuardSet`. They will be auto-instantiated during
-   * `apply()`, so users do not need to list them in module providers.
-   */
-  export const autoInstances = new Set<Constructor>();
 
   /**
    * Add global middleware with specific token.
@@ -86,6 +79,9 @@ export namespace collection {
   export function clear() {
     globalProviders.clear();
     globalModules.clear();
-    autoInstances.clear();
+    globalInterceptors.length = 0;
+    globalGuards.length = 0;
+    globalFilters.length = 0;
+    globalPipes.length = 0;
   }
 }

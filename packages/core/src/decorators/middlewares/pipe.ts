@@ -3,7 +3,6 @@ import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
 
 import { _isConstructable, _isKey, sym } from '@nestify-js/shared';
 
-import { collection } from '@core/register/collection.js';
 import { expectHasOneHook, expectInjectToken, expectObject, expectOrObject, expect } from '@core/asserts/index.js';
 import { metaSetPipe, metaIsPipe, metaSetUsePipes, metaSetProvider } from '@core/register/meta.js';
 
@@ -30,7 +29,6 @@ export function _PipeSet(cls: Constructor) {
   const context = { kind: 'class' as const, name: cls.name, metadata, addInitializer: () => {} };
   metaSetProvider(context);
   metaSetPipe(context);
-  collection.autoInstances.add(cls);
 }
 
 function predicate(opts: PipeOptions) {

@@ -2,6 +2,8 @@ import { type FastifyInstance as NestifyInstance } from 'fastify';
 import { NestifyOptions } from '@core/types/injecorator.js';
 import { startCronJobs } from '@core/schedule/cron.js';
 
+import { BuiltinMiddlewares } from '@core/setup.js';
+
 import { clearExpectCache, expectModule } from './expect-module.js';
 import moduleRegister from './module.js';
 
@@ -15,6 +17,16 @@ function normalize(opts: Partial<NestifyOptions>): NestifyOptions {
   const normalized: NestifyOptions = Object(opts);
   expectModule(normalized.rootModule);
   normalized.allowCrossModuleCircularReference ??= false;
+
+  // defaults to empty arrays
+  normalized.registerGlobalMiddlewares ??= [];
+  normalized.useGlobalFilters ??= [];
+  normalized.useGlobalPipes ??= [];
+  normalized.useGlobalInterceptors ??= [];
+  normalized.useGlobalGuards ??= [];
+
+  // built-in pipes and guard are always registered, before user's ones
+  normalized.registerGlobalMiddlewares = BuiltinMiddlewares.concat(normalized.registerGlobalMiddlewares);
 
   return normalized;
 }

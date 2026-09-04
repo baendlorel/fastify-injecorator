@@ -8,7 +8,7 @@ import fastify, {
   type FastifyInstance as NestifyInstance,
 } from 'fastify';
 import type { Constructor } from '@nestify-js/shared';
-import type { NestifyOptions, ProviderOptions } from '@core/types/injecorator.js';
+import type { NestifyOptions } from '@core/types/injecorator.js';
 
 import { apply } from './index.js';
 
@@ -27,33 +27,6 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
    * Options passed to the fastify factory (`fastify(options)`)
    */
   fastify?: FastifyServerOptions;
-
-  /**
-   * Middlewares listed here are no need to be registered in `@Module({providers:[...]})` manually.
-   * - Only register, you can use them manually.
-   */
-  registerGlobalMiddlewares?: ProviderOptions[];
-
-  /**
-   * This will be the bottom filter of all filters
-   * - Automically applied globally
-   */
-  useGlobalFilters?: ProviderOptions[];
-  /**
-   * Execute order: global → controller → route
-   * - Automically applied globally
-   */
-  useGlobalPipes?: ProviderOptions[];
-  /**
-   * Execute order: global → controller → route → controller → global
-   * - Automically applied globally
-   */
-  useGlobalInterceptors?: ProviderOptions[];
-  /**
-   * Execute order: global → controller → route
-   * - Automically applied globally
-   */
-  useGlobalGuards?: ProviderOptions[];
 
   /**
    * Fastify plugins registered before modules are applied

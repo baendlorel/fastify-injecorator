@@ -40,10 +40,6 @@ export namespace injector {
     return instanceMap.get(_isKey(token) ? token : token.name) as T | undefined;
   }
 
-  export function internalCreateInstanceByClass(cls: Constructor) {
-    instanceMap.set(cls.name, new cls());
-  }
-
   /**
    * Convert token array to a list of middleware hook functions
    * @param tokens

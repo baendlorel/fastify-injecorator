@@ -69,6 +69,3 @@ export type { NestifyHttpPart } from './pipes/basic-transformer.js';
 
 // validation engine
 export { BasicTransformer, basicTransformer } from './pipes/basic-transformer.js';
-
-// setup helper
-export { setupBasicPipes } from './setup.js';

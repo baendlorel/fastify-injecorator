@@ -111,15 +111,46 @@ export interface NestifyOptions {
   allowCrossModuleCircularReference: boolean;
 
   /**
-   * Setup callback to register auto-created instances.
-   * - e.g. the built-in `setupBasicPipes` creates preset pipe instances
-   * @example
-   * ```typescript
-   * import { apply, setupBasicPipes } from '@nestify-js/core';
-   * apply(app, { rootModule: AppModule, setup: setupBasicPipes });
-   * ```
+   * Middlewares listed here are no need to be registered in `@Module({providers:[...]})` manually.
+   * - Only register, you can use them as you want.
+   * - If you want to apply middlewares globally, use `useGlobalXXX` options.
+   * - Built-in pipes and guard are prepended automatically.
+   *
+   * @default []
    */
-  setup?: (register: (cls: Constructor) => void) => void;
+  registerGlobalMiddlewares?: ProviderOptions[];
+
+  /**
+   * This will be the bottom filter of all filters
+   * - Automatically applied globally
+   *
+   * @default []
+   */
+  useGlobalFilters?: ProviderOptions[];
+
+  /**
+   * Execute order: global → controller → route
+   * - Automatically applied globally, in array order
+   *
+   * @default []
+   */
+  useGlobalPipes?: ProviderOptions[];
+
+  /**
+   * Execute order: global → controller → route → controller → global
+   * - Automatically applied globally, in array order
+   *
+   * @default []
+   */
+  useGlobalInterceptors?: ProviderOptions[];
+
+  /**
+   * Execute order: global → controller → route
+   * - Automatically applied globally, in array order
+   *
+   * @default []
+   */
+  useGlobalGuards?: ProviderOptions[];
 }
 
 export interface LazyInjectEntry {

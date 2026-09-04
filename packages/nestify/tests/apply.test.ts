@@ -65,9 +65,7 @@ describe('Nestify wrapper apply', () => {
     await app.close();
   });
 
-  it('should accept custom setup that overrides default', async () => {
-    let setupCalled = false;
-
+  it('should register middlewares from registerGlobalMiddlewares', async () => {
     @Controller('api/custom')
     class CustomController {
       @Get('ping')
@@ -80,15 +78,10 @@ describe('Nestify wrapper apply', () => {
     class AppModule {}
 
     const app = fastify();
-    // Pass a custom setup that doesn't register any pipes
     await apply(app, {
       rootModule: AppModule,
-      setup: () => {
-        setupCalled = true;
-      },
+      registerGlobalMiddlewares: [],
     });
-
-    expect(setupCalled).toBe(true);
 
     const response = await app.inject({
       method: 'GET',

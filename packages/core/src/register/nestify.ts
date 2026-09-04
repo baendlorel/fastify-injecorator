@@ -29,6 +29,15 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
   fastify?: FastifyServerOptions;
 
   /**
+   * Whether to treat `/path/` and `/path` as the same route.
+   * - `true` by default, so trailing slashes never cause a 404
+   * - Explicitly set `fastify.ignoreTrailingSlash` to override this
+   *
+   * @default true
+   */
+  ignoreTrailingSlash?: boolean;
+
+  /**
    * Fastify plugins registered before modules are applied
    * @example
    * ```typescript
@@ -67,8 +76,9 @@ export interface NestifyBootOptions extends Partial<Omit<NestifyOptions, 'rootMo
  * ```
  */
 export async function nestify(rootModule: Constructor, opts: NestifyBootOptions = {}): Promise<NestifyInstance> {
-  const { fastify: serverOptions, plugins, listen, ...rest } = opts;
+  const { fastify: serverOptions = {}, plugins, listen, ignoreTrailingSlash, ...rest } = opts;
 
+  serverOptions.ignoreTrailingSlash = ignoreTrailingSlash ?? serverOptions.ignoreTrailingSlash ?? true;
   const app = fastify(serverOptions);
 
   for (const [plugin, options] of plugins ?? []) {

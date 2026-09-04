@@ -1,6 +1,9 @@
 import { join } from 'node:path';
 import { defineConfig } from 'tsdown';
 import funcMacro from 'rollup-plugin-func-macro';
+import { babel } from '@rollup/plugin-babel';
+import proposalDecorators from '@babel/plugin-proposal-decorators';
+import presetTypescript from '@babel/preset-typescript';
 // @ts-ignore
 import { replacePlugin } from '../../scripts/replace.js';
 
@@ -27,5 +30,19 @@ export default defineConfig({
     '@tests/': join(root, 'packages', 'tests'),
   },
   minify: false,
-  plugins: [replacePlugin(), funcMacro()],
+  plugins: [
+    replacePlugin(),
+    funcMacro(),
+    babel({
+      include: [join(packDir, 'src', '**', '*.ts')],
+      extensions: ['.ts'],
+      babelHelpers: 'bundled',
+      parserOpts: {
+        sourceType: 'module',
+        plugins: ['typescript', 'decorators'],
+      },
+      presets: [presetTypescript],
+      plugins: [[proposalDecorators, { version: '2023-11' }]],
+    }),
+  ],
 });

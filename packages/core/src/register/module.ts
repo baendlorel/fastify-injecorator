@@ -125,6 +125,10 @@ class ModuleRegister {
     // run setup callback to create basic pipes (from sub-packages)
     this.runSetup(this.opts.setup);
 
+    // & Auto-create instances for middlewares decorated by @Pipe/@Guard/@Interceptor/@Filter
+    // & createInstance dedupes by token, so module-registered ones will not be created twice
+    collection.autoInstances.forEach((cls) => injector.createInstance(cls));
+
     // register every module recursively
     this.visit(this.opts.rootModule);
     injector.apply(this.app);

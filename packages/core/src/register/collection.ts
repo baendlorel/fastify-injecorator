@@ -19,6 +19,13 @@ export namespace collection {
   export const globalPipes: PipeOptions[] = [];
 
   /**
+   * Internal middleware classes (e.g. preset pipes, JwtGuard) registered
+   * via `_PipeSet`/`_GuardSet`. They will be auto-instantiated during
+   * `apply()`, so users do not need to list them in module providers.
+   */
+  export const autoInstances = new Set<Constructor>();
+
+  /**
    * Add global middleware with specific token.
    * - do nothing if the token does not match
    * @param middleware tokens like `APP_FILTER`...
@@ -79,5 +86,6 @@ export namespace collection {
   export function clear() {
     globalProviders.clear();
     globalModules.clear();
+    autoInstances.clear();
   }
 }

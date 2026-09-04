@@ -4,6 +4,7 @@ import type { InjecoratorGuard } from '@core/types/middleware.js';
 import { sym } from '@nestify-js/shared';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
+import { collection } from '@core/register/collection.js';
 import { metaSetGuard, metaSetProvider, metaSetUseGuards } from '@core/register/meta.js';
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
@@ -31,6 +32,7 @@ export function _GuardSet(cls: Constructor) {
   const context = { kind: 'class' as const, name: cls.name, metadata, addInitializer: () => {} };
   metaSetProvider(context);
   metaSetGuard(context);
+  collection.autoInstances.add(cls);
 }
 
 /**

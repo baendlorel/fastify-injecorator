@@ -24,6 +24,6 @@ export default defineConfig({
     '@swagger/': packDir.join('swagger', 'src'),
     '@tests/': root.join('tests'),
   },
-  minify: lib.includes('core') ? false : true,
+  minify: true,
   plugins: [replacePlugin(), funcMacro()],
 });

@@ -8,7 +8,7 @@ import {
   ProviderUseClass,
   ProviderUseFactory,
   ProviderUseExisting,
-} from '@core/types/injecorator.js';
+} from '@core/types/injection.js';
 
 import { metaGetModule } from '@core/register/meta.js';
 

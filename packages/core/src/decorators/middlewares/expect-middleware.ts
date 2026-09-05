@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
-import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injection.js';
 
 import { expectInjectArg } from '@core/asserts/application.js';
 import { expectClassDecoratorContext, expectClassMethodDecoratorContext } from '@core/asserts/decorator-context.js';

@@ -1,6 +1,6 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { PipeOptions, PipeTask, PipeFullSchema, NestifyPipe } from '@core/types/middleware.js';
-import { InjectToken } from '@core/types/injecorator.js';
+import { InjectToken } from '@core/types/injection.js';
 
 import { injector } from '@core/register/lazy-injector.js';
 

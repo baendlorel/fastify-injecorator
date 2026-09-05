@@ -1,5 +1,5 @@
 import { type Constructor } from '@nestify-js/shared';
-import { DynamicModule } from '@core/types/injecorator.js';
+import { DynamicModule } from '@core/types/injection.js';
 import { likeModule } from '@core/asserts/index.js';
 
 const PATH_REGEX = /^\/?(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+)(\/(:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+))*$/;

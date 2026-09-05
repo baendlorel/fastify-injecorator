@@ -1,5 +1,5 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
-import { InjectToken } from '@core/types/injecorator.js';
+import { InjectToken } from '@core/types/injection.js';
 import { InterceptorTask, NestifyInterceptor } from '@core/types/middleware.js';
 import { injector } from '@core/register/lazy-injector.js';
 

@@ -1,4 +1,4 @@
-import type { ModuleMeta, DynamicModule } from '@core/types/injecorator.js';
+import type { ModuleMeta, DynamicModule } from '@core/types/injection.js';
 import { type Constructor } from '@nestify-js/shared';
 
 import { ReflectDeep } from 'reflect-deep';

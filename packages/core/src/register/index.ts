@@ -1,5 +1,5 @@
 import { type FastifyInstance as NestifyInstance } from 'fastify';
-import { NestifyOptions } from '@core/types/injecorator.js';
+import { NestifyOptions } from '@core/types/injection.js';
 import { startCronJobs } from '@core/schedule/cron.js';
 
 import { BuiltinMiddlewares } from '@core/setup.js';

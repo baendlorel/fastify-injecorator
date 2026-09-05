@@ -1,4 +1,4 @@
-import type { ProviderOptions } from './types/injecorator.js';
+import type { ProviderOptions } from './types/injection.js';
 
 import { PipeBody } from './pipes/body.pipe.js';
 import { PipeParams } from './pipes/params.pipe.js';

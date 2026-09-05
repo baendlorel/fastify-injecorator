@@ -9,7 +9,7 @@ import type {
   DynamicModule,
   ProviderOptions,
   InjectToken,
-} from '@core/types/injecorator.js';
+} from '@core/types/injection.js';
 import type {
   RouteApiSchema,
   InterceptorGetter,

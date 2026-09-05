@@ -1,4 +1,4 @@
-import type { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
+import type { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injection.js';
 import type { NestifyMiddleware } from '@core/types/middleware.js';
 import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 

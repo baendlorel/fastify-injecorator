@@ -1,4 +1,4 @@
-import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injection.js';
 import type { FilterTask, NestifyFilter } from '@core/types/middleware.js';
 
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';

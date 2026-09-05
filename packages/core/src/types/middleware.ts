@@ -2,7 +2,7 @@
 import type { FastifySchema } from 'fastify';
 import { type Constructor, type SSKey, type OrPromise } from '@nestify-js/shared';
 import type { ExecutionContext } from '@core/common/execution-context.js';
-import type { InjectToken } from './injecorator.js';
+import type { InjectToken } from './injection.js';
 
 /**
  * Get middlewares for a class method

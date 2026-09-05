@@ -1,4 +1,4 @@
-import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injection.js';
 import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
 import { NestifyError } from './error.js';

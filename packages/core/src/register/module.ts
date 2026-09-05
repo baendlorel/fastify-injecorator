@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import type { NestifyOptions, DynamicModule, InheritedModuleMeta, ProviderOptions } from '@core/types/injecorator.js';
+import type { NestifyOptions, DynamicModule, InheritedModuleMeta, ProviderOptions } from '@core/types/injection.js';
 import { type Constructor, type SSKey } from '@nestify-js/shared';
 
 import { toDynamicModule, toModuleClass } from '@core/common/index.js';

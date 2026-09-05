@@ -8,7 +8,7 @@ import fastify, {
   type FastifyInstance as NestifyInstance,
 } from 'fastify';
 import type { Constructor } from '@nestify-js/shared';
-import type { NestifyOptions } from '@core/types/injecorator.js';
+import type { NestifyOptions } from '@core/types/injection.js';
 
 import { apply } from './index.js';
 

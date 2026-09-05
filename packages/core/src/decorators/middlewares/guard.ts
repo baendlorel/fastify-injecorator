@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
-import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injection.js';
 import type { NestifyGuard } from '@core/types/middleware.js';
 import { sym } from '@nestify-js/shared';
 

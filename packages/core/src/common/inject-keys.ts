@@ -1,5 +1,5 @@
 import { _get, APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_LOGGER, APP_PIPE } from '@nestify-js/shared';
-import { ProviderStandardOptions, ProviderOptions } from '@core/types/injecorator.js';
+import { ProviderStandardOptions, ProviderOptions } from '@core/types/injection.js';
 
 const tokenField: keyof ProviderStandardOptions = 'provide';
 

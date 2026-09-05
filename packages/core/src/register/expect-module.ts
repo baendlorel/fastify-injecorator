@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { InjectMetadata, ProviderOptions } from '@core/types/injecorator.js';
+import type { InjectMetadata, ProviderOptions } from '@core/types/injection.js';
 import { inspect } from 'node:util';
 import {
   sym,

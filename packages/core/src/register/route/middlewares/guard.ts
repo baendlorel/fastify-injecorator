@@ -1,6 +1,6 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { GuardTask, NestifyGuard } from '@core/types/middleware.js';
-import { InjectToken } from '@core/types/injecorator.js';
+import { InjectToken } from '@core/types/injection.js';
 
 import { ForbiddenException } from '@core/exceptions/index.js';
 import { injector } from '@core/register/lazy-injector.js';

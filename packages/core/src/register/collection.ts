@@ -1,5 +1,5 @@
 import { type Constructor, type SSKey } from '@nestify-js/shared';
-import type { ModuleMeta } from '@core/types/injecorator.js';
+import type { ModuleMeta } from '@core/types/injection.js';
 import type { PipeOptions } from '@core/types/middleware.js';
 
 import { ReflectDeep } from 'reflect-deep';

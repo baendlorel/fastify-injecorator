@@ -1,6 +1,6 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { NestifyInterceptor } from '@core/types/middleware.js';
-import type { InjectToken } from '@core/types/injecorator.js';
+import type { InjectToken } from '@core/types/injection.js';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
 import { metaSetInterceptor, metaSetUseInterceptors } from '@core/register/meta.js';

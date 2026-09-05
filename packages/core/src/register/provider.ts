@@ -6,7 +6,7 @@ import type {
   ProviderUseValue,
   ProviderUseFactory,
   ProviderUseExisting,
-} from '@core/types/injecorator.js';
+} from '@core/types/injection.js';
 
 import { inspect } from 'node:util';
 import { _isConstructable, _isFunction, type Constructor, type SSKey } from '@nestify-js/shared';

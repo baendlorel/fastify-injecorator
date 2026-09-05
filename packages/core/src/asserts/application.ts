@@ -1,4 +1,4 @@
-import type { InjectArg } from '@core/types/injecorator.js';
+import type { InjectArg } from '@core/types/injection.js';
 
 import { inspect } from 'node:util';
 import { ReflectDeep } from 'reflect-deep';

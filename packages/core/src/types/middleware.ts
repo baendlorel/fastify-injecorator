@@ -67,7 +67,9 @@ export interface NestifyInterceptor {
 }
 
 export type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];
-export interface NestifyPipe {
+
+// TODO 全部改为 abstract class
+export abstract class NestifyPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -75,7 +77,7 @@ export interface NestifyPipe {
    * @param schema validation schema, if provided in the pipe options
    * @returns returned value will be passed to the next pipe or as the `input` argument
    */
-  transform: (context: ExecutionContext, input: any[], schema: PipeFullSchema) => OrPromise<any[]>;
+  abstract transform(context: ExecutionContext, input: any[], schema: PipeFullSchema): OrPromise<any[]>;
 }
 
 export interface NestifyFilter {

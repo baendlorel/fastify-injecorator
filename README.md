@@ -1,5 +1,9 @@
 # Nestify
 
+[![npm version](
+https://img.shields.io/npm/v/nestify-js.svg)](https://www.npmjs.com/package/nestify-js) [![npm downloads](http://img.shields.io/npm/dm/nestify-js.svg)](https://npmcharts.com/compare/nestify-js,token-types?start=1200&interval=30)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/59dd6795e61949fb97066ca52e6097ef)](https://www.codacy.com/app/Borewit/nestify-js?utm_source=github.com&utm_medium=referral&utm_content=Borewit/nestify-js&utm_campaign=Badge_Grade)
+
 [中文版本 README.zh.md](./README.zh.md)
 
 > ⚠️ **Warning**: This is not an official release version. APIs may change in the future.
@@ -425,14 +429,14 @@ const app = await nestify(AppModule, {
 
 Available options:
 
-| Option | Type | Description |
-| --- | --- | --- |
-| `logger` | `FastifyServerOptions['logger']` | Shortcut for `fastify.logger` |
-| `fastify` | `FastifyServerOptions` | Options passed to the fastify factory (`fastify(options)`) |
-| `plugins` | `readonly [plugin, options?][]` | Fastify plugins registered before modules are applied (callback-style and async-style are both accepted) |
-| `setup` | `(register: (cls: Constructor) => void) => void` | Setup callback to register auto-created instances (optional; built-in pipes/JwtGuard are auto-registered, usually not needed) |
-| `listen` | `boolean \| Partial<FastifyListenOptions>` | Start listening after all modules are registered |
-| `allowCrossModuleCircularReference` | `boolean` | Must be `true` to allow **cross-module** circular dependencies (same-module circular references are always allowed). `@default false` |
+| Option                              | Type                                             | Description                                                                                                                           |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `logger`                            | `FastifyServerOptions['logger']`                 | Shortcut for `fastify.logger`                                                                                                         |
+| `fastify`                           | `FastifyServerOptions`                           | Options passed to the fastify factory (`fastify(options)`)                                                                            |
+| `plugins`                           | `readonly [plugin, options?][]`                  | Fastify plugins registered before modules are applied (callback-style and async-style are both accepted)                              |
+| `setup`                             | `(register: (cls: Constructor) => void) => void` | Setup callback to register auto-created instances (optional; built-in pipes/JwtGuard are auto-registered, usually not needed)         |
+| `listen`                            | `boolean \| Partial<FastifyListenOptions>`       | Start listening after all modules are registered                                                                                      |
+| `allowCrossModuleCircularReference` | `boolean`                                        | Must be `true` to allow **cross-module** circular dependencies (same-module circular references are always allowed). `@default false` |
 
 #### `apply(app, options)`
 

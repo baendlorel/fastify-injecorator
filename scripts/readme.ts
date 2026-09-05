@@ -5,7 +5,10 @@ import { dirs } from './common/consts.js';
 export function syncReadme(_who?: string) {
   const rootReadmePath = dirs.root.join('README.md');
   const rootReadme = readFileSync(rootReadmePath, 'utf-8');
-  const readmePaths = [rootReadmePath];
+  // Inside a sub-package (packages/<pkg>/README.md) the relative link must point
+  // back to the repo root instead of ./README.zh.md.
+  const subReadme = rootReadme.replaceAll('./README.zh.md', '../../README.zh.md');
+  let count = 0;
 
   ['packages', 'plugins'].forEach((baseDir) => {
     const basePath = dirs.root.join(baseDir);
@@ -24,13 +27,15 @@ export function syncReadme(_who?: string) {
       }
 
       const readmePath = packagePath.join('README.md');
-      if (!existsSync(readmePath) || readFileSync(readmePath, 'utf-8') !== rootReadme) {
-        writeFileSync(readmePath, rootReadme, 'utf-8');
+      if (!existsSync(readmePath) || readFileSync(readmePath, 'utf-8') !== subReadme) {
+        writeFileSync(readmePath, subReadme, 'utf-8');
       }
-      readmePaths.push(readmePath);
+      count++;
     });
   });
 
-  console.log(`Synced root README.md to ${readmePaths.length - 1} sub-package(s).`);
-  return readmePaths;
+  console.log(`Synced root README.md to ${count} sub-package(s).`);
+  // Sub-package READMEs are gitignored and only exist for the npm tarball;
+  // only the tracked root README is returned for the release commit.
+  return [rootReadmePath];
 }

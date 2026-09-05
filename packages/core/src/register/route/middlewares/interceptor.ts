@@ -1,6 +1,6 @@
 import { createSerialTaskAsync, TaskifyAsync } from 'serial-task';
 import { InjectToken } from '@core/types/injecorator.js';
-import { InterceptorTask, InjecoratorInterceptor } from '@core/types/middleware.js';
+import { InterceptorTask, NestifyInterceptor } from '@core/types/middleware.js';
 import { injector } from '@core/register/lazy-injector.js';
 
 /**
@@ -8,7 +8,7 @@ import { injector } from '@core/register/lazy-injector.js';
  */
 export function createInterceptor(tokens: InjectToken[]): TaskifyAsync<InterceptorTask> {
   return createSerialTaskAsync<InterceptorTask>({
-    tasks: injector.getMiddlewareHooks<InjecoratorInterceptor>(tokens, 'intercept'),
+    tasks: injector.getMiddlewareHooks<NestifyInterceptor>(tokens, 'intercept'),
     resultWrapper: (_task, _i, _tasks, args) => args,
     breakCondition: () => false,
     skipCondition: () => false,

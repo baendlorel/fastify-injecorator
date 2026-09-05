@@ -20,10 +20,10 @@ export { UseInterceptors } from './decorators/middlewares/interceptor.js';
 export { UsePipes } from './decorators/middlewares/pipe.js';
 export { UseFilters } from './decorators/middlewares/filter.js';
 export type {
-  InjecoratorGuard,
-  InjecoratorInterceptor,
-  InjecoratorPipe,
-  InjecoratorFilter,
+  NestifyGuard,
+  NestifyInterceptor,
+  NestifyPipe,
+  NestifyFilter,
   PipeSchema,
   PipeFullSchema,
   PipeOptions,

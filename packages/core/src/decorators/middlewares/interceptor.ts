@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
-import type { InjecoratorInterceptor } from '@core/types/middleware.js';
+import type { NestifyInterceptor } from '@core/types/middleware.js';
 import type { InjectToken } from '@core/types/injecorator.js';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
@@ -7,13 +7,14 @@ import { metaSetInterceptor, metaSetUseInterceptors } from '@core/register/meta.
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
-const hooks: (keyof InjecoratorInterceptor)[] = ['intercept'];
+const hooks: (keyof NestifyInterceptor)[] = ['intercept'];
 /**
  * Use on services, configurations, etc.
+ * - Decorated class must implement `NestifyInterceptor`
  */
 export function Interceptor() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expectHasOneHook<InjecoratorInterceptor>(
+    expectHasOneHook<NestifyInterceptor>(
       target,
       hooks,
       `Interceptor class must implement at least one hook: [${hooks.join(', ')}]`,

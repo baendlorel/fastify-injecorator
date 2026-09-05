@@ -1,5 +1,5 @@
 import type { LazyInjectEntry, ProviderOptions, InjectToken, DynamicModule } from '@core/types/injecorator.js';
-import type { InjecoratorMiddleware } from '@core/types/middleware.js';
+import type { NestifyMiddleware } from '@core/types/middleware.js';
 import type { AnyFunction, Constructor, SSKey } from '@core/types/primitives.js';
 
 import { FastifyInstance } from 'fastify';
@@ -45,7 +45,7 @@ export namespace injector {
    * @param tokens
    * @param handlerName
    */
-  export function getMiddlewareHooks<T extends InjecoratorMiddleware>(
+  export function getMiddlewareHooks<T extends NestifyMiddleware>(
     tokens: InjectToken[],
     handlerName: SSKey,
   ): AnyFunction[] {

@@ -1,9 +1,9 @@
 import { Interceptor } from '../../../packages/core/src/decorators/middlewares/interceptor.js';
 import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
-import { InjecoratorInterceptor } from '../../../packages/core/src/types/middleware.js';
+import { NestifyInterceptor } from '../../../packages/core/src/types/middleware.js';
 
 @Interceptor()
-export class TransformInterceptor implements InjecoratorInterceptor {
+export class TransformInterceptor implements NestifyInterceptor {
   intercept(context: ExecutionContext) {
     const http = context.switchToHttp();
     const reply = http.getReply();

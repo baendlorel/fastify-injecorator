@@ -13,7 +13,7 @@ import {
   ExecutionContext,
 } from '@core/index.js';
 import { apply } from '@core/register/index.js';
-import { InjecoratorGuard } from '@core/types/middleware.js';
+import { NestifyGuard } from '@core/types/middleware.js';
 import { injector } from '@core/register/lazy-injector.js';
 import { metaGet } from '@core/register/meta.js';
 import { sym } from '../packages/shared/src/sym.js';
@@ -30,7 +30,7 @@ describe('Custom Decorator Factory', () => {
 
     // Create a guard that uses custom metadata
     @Guard()
-    class RoleGuard implements InjecoratorGuard {
+    class RoleGuard implements NestifyGuard {
       canActivate(context: ExecutionContext): boolean {
         const roles = getCustomClassMetadata<string[]>(context, 'roles');
         const permission = getCustomMethodMetadata<string>(context, 'permission');

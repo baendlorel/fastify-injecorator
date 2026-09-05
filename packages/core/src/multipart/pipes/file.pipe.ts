@@ -1,4 +1,4 @@
-import type { InjecoratorPipe } from '@core/types/middleware.js';
+import type { NestifyPipe } from '@core/types/middleware.js';
 import type { FileUploadMeta, MultipartFile } from '@core/types/multipart.js';
 
 import { sym } from '@nestify-js/shared';
@@ -13,7 +13,7 @@ import { UploadedFile } from '../uploaded-file.js';
  *
  * Note: Requires @fastify/multipart to be installed and registered with Fastify
  */
-class PipeFile implements InjecoratorPipe {
+class PipeFile implements NestifyPipe {
   async transform(context: ExecutionContext, input?: any[]): Promise<any[]> {
     const request = context.switchToHttp().getRequest();
     const sourceClass = context.getClass();

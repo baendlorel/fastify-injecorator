@@ -43,10 +43,10 @@ export interface PipeOptions {
    * Pipe class
    * - if `inputPath` is not given, pipe transformer will take the whole `request`
    */
-  pipe: SSKey | Constructor<InjecoratorPipe>;
+  pipe: SSKey | Constructor<NestifyPipe>;
 }
 
-export interface InjecoratorGuard {
+export interface NestifyGuard {
   /**
    * Guard
    * - you can use `throw` when guard fails
@@ -57,7 +57,7 @@ export interface InjecoratorGuard {
   canActivate: (context: ExecutionContext) => OrPromise | OrPromise<boolean>;
 }
 
-export interface InjecoratorInterceptor {
+export interface NestifyInterceptor {
   /**
    * Called when entering the controller method
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -67,7 +67,7 @@ export interface InjecoratorInterceptor {
 }
 
 export type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];
-export interface InjecoratorPipe {
+export interface NestifyPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -78,7 +78,7 @@ export interface InjecoratorPipe {
   transform: (context: ExecutionContext, input?: any[], schema?: PipeFullSchema) => OrPromise<any[]>;
 }
 
-export interface InjecoratorFilter {
+export interface NestifyFilter {
   /**
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @param exception catched exception
@@ -86,10 +86,10 @@ export interface InjecoratorFilter {
   catch: (context: ExecutionContext, exception: unknown) => OrPromise;
 }
 
-export type InjecoratorMiddleware = InjecoratorInterceptor | InjecoratorGuard | InjecoratorFilter | InjecoratorPipe;
+export type NestifyMiddleware = NestifyInterceptor | NestifyGuard | NestifyFilter | NestifyPipe;
 
 // & Middleware tasks
-export type GuardTask = InjecoratorGuard['canActivate'];
-export type PipeTask = InjecoratorPipe['transform'];
-export type InterceptorTask = InjecoratorInterceptor['intercept'];
-export type FilterTask = InjecoratorFilter['catch'];
+export type GuardTask = NestifyGuard['canActivate'];
+export type PipeTask = NestifyPipe['transform'];
+export type InterceptorTask = NestifyInterceptor['intercept'];
+export type FilterTask = NestifyFilter['catch'];

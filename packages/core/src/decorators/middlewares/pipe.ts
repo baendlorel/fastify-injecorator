@@ -1,5 +1,5 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
-import type { InjecoratorPipe, PipeOptions } from '@core/types/middleware.js';
+import type { NestifyPipe, PipeOptions } from '@core/types/middleware.js';
 
 import { _isConstructable, _isKey, sym } from '@nestify-js/shared';
 
@@ -9,14 +9,15 @@ import { metaSetPipe, metaIsPipe, metaSetUsePipes, metaSetProvider } from '@core
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
-const hooks: (keyof InjecoratorPipe)[] = ['transform'];
+const hooks: (keyof NestifyPipe)[] = ['transform'];
+/**
+ * Create a Pipe class by decorate it.
+ * - Decorated class must implement `NestifyPipe`
+ * @returns
+ */
 export function Pipe() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expectHasOneHook<InjecoratorPipe>(
-      target,
-      hooks,
-      `Pipe class must implement at least one hook: [${hooks.join(', ')}]`,
-    );
+    expectHasOneHook<NestifyPipe>(target, hooks, `Pipe class must implement at least one hook: [${hooks.join(', ')}]`);
     // Same as Injectable, so it can be registered as a provider
     Injectable()(target, context);
     metaSetPipe(context);

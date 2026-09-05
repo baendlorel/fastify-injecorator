@@ -1,11 +1,11 @@
 import { Guard } from '@core/decorators/middlewares/guard.js';
 import { ExecutionContext } from '@core/common/execution-context.js';
-import { InjecoratorGuard } from '@core/types/middleware.js';
+import { NestifyGuard } from '@core/types/middleware.js';
 import { getCustomMethodMetadata, getCustomClassMetadata } from '@core/decorators/custom.js';
 import { JwtService } from '@core/index.js';
 
 @Guard()
-export class RolesGuard implements InjecoratorGuard {
+export class RolesGuard implements NestifyGuard {
   canActivate(context: ExecutionContext): boolean {
     // Get roles from method or class metadata
     const methodRoles = getCustomMethodMetadata<string[]>(context, 'roles');

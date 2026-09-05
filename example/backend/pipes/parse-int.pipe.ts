@@ -1,10 +1,10 @@
 import { Pipe } from '../../../packages/core/src/decorators/middlewares/pipe.js';
 import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
-import { InjecoratorPipe, PipeFullSchema } from '../../../packages/core/src/types/middleware.js';
+import { NestifyPipe, PipeFullSchema } from '../../../packages/core/src/types/middleware.js';
 import { BadRequestException } from '../../../packages/core/src/exceptions/index.js';
 
 @Pipe()
-export class ParseIntPipe implements InjecoratorPipe {
+export class ParseIntPipe implements NestifyPipe {
   async transform(context: ExecutionContext, input?: any[], schema?: PipeFullSchema): Promise<any[]> {
     if (!input || input.length === 0) {
       return input || [];

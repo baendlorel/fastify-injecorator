@@ -1,10 +1,10 @@
 import { Filter } from '../../../packages/core/src/decorators/middlewares/filter.js';
 import { ExecutionContext } from '../../../packages/core/src/common/execution-context.js';
-import { InjecoratorFilter } from '../../../packages/core/src/types/middleware.js';
+import { NestifyFilter } from '../../../packages/core/src/types/middleware.js';
 import { HttpException } from '../../../packages/core/src/exceptions/index.js';
 
 @Filter(HttpException)
-export class HttpExceptionFilter implements InjecoratorFilter {
+export class HttpExceptionFilter implements NestifyFilter {
   catch(context: ExecutionContext, exception: unknown) {
     const http = context.switchToHttp();
     const reply = http.getReply();

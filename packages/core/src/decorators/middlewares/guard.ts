@@ -1,6 +1,6 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjectToken } from '@core/types/injecorator.js';
-import type { InjecoratorGuard } from '@core/types/middleware.js';
+import type { NestifyGuard } from '@core/types/middleware.js';
 import { sym } from '@nestify-js/shared';
 
 import { expectHasOneHook, expect } from '@core/asserts/index.js';
@@ -8,13 +8,14 @@ import { metaSetGuard, metaSetProvider, metaSetUseGuards } from '@core/register/
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
-const hooks: (keyof InjecoratorGuard)[] = ['canActivate'];
+const hooks: (keyof NestifyGuard)[] = ['canActivate'];
 /**
  * Use to define a Guard class
+ * - Decorated class must implement `NestifyGuard`
  */
 export function Guard() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expectHasOneHook<InjecoratorGuard>(
+    expectHasOneHook<NestifyGuard>(
       target,
       hooks,
       `Guard class must implement at least one hook: [${hooks.join(', ')}]`,

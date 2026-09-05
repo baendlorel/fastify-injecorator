@@ -1,15 +1,13 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjectToken } from '@core/types/injection.js';
-import type { NestifyFilter } from '@core/types/middleware.js';
+import { NestifyFilter } from '@core/types/middleware.js';
 import { subclassOf } from '@nestify-js/shared';
 
-import { expectHasOneHook, expect } from '@core/asserts/index.js';
+import { expect } from '@core/asserts/index.js';
 import { metaSetFilters, metaSetUseFilters } from '@core/register/meta.js';
 
 import { Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
-
-const hooks: (keyof NestifyFilter)[] = ['catch'];
 
 /**
  * Set the exception classes to be caught by this filter.
@@ -19,7 +17,7 @@ const hooks: (keyof NestifyFilter)[] = ['catch'];
  */
 export function Filter(...exceptionClasses: Constructor[]) {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expectHasOneHook<NestifyFilter>(target, hooks, `Filters must implement one of [${hooks.join(', ')}]`);
+    expect(target instanceof NestifyFilter, '@Filter classes must extends NestifyFilter');
 
     exceptionClasses.forEach((exceptionClass) => {
       const msg = `Error registered by @Filters must extend Error, got '${exceptionClass.name}'`;

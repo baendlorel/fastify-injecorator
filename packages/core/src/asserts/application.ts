@@ -55,18 +55,3 @@ export const expectProviderOptions = (target: unknown) => {
     _throw(`Should be a provider options object, got: ${inspect(target)}`);
   }
 };
-
-/**
- * Middleware class must at least have 1 hook implemented
- * @param target it is a Middleware class
- */
-export const expectHasOneHook = <T>(target: Constructor<T>, hooks: (keyof T)[], msg: string): void => {
-  const proto = target.prototype as T;
-  expectObject(proto, 'Prototype should be an object');
-  for (let i = 0; i < hooks.length; i++) {
-    if (_isFunction(proto[hooks[i]])) {
-      return;
-    }
-  }
-  _throw(msg);
-};

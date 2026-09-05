@@ -35,7 +35,7 @@ export function JwtGuard(jwt: JwtService = defaultJwt) {
     return guardClass;
   }
 
-  class JwtGuardClass implements NestifyGuard {
+  class JwtGuardClass extends NestifyGuard {
     static {}
     canActivate(context: ExecutionContext): boolean {
       const http = context.switchToHttp();

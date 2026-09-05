@@ -19,16 +19,8 @@ export { UseGuards } from './decorators/middlewares/guard.js';
 export { UseInterceptors } from './decorators/middlewares/interceptor.js';
 export { UsePipes } from './decorators/middlewares/pipe.js';
 export { UseFilters } from './decorators/middlewares/filter.js';
-export type {
-  NestifyGuard,
-  NestifyInterceptor,
-  NestifyPipe,
-  NestifyFilter,
-  PipeSchema,
-  PipeFullSchema,
-  PipeOptions,
-  RouteApiSchema,
-} from './types/middleware.js';
+export { NestifyGuard, NestifyInterceptor, NestifyPipe, NestifyFilter } from './types/middleware.js';
+export type { PipeSchema, PipeFullSchema, PipeOptions, RouteApiSchema } from './types/middleware.js';
 
 export type { NestifyOptions } from '@core/types/index.js';
 

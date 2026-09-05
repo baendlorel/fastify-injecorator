@@ -49,7 +49,7 @@ export interface PipeOptions {
 /**
  * You must override the `canActivate` method in your custom guard class.
  */
-export abstract class NestifyGuard {
+export class NestifyGuard {
   /**
    * Guard
    * - you can use `throw` when guard fails
@@ -64,7 +64,7 @@ export abstract class NestifyGuard {
 /**
  * You must override the `intercept` method in your custom interceptor class.
  */
-export abstract class NestifyInterceptor {
+export class NestifyInterceptor {
   /**
    * Called when entering the controller method
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
@@ -77,7 +77,7 @@ export abstract class NestifyInterceptor {
 /**
  * You must override the `transform` method in your custom pipe class.
  */
-export abstract class NestifyPipe {
+export class NestifyPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
    *
@@ -95,7 +95,7 @@ export abstract class NestifyPipe {
 /**
  * You must override the `catch` method in your custom filter class.
  */
-export abstract class NestifyFilter {
+export class NestifyFilter {
   /**
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @param exception catched exception

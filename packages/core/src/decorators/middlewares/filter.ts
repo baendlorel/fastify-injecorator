@@ -6,7 +6,7 @@ import { subclassOf } from '@nestify-js/shared';
 import { expect } from '@core/asserts/index.js';
 import { metaSetFilters, metaSetUseFilters } from '@core/register/meta.js';
 
-import { Injectable } from '../injectable.js';
+import { _Injectable } from '../injectable.js';
 import { expectMiddleware } from './expect-middleware.js';
 
 /**
@@ -25,7 +25,7 @@ export function Filter(...exceptionClasses: Constructor[]) {
     });
 
     // Same as Injectable, so it can be registered as a provider
-    Injectable()(target, context);
+    _Injectable(target, context);
     metaSetFilters(context, exceptionClasses);
   };
 }

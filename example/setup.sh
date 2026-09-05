@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Example setup script for Fastify Injecorator
+# Example setup script for Nestify
 
-echo "🚀 Setting up Fastify Injecorator Example..."
+echo "🚀 Setting up Nestify Example..."
 
 # Check if we're in the example directory
 if [ ! -f "package.json" ]; then

@@ -8,7 +8,7 @@ https://img.shields.io/npm/v/nestify-js.svg)](https://www.npmjs.com/package/nest
 
 > ⚠️ **Warning**: This is not an official release version. APIs may change in the future.
 
-**Injecorator** is a portmanteau of "inject" and "decorator" - a dependency injection framework for Fastify that uses modern Stage 3 decorators instead of the legacy decorators used by NestJS.
+**Nestify** is a NestJS-like dependency injection framework for Fastify that uses modern Stage 3 decorators instead of the legacy decorators used by NestJS.
 
 This project was created because NestJS uses the old decorator syntax, but we wanted to leverage the new Stage 3 decorator specification for better type safety and modern JavaScript features.
 
@@ -191,7 +191,7 @@ Guards control access to routes. Returning `false` or throwing from `canActivate
 
 ```typescript
 @Guard()
-class AuthGuard implements InjecoratorGuard {
+class AuthGuard implements NestifyGuard {
   // Dependency injection works
   @Inject(AuthService)
   authService: AuthService;
@@ -239,7 +239,7 @@ Interceptors run before the controller method; the returned function is called a
 
 ```typescript
 @Interceptor()
-class LoggingInterceptor implements InjecoratorInterceptor {
+class LoggingInterceptor implements NestifyInterceptor {
   intercept(context: ExecutionContext) {
     const start = Date.now();
     console.log('Request started');
@@ -271,7 +271,7 @@ Pipes validate and transform input data. Each pipe's return value becomes the ne
 
 ```typescript
 @Pipe()
-class TrimPipe implements InjecoratorPipe {
+class TrimPipe implements NestifyPipe {
   async transform(context: ExecutionContext, input: any[], schema?: PipeFullSchema) {
     // `input` comes from the previous step; the return value goes to the next pipe or the handler
     return input.map((v) => (typeof v === 'string' ? v.trim() : v));
@@ -342,7 +342,7 @@ Filters handle exceptions thrown by routes. Specify the exception classes to cat
 
 ```typescript
 @Filter(HttpException)
-class HttpExceptionFilter implements InjecoratorFilter {
+class HttpExceptionFilter implements NestifyFilter {
   catch(context: ExecutionContext, exception: HttpException) {
     const response = context.switchToHttp().getReply();
     response.status(exception.status).send({

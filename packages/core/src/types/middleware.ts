@@ -46,7 +46,10 @@ export interface PipeOptions {
   pipe: SSKey | Constructor<NestifyPipe>;
 }
 
-export interface NestifyGuard {
+/**
+ * You must override the `canActivate` method in your custom guard class.
+ */
+export abstract class NestifyGuard {
   /**
    * Guard
    * - you can use `throw` when guard fails
@@ -54,38 +57,51 @@ export interface NestifyGuard {
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * - if `previousReturn` is `undefined`, it will be ignored.
    */
-  canActivate: (context: ExecutionContext) => OrPromise | OrPromise<boolean>;
+  canActivate(context: ExecutionContext): OrPromise | OrPromise<boolean>;
+  canActivate(_context: ExecutionContext): OrPromise | OrPromise<boolean> {}
 }
 
-export interface NestifyInterceptor {
+/**
+ * You must override the `intercept` method in your custom interceptor class.
+ */
+export abstract class NestifyInterceptor {
   /**
    * Called when entering the controller method
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @returns returned function will be called when leaving the controller method
    */
-  intercept: (context: ExecutionContext) => OrPromise | OrPromise<(resultOrError: any | Error) => any>;
+  intercept(context: ExecutionContext): OrPromise | OrPromise<(resultOrError: any | Error) => any>;
+  intercept(_context: ExecutionContext) {}
 }
 
-export type PipeTransformerArgs = [] | [any[]] | [any[], PipeFullSchema];
-
-// TODO 全部改为 abstract class
+/**
+ * You must override the `transform` method in your custom pipe class.
+ */
 export abstract class NestifyPipe {
   /**
    * Like transform in NestJS Pipe, validation and transformation are done here
+   *
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @param input comes from last pipe's return value, or `undefined` if it's the first
    * @param schema validation schema, if provided in the pipe options
-   * @returns returned value will be passed to the next pipe or as the `input` argument
+   * @returns returned value will be passed to the next pipe. The last pipe's return value will be passed to the controller.
    */
-  abstract transform(context: ExecutionContext, input: any[], schema: PipeFullSchema): OrPromise<any[]>;
+  transform(context: ExecutionContext, input: any[], schema: PipeFullSchema): OrPromise<any[]>;
+  transform(_context: ExecutionContext, input: any[], _schema: PipeFullSchema): OrPromise<any[]> {
+    return input;
+  }
 }
 
-export interface NestifyFilter {
+/**
+ * You must override the `catch` method in your custom filter class.
+ */
+export abstract class NestifyFilter {
   /**
    * @param context like in NestJS, it can `.switchToHttp()` and get `request` and `reply` object
    * @param exception catched exception
    */
-  catch: (context: ExecutionContext, exception: unknown) => OrPromise;
+  catch(context: ExecutionContext, exception: unknown): OrPromise;
+  catch(_context: ExecutionContext, _exception: unknown): OrPromise {}
 }
 
 export type NestifyMiddleware = NestifyInterceptor | NestifyGuard | NestifyFilter | NestifyPipe;

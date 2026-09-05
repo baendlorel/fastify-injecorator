@@ -27,7 +27,6 @@ export type {
   PipeSchema,
   PipeFullSchema,
   PipeOptions,
-  PipeTransformerArgs,
   RouteApiSchema,
 } from './types/middleware.js';
 

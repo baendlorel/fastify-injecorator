@@ -4,7 +4,7 @@
 
 > ⚠️ **警告**: 这还不是正式发布的版本，API 可能会发生变化。
 
-**Injecorator** 是 "inject" 和 "decorator" 的合并词 - 一个基于 Fastify 的依赖注入框架，使用现代 Stage 3 装饰器而不是 NestJS 使用的旧版装饰器。
+**Nestify** 是类似 NestJS 的基于 Fastify 的依赖注入框架，使用现代 Stage 3 装饰器而不是 NestJS 使用的旧版装饰器。
 
 这个项目的创建是因为 NestJS 使用的是旧版装饰器语法，但我们希望能够利用新的 Stage 3 装饰器规范来获得更好的类型安全性和现代 JavaScript 特性。
 
@@ -187,7 +187,7 @@ class UserModule {}
 
 ```typescript
 @Guard()
-class AuthGuard implements InjecoratorGuard {
+class AuthGuard implements NestifyGuard {
   // 支持依赖注入
   @Inject(AuthService)
   authService: AuthService;
@@ -235,7 +235,7 @@ class AppModule {}
 
 ```typescript
 @Interceptor()
-class LoggingInterceptor implements InjecoratorInterceptor {
+class LoggingInterceptor implements NestifyInterceptor {
   intercept(context: ExecutionContext) {
     const start = Date.now();
     console.log('请求开始');
@@ -267,7 +267,7 @@ class ApiController {
 
 ```typescript
 @Pipe()
-class TrimPipe implements InjecoratorPipe {
+class TrimPipe implements NestifyPipe {
   async transform(context: ExecutionContext, input: any[], schema?: PipeFullSchema) {
     // input 是上一步的数据；返回值传给下一个管道或控制器方法
     return input.map((v) => (typeof v === 'string' ? v.trim() : v));
@@ -338,7 +338,7 @@ class UserController {
 
 ```typescript
 @Filter(HttpException)
-class HttpExceptionFilter implements InjecoratorFilter {
+class HttpExceptionFilter implements NestifyFilter {
   catch(context: ExecutionContext, exception: HttpException) {
     const response = context.switchToHttp().getReply();
     response.status(exception.status).send({

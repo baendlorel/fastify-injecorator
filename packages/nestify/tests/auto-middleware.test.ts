@@ -2,12 +2,12 @@ import { describe, it, expect, afterEach } from 'vitest';
 import fastify from 'fastify';
 
 import { apply, Controller, Post, Body, Module, Pipe, UsePipes } from '../src/index.js';
-import { injector } from '@core/register/lazy-injector.js';
-import type { InjecoratorPipe, ExecutionContext, PipeFullSchema } from '../src/index.js';
+import { injector } from '../../core/src/register/lazy-injector.js';
+import type { NestifyPipe, ExecutionContext, PipeFullSchema } from '../src/index.js';
 
 /** A custom pipe decorated by @Pipe but NOT registered in any module providers */
 @Pipe()
-class CustomPipe implements InjecoratorPipe {
+class CustomPipe implements NestifyPipe {
   async transform(context: ExecutionContext, input: any[], _schema?: PipeFullSchema) {
     return input;
   }
@@ -62,7 +62,9 @@ describe('auto-instantiation of internal middlewares', () => {
 
     // The custom pipe is not in providers, so route registration must reject
     const app = fastify();
-    await expect(apply(app, { rootModule: AppModule })).rejects.toThrow(/Cannot find class for token|_throw is not defined/);
+    await expect(apply(app, { rootModule: AppModule })).rejects.toThrow(
+      /Cannot find class for token|_throw is not defined/,
+    );
     expect(injector.get('CustomPipe')).toBeFalsy();
   });
 

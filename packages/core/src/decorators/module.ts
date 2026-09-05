@@ -32,7 +32,7 @@ interface ToModuleOptions {
 }
 
 /**
- * Make outer provider an importable Injecorator module
+ * Make outer provider an importable Nestify module
  * @param outerProvider
  */
 export function toModule(outerProvider: Constructor, opt?: Partial<ToModuleOptions>): DynamicModule {

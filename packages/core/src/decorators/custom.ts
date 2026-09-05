@@ -29,7 +29,7 @@ import { ExecutionContext } from '@core/common/execution-context.js';
  *
  * // Access in a guard
  * @Guard()
- * class RoleGuard implements InjecoratorGuard {
+ * class RoleGuard implements NestifyGuard {
  *   canActivate(context: ExecutionContext): boolean {
  *     const requiredRoles = getCustomMetadata<string[]>('roles', context);
  *     // Check if user has required roles
@@ -63,7 +63,7 @@ export function createCustomDecorator<T = unknown>(key: SSKey) {
  * ```typescript
  * // In a guard, interceptor, pipe, or filter
  * @Guard()
- * class MyGuard implements InjecoratorGuard {
+ * class MyGuard implements NestifyGuard {
  *   canActivate(context: ExecutionContext): boolean {
  *     // Get metadata from the controller class
  *     const controllerRoles = getCustomClassMetadata<string[]>(context, 'roles');
@@ -87,7 +87,7 @@ export function getCustomClassMetadata<T = unknown>(context: ExecutionContext, k
  * ```typescript
  * // In a guard, interceptor, pipe, or filter
  * @Guard()
- * class MyGuard implements InjecoratorGuard {
+ * class MyGuard implements NestifyGuard {
  *   canActivate(context: ExecutionContext): boolean {
  *     // Get metadata from the controller class
  *     const controllerRoles = getCustomClassMetadata<string[]>(context, 'roles');

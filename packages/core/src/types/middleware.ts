@@ -75,7 +75,7 @@ export interface NestifyPipe {
    * @param schema validation schema, if provided in the pipe options
    * @returns returned value will be passed to the next pipe or as the `input` argument
    */
-  transform: (context: ExecutionContext, input?: any[], schema?: PipeFullSchema) => OrPromise<any[]>;
+  transform: (context: ExecutionContext, input: any[], schema: PipeFullSchema) => OrPromise<any[]>;
 }
 
 export interface NestifyFilter {

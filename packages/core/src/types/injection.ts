@@ -63,7 +63,7 @@ export interface ProviderUseClass {
   provide: SSKey;
 
   /**
-   * Provide via class. Managed by Injecorator, dependencies are automatically injected.
+   * Provide via class. Managed by Nestify, dependencies are automatically injected.
    */
   useClass: Constructor;
 }
@@ -103,7 +103,7 @@ export interface NestifyOptions {
   rootModule: Constructor;
 
   /**
-   * Injecorator naturally allows circular references, but:
+   * Nestify naturally allows circular references, but:
    * - Providers declared in the same module are allowed by default
    * - **Must set to `true`** to allow cross-module circular dependencies
    * @default false

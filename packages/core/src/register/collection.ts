@@ -74,7 +74,7 @@ export namespace collection {
    * When registration is done, clears:
    * - globalProviders
    * - globalModules
-   * - metadata(exclude sym.Custom) of injecoratorClasses
+   * - metadata(exclude sym.Custom) of Nestify Classes
    */
   export function clear() {
     globalProviders.clear();

@@ -25,13 +25,13 @@ export class JwtService {
 
   // # privates
   private secret: string;
-  private defaultSignOptions: Required<JwtSignOptions>;
-  private defaultVerifyOptions: Required<JwtVerifyOptions>;
+  private signOptions: JwtSignOptions;
+  private verifyOptions: JwtVerifyOptions;
 
   constructor(options?: JwtModuleOptions) {
     this.secret = options?.secret || 'nestify-js-jwt-secret';
-    this.defaultSignOptions = this.validateSignOptions(options?.signOptions ?? {});
-    this.defaultVerifyOptions = this.validateVerifyOptions(options?.verifyOptions ?? {});
+    this.signOptions = this.validateSignOptions(options?.signOptions ?? {});
+    this.verifyOptions = options?.verifyOptions ?? {};
   }
 
   /**
@@ -40,12 +40,15 @@ export class JwtService {
    */
   configure(options: JwtModuleOptions): void {
     this.secret = options.secret;
-    this.defaultSignOptions = this.validateSignOptions(options.signOptions ?? {});
-    this.defaultVerifyOptions = this.validateVerifyOptions(options.verifyOptions ?? {});
+    this.signOptions = this.validateSignOptions(options.signOptions ?? {});
+    this.verifyOptions = options.verifyOptions ?? {};
   }
 
+  /**
+   * Is verified in `this.validateSignOptions`
+   */
   get expiresIn(): number {
-    return this.defaultSignOptions.expiresIn;
+    return this.signOptions.expiresIn as number;
   }
 
   /**
@@ -76,134 +79,29 @@ export class JwtService {
     return this.base64UrlEncode(hmac.digest().toString('binary'));
   }
 
-  private validateSignOptions(options: JwtSignOptions): Required<JwtSignOptions> {
-    if (!_isObject<JwtSignOptions>(options) || _isArray(options)) {
+  private validateSignOptions(options: JwtSignOptions): JwtSignOptions {
+    if (!_isObject<JwtSignOptions>(options)) {
       throw new Error('signOptions must be an object');
     }
 
-    const normalized: Required<JwtSignOptions> = {
-      expiresIn: 3600, // default: 1 hour
-      audience: undefined as unknown as string,
-      issuer: '',
-      jwtid: '',
-      subject: '',
-      notBefore: 0,
-      algorithm: 'HS256',
-    };
-
     if (options.expiresIn !== undefined) {
-      if (typeof options.expiresIn !== 'number' || !Number.isFinite(options.expiresIn) || options.expiresIn <= 0) {
+      if (!Number.isSafeInteger(options.expiresIn) || options.expiresIn <= 0) {
         throw new Error('expiresIn must be a positive finite number representing seconds');
       }
-      normalized.expiresIn = options.expiresIn;
     }
 
-    if (options.audience !== undefined) {
-      const audiences = _isArray(options.audience) ? options.audience : [options.audience];
-      if (audiences.some((aud) => typeof aud !== 'string' || aud.length === 0)) {
-        throw new Error('audience must be a non-empty string or an array of non-empty strings');
-      }
-      normalized.audience = options.audience as string;
-    }
-
-    if (options.issuer !== undefined) {
-      if (typeof options.issuer !== 'string' || options.issuer.length === 0) {
-        throw new Error('issuer must be a non-empty string');
-      }
-      normalized.issuer = options.issuer;
-    }
-
-    if (options.jwtid !== undefined) {
-      if (typeof options.jwtid !== 'string' || options.jwtid.length === 0) {
-        throw new Error('jwtid must be a non-empty string');
-      }
-      normalized.jwtid = options.jwtid;
-    }
-
-    if (options.subject !== undefined) {
-      if (typeof options.subject !== 'string' || options.subject.length === 0) {
-        throw new Error('subject must be a non-empty string');
-      }
-      normalized.subject = options.subject;
-    }
-
-    if (options.notBefore !== undefined) {
-      const notBefore = typeof options.notBefore === 'string' ? Number(options.notBefore) : options.notBefore;
-      if (typeof notBefore !== 'number' || !Number.isFinite(notBefore) || notBefore < 0) {
-        throw new Error('notBefore must be a non-negative number of seconds (or a numeric string)');
-      }
-      normalized.notBefore = notBefore;
-    }
-
-    const supportedAlgorithms = ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512'] as const;
-    if (options.algorithm !== undefined) {
-      if (!supportedAlgorithms.includes(options.algorithm)) {
-        throw new Error(`algorithm must be one of: ${supportedAlgorithms.join(', ')}`);
-      }
-      normalized.algorithm = options.algorithm;
-    }
-
-    return normalized;
-  }
-
-  private validateVerifyOptions(options: JwtVerifyOptions): Required<JwtVerifyOptions> {
-    if (!_isObject<JwtVerifyOptions>(options) || _isArray(options)) {
-      throw new Error('verifyOptions must be an object');
-    }
-
-    const normalized: Required<JwtVerifyOptions> = {
-      audience: undefined as unknown as string,
-      issuer: undefined as unknown as string,
-      ignoreExpiration: false,
-      clockTolerance: 0,
-    };
-
-    if (options.audience !== undefined) {
-      const audiences = _isArray(options.audience) ? options.audience : [options.audience];
-      if (audiences.some((aud) => typeof aud !== 'string' || aud.length === 0)) {
-        throw new Error('audience must be a non-empty string or an array of non-empty strings');
-      }
-      normalized.audience = options.audience as string;
-    }
-
-    if (options.issuer !== undefined) {
-      const issuers = _isArray(options.issuer) ? options.issuer : [options.issuer];
-      if (issuers.some((iss) => typeof iss !== 'string' || iss.length === 0)) {
-        throw new Error('issuer must be a non-empty string or an array of non-empty strings');
-      }
-      normalized.issuer = options.issuer as string;
-    }
-
-    if (options.ignoreExpiration !== undefined) {
-      if (typeof options.ignoreExpiration !== 'boolean') {
-        throw new Error('ignoreExpiration must be a boolean');
-      }
-      normalized.ignoreExpiration = options.ignoreExpiration;
-    }
-
-    if (options.clockTolerance !== undefined) {
-      if (
-        typeof options.clockTolerance !== 'number' ||
-        !Number.isFinite(options.clockTolerance) ||
-        options.clockTolerance < 0
-      ) {
-        throw new Error('clockTolerance must be a non-negative finite number representing seconds');
-      }
-      normalized.clockTolerance = options.clockTolerance;
-    }
-
-    return normalized;
+    return options;
   }
 
   /**
    * Sign a payload and return JWT token
    */
   sign(payload: JwtPayload, options?: JwtSignOptions): string {
-    const mergedOptions = this.validateSignOptions({ ...this.defaultSignOptions, ...options });
+    const opts = this.validateSignOptions({ ...this.signOptions, ...options });
 
     // Create header
     const header = {
-      alg: mergedOptions.algorithm || 'HS256',
+      alg: opts.algorithm || 'HS256',
       typ: 'JWT',
     };
 
@@ -215,31 +113,31 @@ export class JwtService {
     };
 
     // Add optional claims
-    if (mergedOptions.expiresIn) {
-      jwtPayload.exp = now + mergedOptions.expiresIn;
+    if (opts.expiresIn) {
+      jwtPayload.exp = now + opts.expiresIn;
     }
 
-    if (mergedOptions.audience) {
-      jwtPayload.aud = mergedOptions.audience;
+    if (opts.audience) {
+      jwtPayload.aud = opts.audience;
     }
 
-    if (mergedOptions.issuer) {
-      jwtPayload.iss = mergedOptions.issuer;
+    if (opts.issuer) {
+      jwtPayload.iss = opts.issuer;
     }
 
-    if (mergedOptions.subject) {
-      jwtPayload.sub = mergedOptions.subject;
+    if (opts.subject) {
+      jwtPayload.sub = opts.subject;
     }
 
-    if (mergedOptions.jwtid) {
-      jwtPayload.jti = mergedOptions.jwtid;
+    if (opts.jwtid) {
+      jwtPayload.jti = opts.jwtid;
     }
 
-    if (mergedOptions.notBefore) {
-      if (typeof mergedOptions.notBefore === 'number') {
-        jwtPayload.nbf = now + mergedOptions.notBefore;
+    if (opts.notBefore) {
+      if (typeof opts.notBefore === 'number') {
+        jwtPayload.nbf = now + opts.notBefore;
       } else {
-        jwtPayload.nbf = now + Number(mergedOptions.notBefore);
+        jwtPayload.nbf = now + Number(opts.notBefore);
       }
     }
 
@@ -257,7 +155,7 @@ export class JwtService {
    * Verify and decode a JWT token
    */
   verify<T = JwtPayload>(token: string, options?: JwtVerifyOptions): T {
-    const mergedOptions = this.validateVerifyOptions({ ...this.defaultVerifyOptions, ...options });
+    const mergedOptions = { ...this.verifyOptions, ...options };
 
     // Split token
     const parts = token.split('.');
@@ -302,7 +200,7 @@ export class JwtService {
       const tokenAudiences = _isArray(payload.aud) ? payload.aud : payload.aud ? [payload.aud] : [];
 
       if (!audiences.some((aud) => tokenAudiences.includes(aud))) {
-        throw new Error('Token audience mismatch');
+        throw new UnauthorizedException('Token audience mismatch');
       }
     }
 
@@ -311,7 +209,7 @@ export class JwtService {
       const issuers = _isArray(mergedOptions.issuer) ? mergedOptions.issuer : [mergedOptions.issuer];
 
       if (!issuers.includes(payload.iss)) {
-        throw new Error('Token issuer mismatch');
+        throw new UnauthorizedException('Token issuer mismatch');
       }
     }
 

@@ -1,7 +1,7 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import type { InjectToken } from '@core/types/injection.js';
 import { NestifyGuard } from '@core/types/middleware.js';
-import { sym } from '@nestify-js/shared';
+import { sym, subclassOf } from '@nestify-js/shared';
 
 import { expect } from '@core/asserts/index.js';
 import { metaSetGuard, metaSetProvider, metaSetUseGuards } from '@core/register/meta.js';
@@ -14,7 +14,7 @@ import { expectMiddleware } from './expect-middleware.js';
  */
 export function Guard() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expect(target instanceof NestifyGuard, '@Guard classes must extends NestifyGuard');
+    expect(subclassOf(target, NestifyGuard), '@Guard classes must extends NestifyGuard');
 
     // Same as Injectable, so it can be registered as a provider
     _Injectable(target, context);

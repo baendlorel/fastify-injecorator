@@ -1,5 +1,6 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
 import { NestifyPipe, type PipeOptions } from '@core/types/middleware.js';
+import { subclassOf } from '@nestify-js/shared';
 
 import { _isConstructable, _isKey, sym } from '@nestify-js/shared';
 
@@ -16,7 +17,7 @@ import { expectMiddleware } from './expect-middleware.js';
  */
 export function Pipe() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expect(target instanceof NestifyPipe, '@Pipe classes must extends NestifyPipe');
+    expect(subclassOf(target, NestifyPipe), '@Pipe classes must extends NestifyPipe');
     // Same as Injectable, so it can be registered as a provider
     _Injectable(target, context);
     metaSetPipe(context);

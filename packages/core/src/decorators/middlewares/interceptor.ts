@@ -1,6 +1,7 @@
 import type { AnyFunction, Constructor } from '@core/types/primitives.js';
-import { NestifyInterceptor } from '@core/types/middleware.js';
 import type { InjectToken } from '@core/types/injection.js';
+import { NestifyInterceptor } from '@core/types/middleware.js';
+import { subclassOf } from '@nestify-js/shared';
 
 import { expect } from '@core/asserts/index.js';
 import { metaSetInterceptor, metaSetUseInterceptors } from '@core/register/meta.js';
@@ -13,7 +14,7 @@ import { expectMiddleware } from './expect-middleware.js';
  */
 export function Interceptor() {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expect(target instanceof NestifyInterceptor, '@Interceptor classes must extends NestifyInterceptor');
+    expect(subclassOf(target, NestifyInterceptor), '@Interceptor classes must extends NestifyInterceptor');
 
     // Same as Injectable, so it can be registered as a provider
     _Injectable(target, context);

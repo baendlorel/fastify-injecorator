@@ -17,7 +17,7 @@ import { expectMiddleware } from './expect-middleware.js';
  */
 export function Filter(...exceptionClasses: Constructor[]) {
   return function (target: Constructor, context: ClassDecoratorContext) {
-    expect(target instanceof NestifyFilter, '@Filter classes must extends NestifyFilter');
+    expect(subclassOf(target, NestifyFilter), '@Filter classes must extends NestifyFilter');
 
     exceptionClasses.forEach((exceptionClass) => {
       const msg = `Error registered by @Filters must extend Error, got '${exceptionClass.name}'`;
